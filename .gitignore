@@ -23,4 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
+# Archivos de entorno y credenciales
 .env
+.env.local
+.env.production
