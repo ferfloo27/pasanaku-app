@@ -6,6 +6,17 @@ import './ui.css';
 
 const focusable = 'button:not(:disabled), input:not(:disabled):not([type="hidden"]), select:not(:disabled), textarea:not(:disabled), a[href], [tabindex="0"]';
 
+function tabStops(root) {
+  const controls = [...root.querySelectorAll(focusable)].filter(element =>
+    element.tabIndex >= 0 && !element.closest('[hidden], [inert]') &&
+    getComputedStyle(element).visibility !== 'hidden' && getComputedStyle(element).display !== 'none');
+  return controls.filter(element => {
+    if (element.type !== 'radio' || !element.name) return true;
+    const group = controls.filter(other => other.type === 'radio' && other.name === element.name && other.form === element.form);
+    return element === (group.find(other => other.checked) || group[0]);
+  });
+}
+
 export default function Sheet({ open, title, description, children, onClose, dismissible = true, initialFocusRef }) {
   const id = useId();
   const panel = useRef(null);
@@ -17,7 +28,7 @@ export default function Sheet({ open, title, description, children, onClose, dis
     const inertBefore = background.map(element => element.hasAttribute('inert'));
     background.forEach(element => element.setAttribute('inert', ''));
     document.body.style.overflow = 'hidden';
-    (initialFocusRef?.current || panel.current.querySelector(focusable) || panel.current).focus();
+    (initialFocusRef?.current || tabStops(panel.current)[0] || panel.current).focus();
     return () => {
       background.forEach((element, index) => { if (!inertBefore[index]) element.removeAttribute('inert'); });
       document.body.style.overflow = oldOverflow;
@@ -26,9 +37,10 @@ export default function Sheet({ open, title, description, children, onClose, dis
   }, [open, initialFocusRef]);
   if (!open) return null;
   function keyDown(event) {
+    if (event.defaultPrevented) return;
     if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); if (dismissible) onClose?.(); }
     if (event.key !== 'Tab') return;
-    const controls = [...panel.current.querySelectorAll(focusable)];
+    const controls = tabStops(panel.current);
     if (!controls.length) { event.preventDefault(); panel.current.focus(); return; }
     const first = controls[0]; const last = controls.at(-1);
     if (event.shiftKey && (document.activeElement === first || document.activeElement === panel.current)) { event.preventDefault(); last.focus(); }

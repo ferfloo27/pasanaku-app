@@ -16,7 +16,7 @@ export default function Menu({ label = 'Más acciones', items = [] }) {
     return () => document.removeEventListener('pointerdown', outside);
   }, [open]);
   function keyDown(event) {
-    if (event.key === 'Escape') { event.preventDefault(); close(); return; }
+    if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close(); return; }
     if (event.key === 'Tab') { close(); return; }
     if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault();
@@ -30,7 +30,7 @@ export default function Menu({ label = 'Más acciones', items = [] }) {
     <IconButton ref={trigger} label={label} aria-haspopup="menu" aria-controls={open ? id : undefined} aria-expanded={open}
       onClick={() => setOpen(!open)} onKeyDown={event => { if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); setOpen(true); } }}><Icon name="more" /></IconButton>
     {open && <div id={id} className="ui-menu" role="menu" aria-label={label} ref={menu} onKeyDown={keyDown}>
-      {items.map(item => <button type="button" role="menuitem" key={item.label} disabled={item.disabled} className={item.danger ? 'ui-menu__danger' : ''}
+      {items.map(item => <button type="button" role="menuitem" tabIndex={-1} key={item.label} disabled={item.disabled} className={item.danger ? 'ui-menu__danger' : ''}
         onClick={() => { close(); item.onSelect?.(); }}>{item.icon}{item.label}</button>)}
     </div>}
   </div>;

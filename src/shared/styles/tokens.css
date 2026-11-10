@@ -18,6 +18,7 @@
   --color-surface-raised: var(--blanco);
   --color-border: var(--crema-200);
   --color-field-border: var(--crema-300);
+  --color-control-border: var(--tinta-400);
   --color-text: var(--tinta-900);
   --color-text-muted: var(--tinta-600);
   --color-text-disabled: var(--tinta-400);
@@ -88,6 +89,7 @@
   --color-surface-raised: #33262a;
   --color-border: #3d2e32;
   --color-field-border: #5a4449;
+  --color-control-border: #8a7a75;
   --color-text: #f3ece8;
   --color-text-muted: #bfafa9;
   --color-text-disabled: #8a7a75;

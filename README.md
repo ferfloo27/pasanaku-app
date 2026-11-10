@@ -169,6 +169,10 @@ datos existentes ni aplica migraciones remotas.
 
 ## Estructura
 
+El sistema visual compartido se puede probar en `/dev/ui` con `npm run dev`.
+La galería no se incluye en producción ni necesita conectarse a Supabase.
+Los contratos de los componentes están en [Componentes compartidos](docs/ui-components.md).
+
 ```text
 src/
   app/          App y router; sesión y guards en fases posteriores

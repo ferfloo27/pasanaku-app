@@ -1,14 +1,19 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HomePage from '../pages/HomePage';
-import RoomPage from '../pages/RoomPage';
+import Spinner from '../shared/ui/Spinner';
+
+const HomePage = lazy(() => import('../pages/HomePage'));
+const RoomPage = lazy(() => import('../pages/RoomPage'));
+const UiKitPage = import.meta.env.DEV ? lazy(() => import('../pages/UiKitPage')) : null;
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
+      <Suspense fallback={<div className="ui-app-loading"><Spinner label="Cargando página…" /></div>}><Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/room/:code" element={<RoomPage />} />
-      </Routes>
+        {import.meta.env.DEV && <Route path="/dev/ui" element={<UiKitPage />} />}
+      </Routes></Suspense>
     </BrowserRouter>
   );
 }
