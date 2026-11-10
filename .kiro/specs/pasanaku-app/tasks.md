@@ -40,7 +40,8 @@ Convenciones:
 - [ ] 1.7 Tests de base de datos: propiedades 8, 9, 10, 11 y 12 de `design.md`.
   - [x] Propiedades 8–11 verificadas en Supabase local (RLS/RPC, cupo concurrente, atomicidad e idempotencia).
   - [ ] Propiedad 12: la paridad SQL/`turnDate` se pospone a la Fase 6 por decisión del 10-11-2026; no adelantar la función de dominio.
-- [ ] 1.8 Plan de migración de los datos actuales (salas sin `host_user_id`/`name`): decidir si se descartan o se migran con valores por defecto.
+- [x] 1.8 Plan de migración de los datos actuales (salas sin `host_user_id`/`name`): decidir si se descartan o se migran con valores por defecto.
+  - Decisión del 10-11-2026: descartar los datos de prueba al estrenar v2; plan en `docs/v2-data-transition.md`. No se han ejecutado borrados ni cambios remotos.
 - _Requirements: 3.5, 4.2, 4.7, 5.7, 5.8, 5.10, 6.8, 6.10, 6.11, 6.12, 10.1–10.7_
 
 ---

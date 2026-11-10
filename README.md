@@ -160,6 +160,13 @@ En el proyecto Supabase de desarrollo, realiza estos pasos:
 Google OAuth no se ha configurado ni validado aquí. Las opciones locales de
 Auth anónimo y manual linking no configuran automáticamente el proyecto remoto.
 
+## Transición de datos de v1
+
+Los datos actuales son de prueba. Por decisión del 10-11-2026, no se importarán
+en v2. El [plan de transición](docs/v2-data-transition.md) describe la preparación
+de un destino limpio, el cambio de versión y la vuelta atrás. Esta fase no borra
+datos existentes ni aplica migraciones remotas.
+
 ## Estructura
 
 ```text
