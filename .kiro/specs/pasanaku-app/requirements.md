@@ -69,7 +69,7 @@ Referencias de diseño: `docs/design-brief.md` y el canvas "Pasanaku" de Claude 
 3. Cada tarjeta de sala SHALL mostrar nombre, código, número de participantes, rol (Anfitrión/Participante) y estado (En espera/Sorteada), y SHALL navegar a `/room/:code`.
 4. WHILE el usuario no tiene salas, THE App SHALL mostrar el estado vacío "Aún no tienes salas" con una explicación breve.
 5. THE App SHALL NOT listar salas `cancelled` en "Tus salas".
-6. WHEN una sala del usuario fue cancelada y el usuario aún no fue avisado en este dispositivo, THE App SHALL mostrar una única vez el aviso "{anfitrión} canceló la sala “{nombre}”. Ya no aparece en tus salas." con opción de cerrarlo.
+6. WHEN una sala del usuario fue cancelada en los últimos 30 días y el usuario aún no fue avisado en este dispositivo, THE App SHALL mostrar una única vez el aviso "{anfitrión} canceló la sala “{nombre}”. Ya no aparece en tus salas." con opción de cerrarlo.
 7. WHILE la sesión es anónima, THE App SHALL mostrar la invitación a vincular Google ("Vincula Google para ver tus salas en otro celular").
 
 ---

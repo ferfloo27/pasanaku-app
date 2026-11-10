@@ -212,7 +212,7 @@ No existe política que permita listar salas ajenas. La información previa a un
 | `remove_participant(participant_id)` | es anfitrión; sala `waiting`; no se elimina a sí mismo | borra participante | `NOT_HOST`, `ROOM_NOT_WAITING`, `CANNOT_REMOVE_HOST` |
 | `cancel_room(room_id)` | es anfitrión; sala `waiting` | `status = 'cancelled'`, `cancelled_at` | `NOT_HOST`, `ROOM_NOT_WAITING` |
 | `confirm_draw(room_id, participant_ids uuid[])` | es anfitrión; `for update`; sala `waiting`; el arreglo contiene exactamente a los participantes actuales, sin repetidos; N ≥ 2 | inserta N `turns` con `position`, `turn_date`, `payout_bs`; `status = 'drawn'`, `drawn_at` | `NOT_HOST`, `ROOM_NOT_WAITING`, `PARTICIPANTS_CHANGED`, `NOT_ENOUGH_PARTICIPANTS` |
-| `list_my_rooms()` → salas `waiting`/`drawn` con conteo y rol; y salas `cancelled` recientes para el aviso | — | — | — |
+| `list_my_rooms()` → salas `waiting`/`drawn` con conteo y rol; y salas `cancelled` de los últimos 30 días para el aviso | — | — | — |
 
 `turn_date` se calcula en SQL con la misma regla que `domain/schedule.js` (mensual `+ (p-1) month`, semanal `+ 7*(p-1)`, quincenal `+ 15*(p-1)` días), para que el borrador y lo persistido coincidan. Un test compara ambas implementaciones.
 
