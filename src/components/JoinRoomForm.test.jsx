@@ -15,14 +15,15 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import * as fc from 'fast-check';
 import JoinRoomForm from './JoinRoomForm';
 
-// Mock joinRoom from joinRoomService
-vi.mock('../services/joinRoomService', () => ({
+// Mock joinRoom from roomService
+vi.mock('../services/roomService', () => ({
   joinRoom: vi.fn(),
 }));
 
 // Mock react-router-dom's useNavigate
+const mockNavigate = vi.fn();
 vi.mock('react-router-dom', () => ({
-  useNavigate: () => vi.fn(),
+  useNavigate: () => mockNavigate,
 }));
 
 // Mock getOrCreateClientId so it doesn't touch localStorage
@@ -30,7 +31,7 @@ vi.mock('../utils/clientId', () => ({
   getOrCreateClientId: () => 'test-client-id',
 }));
 
-import { joinRoom } from '../services/joinRoomService';
+import { joinRoom } from '../services/roomService';
 
 const VALID_CODE = 'ABCDEF';
 
@@ -60,6 +61,20 @@ describe('JoinRoomForm — Property 4: validación de nombre rechaza entradas in
     renderForm();
     await submitWithName('');
     expect(joinRoom).not.toHaveBeenCalled();
+  });
+
+  it('navega a la sala devuelta por el servicio compartido al unirse', async () => {
+    joinRoom.mockResolvedValue({ data: { code: VALID_CODE }, error: null });
+    renderForm();
+
+    await submitWithName('Lucía');
+
+    expect(joinRoom).toHaveBeenCalledWith({
+      code: VALID_CODE,
+      name: 'Lucía',
+      clientId: 'test-client-id',
+    });
+    expect(mockNavigate).toHaveBeenCalledWith('/room/ABCDEF');
   });
 
   it('no llama joinRoom con string de sólo espacios', async () => {

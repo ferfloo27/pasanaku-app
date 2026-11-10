@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { joinRoom } from '../services/joinRoomService';
+import { joinRoom } from '../services/roomService';
 import { getOrCreateClientId } from '../utils/clientId';
 
 export default function JoinRoomForm({ onBack }) {
@@ -35,7 +35,7 @@ export default function JoinRoomForm({ onBack }) {
       return;
     }
 
-    navigate(`/room/${data.room.code}`);
+    navigate(`/room/${data.code}`);
   }
 
   return (

@@ -19,7 +19,7 @@ Convenciones:
 
 - [x] 0.1 Arreglar los 3 tests rotos (`fc.stringOf` ya no existe en fast-check v4 → `fc.string({ unit: … })`) para partir en verde.
 - [x] 0.2 Crear la estructura `app/`, `features/`, `shared/`, `pages/` de `design.md` y mover `roomCode`, `fisherYates` y `formatMonth` a su `domain`/`format` correspondiente con sus tests.
-- [ ] 0.3 Eliminar `services/fetchService.js` y `services/joinRoomService.js` (duplicados).
+- [x] 0.3 Eliminar `services/fetchService.js` y `services/joinRoomService.js` (duplicados).
 - [ ] 0.4 Configurar la regla ESLint `no-restricted-imports` que impide importar `shared/lib/supabase` fuera de `features/*/api`.
 - [ ] 0.5 Reemplazar el README de la plantilla por uno del proyecto (cómo correrlo, variables de entorno, Supabase local).
 - _Requirements: 11.3_
