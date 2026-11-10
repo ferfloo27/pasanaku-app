@@ -51,7 +51,7 @@ Convenciones:
 > Fuente: artboards "Sistema de diseño", "Componentes" y "Modo oscuro".
 
 - [x] 2.1 `shared/styles/tokens.css`: primitivos y semánticos claro/oscuro (oscuro definido, desactivado); `base.css` con Nunito/JetBrains Mono, reset y foco visible. Quitar el CSS de la plantilla de Vite.
-- [ ] 2.2 Componentes de acción: `Button` (primario, secundario, texto, peligro; cargando, deshabilitado), `IconButton`, `Chip`, `Avatar`.
+- [x] 2.2 Componentes de acción: `Button` (primario, secundario, texto, peligro; cargando, deshabilitado), `IconButton`, `Chip`, `Avatar`.
 - [ ] 2.3 Componentes de formulario: `TextField`, `CodeInput` (6 casillas, pegar, mayúsculas), `MoneyField` (Bs), `Segmented` (frecuencia), `DateField` (mes/año o día).
 - [ ] 2.4 Contenedores: `Card`, `Sheet` (modal inferior), `Menu` (⋯), `EmptyState`, `AguayoStripe`.
 - [ ] 2.5 Feedback: `ErrorBanner`, `Toast`, `Skeleton`, `Spinner`, `ReconnectingChip`.
