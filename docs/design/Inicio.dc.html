@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Inicio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#8B1E2F}a:hover{color:#5C1220}button,input{font-family:inherit}</style>
+</helmet>
+<div style="width: 360px; height: 980px; box-sizing: border-box; background: #FBF3EC; color: #2C2C2A; font-family: Nunito, Poppins, system-ui, sans-serif; display: flex; flex-direction: column;">
+  <svg width="100%" height="12" aria-hidden="true" style="display: block; flex-shrink: 0;"><defs><pattern id="iA" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="#8B1E2F"></rect><path d="M12 1L18 6L12 11L6 6Z" fill="#D9A441"></path><path d="M12 4L14 6L12 8L10 6Z" fill="#8B1E2F"></path><path d="M0 0L3 6L0 12Z" fill="#B5475A"></path><path d="M24 0L21 6L24 12Z" fill="#B5475A"></path></pattern></defs><rect width="100%" height="12" fill="url(#iA)"></rect></svg>
+  <header style="padding: 24px 16px 8px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <span style="font-size: 13px; font-weight: 700; color: #8B1E2F; letter-spacing: 0.04em;">Pasanaku</span>
+      <h1 style="margin: 0; font-size: 28px; line-height: 34px; font-weight: 700;">Hola, Lucía</h1>
+    </div>
+    <button type="button" aria-label="Editar tu nombre" style="width: 44px; height: 44px; border: 1px solid #E8DCD2; border-radius: 999px; background: #FFFFFF; color: #8B1E2F; display: flex; align-items: center; justify-content: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg></button>
+  </header>
+  <p style="margin: 0; padding: 0 16px 20px; font-size: 15px; line-height: 22px; color: #6E5A55;">Organiza el sorteo de tu tanda con tu familia, amigos o trabajo.</p>
+  <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 12px;">
+    <a href="Crear.dc.html" style="height: 52px; border-radius: 999px; background: #8B1E2F; color: #FFFFFF; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Crear sala</a>
+    <a href="Unirse.dc.html" style="height: 52px; box-sizing: border-box; border: 1.5px solid #8B1E2F; border-radius: 999px; background: #FFFFFF; color: #8B1E2F; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><path d="m10 17 5-5-5-5"></path><path d="M15 12H3"></path></svg>Unirme con código</a>
+  </div>
+  <section style="padding: 32px 16px 0; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      <h2 style="margin: 0; font-size: 17px; line-height: 24px; font-weight: 700;">Tus salas</h2>
+      <span style="font-size: 13px; color: #6E5A55;">3 salas</span>
+    </div>
+    <sc-for list="{{rooms}}" as="r" hint-placeholder-count="3">
+      <a href="LobbyAnfitrion.dc.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; border: 1px solid #E8DCD2; border-radius: 18px; padding: 16px; background: #FFFFFF;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+          <b style="font-size: 17px; line-height: 24px;">{{r.name}}</b>
+          <span style="flex-shrink: 0; display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 700; {{r.chipStyle}}">{{r.status}}</span>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; color: #6E5A55;">
+          <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; letter-spacing: 0.2em; color: #2C2C2A;">{{r.code}}</span>
+          <span aria-hidden="true">·</span><span>{{r.people}}</span><span aria-hidden="true">·</span><span>{{r.role}}</span>
+        </div>
+      </a>
+    </sc-for>
+  </section>
+  <div style="flex: 1;"></div>
+  <footer style="margin: 32px 16px 24px; padding: 16px; border: 1px solid #E8DCD2; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px;">
+    <span style="font-size: 13px; line-height: 18px; color: #6E5A55;">Estás usando Pasanaku sin cuenta. Vincula Google para ver tus salas en otro celular.</span>
+    <button type="button" style="height: 44px; border: 1.5px solid #8B1E2F; border-radius: 999px; background: #FFFFFF; color: #8B1E2F; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>Vincular cuenta de Google</button>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":360,"height":980}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const wait = 'background: #FAEEDA; color: #633806;';
+    const done = 'background: #E3F1E4; color: #27500A;';
+    const off = 'background: #E8DCD2; color: #6E5A55;';
+    return {
+      rooms: [
+        { name: 'Pasanaku Familia Mamani', status: 'En espera', chipStyle: wait, code: 'K7QM3P', people: '8 participantes', role: 'Anfitrión' },
+        { name: 'Tanda de la oficina', status: 'En espera', chipStyle: wait, code: 'R2XH9D', people: '7 participantes', role: 'Participante' },
+        { name: 'Amigas del cole', status: 'Sorteada', chipStyle: done, code: 'B8TW4N', people: '5 participantes', role: 'Participante' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

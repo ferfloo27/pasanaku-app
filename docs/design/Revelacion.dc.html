@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Revelación del orden</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#8B1E2F}a:hover{color:#5C1220}button{font-family:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid #B5475A;outline-offset:2px}
+@keyframes pk-popA{0%{opacity:0;transform:scale(.9) translateY(8px)}60%{opacity:1;transform:scale(1.03)}100%{transform:none}}
+@keyframes pk-popB{0%{opacity:0;transform:scale(.9) translateY(8px)}60%{opacity:1;transform:scale(1.03)}100%{transform:none}}
+.pk-a{animation:pk-popA .6s cubic-bezier(.2,.8,.2,1) both}.pk-b{animation:pk-popB .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pk-glow{0%{box-shadow:0 0 0 0 rgba(217,164,65,.0)}40%{box-shadow:0 0 0 6px rgba(217,164,65,.45)}100%{box-shadow:0 0 0 0 rgba(217,164,65,0)}}
+.pk-glow{animation:pk-glow .9s ease-out both}
+@media (prefers-reduced-motion: reduce){.pk-a,.pk-b,.pk-glow{animation:none}}</style>
+</helmet>
+<div style="width: 360px; height: 880px; box-sizing: border-box; background: #FBF3EC; color: #2C2C2A; font-family: Nunito, Poppins, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden;">
+  <div style="position: relative; height: 112px; flex-shrink: 0;">
+    <svg width="100%" height="112" aria-hidden="true" style="display: block;"><defs><pattern id="rL" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#8B1E2F"></rect><path d="M20 2L38 20L20 38L2 20Z" fill="#B5475A"></path><path d="M20 8L32 20L20 32L8 20Z" fill="#D9A441"></path><path d="M20 13L27 20L20 27L13 20Z" fill="#8B1E2F"></path><path d="M20 17L23 20L20 23L17 20Z" fill="#F6DDE2"></path><path d="M0 0H4L0 4Z M40 0H36L40 4Z M0 40H4L0 36Z M40 40H36L40 36Z" fill="#2E6B4F"></path></pattern><pattern id="rC" width="16" height="12" patternUnits="userSpaceOnUse"><rect width="16" height="12" fill="#D9A441"></rect><path d="M0 12V9H2V6H4V3H6V0H10V3H12V6H14V9H16V12Z" fill="#8B1E2F"></path><rect x="7" y="4" width="2" height="2" fill="#F6DDE2"></rect></pattern></defs><rect width="100%" height="100" fill="url(#rL)"></rect><rect y="100" width="100%" height="12" fill="url(#rC)"></rect></svg>
+    <div style="position: absolute; left: 16px; right: 16px; bottom: 24px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+      <span style="display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 999px; background: #FFFFFF; color: #5C1220; font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Pasanaku Familia Mamani</span>
+      <span style="flex-shrink: 0; display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 999px; background: #5C1220; color: #FFFFFF; font-size: 13px; font-weight: 700;">{{progress}}</span>
+    </div>
+  </div>
+
+  <sc-if value="{{notDone}}" hint-placeholder-val="{{true}}">
+    <div style="padding: 16px 16px 0; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;">
+      <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 999px; background: #FAEEDA; color: #633806; font-size: 13px; font-weight: 700;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg>Sorteado al azar</span>
+      <h1 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">{{question}}</h1>
+    </div>
+
+    <div aria-hidden="true" style="position: relative; margin: 14px 16px 0; height: 236px; border-radius: 24px; background: #F1E8E0; border: 1px solid #E8DCD2; overflow: hidden; perspective: 760px;">
+      <div style="position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX({{drumDeg}}deg); transition: transform {{dur}}ms cubic-bezier(.17,.67,.24,1.02);">
+        <sc-for list="{{faces}}" as="f" hint-placeholder-count="12">
+          <div style="position: absolute; left: 16px; right: 16px; top: 90px; height: 56px; box-sizing: border-box; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; backface-visibility: hidden; {{f.style}}">{{f.name}}</div>
+        </sc-for>
+      </div>
+      <div style="position: absolute; left: 0; right: 0; top: 0; height: 84px; background: linear-gradient(#F1E8E0 10%, rgba(241,232,224,0)); pointer-events: none;"></div>
+      <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: linear-gradient(rgba(241,232,224,0), #F1E8E0 90%); pointer-events: none;"></div>
+      <div class="{{frameCls}}" style="position: absolute; left: 10px; right: 10px; top: 86px; height: 64px; box-sizing: border-box; border: 2.5px solid #8B1E2F; border-radius: 16px; pointer-events: none;"></div>
+      <svg width="12" height="20" viewBox="0 0 12 20" style="position: absolute; left: 0; top: 108px;"><path d="M0 0L12 10L0 20Z" fill="#D9A441"></path></svg>
+      <svg width="12" height="20" viewBox="0 0 12 20" style="position: absolute; right: 0; top: 108px;"><path d="M12 0L0 10L12 20Z" fill="#D9A441"></path></svg>
+    </div>
+
+    <div aria-live="assertive" aria-atomic="true" style="margin: 12px 16px 0; height: 76px; display: flex;">
+      <sc-if value="{{landed}}" hint-placeholder-val="{{false}}">
+        <div class="{{cardCls}}" style="flex: 1; display: flex; align-items: center; gap: 12px; padding: 0 16px; border-radius: 18px; background: #8B1E2F; color: #FFFFFF;">
+          <span style="width: 44px; height: 44px; border-radius: 999px; background: #FFFFFF; color: #8B1E2F; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; flex-shrink: 0;">{{cur.pos}}</span>
+          <div style="display: flex; flex-direction: column; min-width: 0;"><b style="font-size: 17px; line-height: 22px;">Le toca a {{cur.name}}</b><span style="font-size: 13px; color: #F6DDE2;">Turno {{cur.pos}} · {{cur.date}}</span></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{spinning}}" hint-placeholder-val="{{true}}">
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; border-radius: 18px; border: 1.5px dashed #E9B5C0; color: #6E5A55; font-size: 15px;">Girando la ruleta…</div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{done}}" hint-placeholder-val="{{false}}">
+    <div role="status" class="pk-a" style="margin: 20px 16px 0; padding: 20px; border-radius: 24px; background: #F6DDE2; border: 2px solid #E9B5C0; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; color: #5C1220;">
+      <svg width="64" height="40" viewBox="0 0 64 40" aria-hidden="true"><path d="M32 2L50 20L32 38L14 20Z" fill="#8B1E2F"></path><path d="M32 10L42 20L32 30L22 20Z" fill="#D9A441"></path><path d="M32 16L36 20L32 24L28 20Z" fill="#F6DDE2"></path><path d="M2 20L10 12V28Z M62 20L54 12V28Z" fill="#B5475A"></path></svg>
+      <b style="font-size: 28px; line-height: 34px;">Orden listo</b>
+      <span style="font-size: 15px; line-height: 22px;">La ruleta sorteó los 8 turnos al azar. Tu turno es el 3, en Marzo 2027.</span>
+    </div>
+  </sc-if>
+
+  <div style="padding: 16px 16px 0; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px;">
+    <span style="font-size: 13px; font-weight: 700; color: #6E5A55;">{{revealedLabel}}</span>
+    <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; overflow: hidden;">
+      <sc-for list="{{revealed}}" as="r" hint-placeholder-count="2">
+        <li style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 14px; {{r.style}}">
+          <b style="width: 20px; font-size: 15px; color: #8B1E2F;">{{r.pos}}</b>
+          <span style="flex: 1; font-size: 15px; font-weight: 700;">{{r.name}}</span>
+          <span style="font-size: 13px; color: #6E5A55;">{{r.date}}</span>
+        </li>
+      </sc-for>
+    </ol>
+  </div>
+
+  <div style="padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 8px; background: #FBF3EC;">
+    <sc-if value="{{notDone}}" hint-placeholder-val="{{true}}">
+      <button type="button" onClick="{{skip}}" style="width: 100%; height: 48px; border: 1.5px solid #8B1E2F; border-radius: 999px; background: #FFFFFF; color: #8B1E2F; font-size: 15px; font-weight: 700;">Saltar</button>
+    </sc-if>
+    <sc-if value="{{done}}" hint-placeholder-val="{{false}}">
+      <a href="Resultados.dc.html" style="height: 52px; border-radius: 999px; background: #8B1E2F; color: #FFFFFF; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Ver resultados</a>
+      <button type="button" onClick="{{replay}}" style="width: 100%; height: 44px; border: none; border-radius: 999px; background: transparent; color: #8B1E2F; font-size: 15px; font-weight: 700;">Ver de nuevo</button>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"spinMs":{"editor":"range","default":2600,"min":800,"max":5000,"step":100,"unit":"ms"},"pauseMs":{"editor":"range","default":1500,"min":400,"max":4000,"step":100,"unit":"ms"},"$preview":{"width":360,"height":880}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto'];
+    this.list = ['Carmen Choque', 'Luis Condori', 'Lucía Mamani', 'Juan Quispe', 'Sofía Limachi', 'Pedro Huanca', 'Ana Flores', 'Marco Apaza']
+      .map((n, i) => ({ pos: i + 1, name: n, date: months[i] + ' 2027', me: i === 2 }));
+    this.SLOTS = 12;
+    this.STEP = 360 / this.SLOTS;
+    const names = this.list.map((p) => p.name);
+    this.state = {
+      k: 0, phase: 'intro', revealedCount: 0, drumDeg: 0, dur: 0, targetSlot: 0,
+      faces: Array.from({ length: this.SLOTS }, (_, i) => names[i % names.length])
+    };
+  }
+  reduced() {
+    try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+  componentDidMount() { this.t = setTimeout(() => this.spinTo(0), 700); }
+  componentWillUnmount() { clearTimeout(this.t); }
+  spinTo(k) {
+    const st = this.state;
+    const pool = this.list.slice(k).map((p) => p.name);
+    const target = this.list[k].name;
+    const frontSlot = st.targetSlot;
+    const t = (frontSlot + 5 + Math.floor(Math.random() * 3)) % this.SLOTS;
+    const faces = st.faces.slice();
+    let c = Math.floor(Math.random() * pool.length);
+    for (let i = 0; i < this.SLOTS; i++) {
+      if (i === frontSlot && st.phase !== 'intro') continue;
+      faces[i] = pool[c % pool.length]; c++;
+    }
+    faces[t] = target;
+    const fast = this.reduced();
+    const dur = fast ? 0 : (this.props.spinMs ?? 2600);
+    const base = st.drumDeg - (fast ? 0 : 360 * 3);
+    const r = (((base + t * this.STEP) % 360) + 360) % 360;
+    this.setState({ k, faces, targetSlot: t, phase: 'spin', dur, drumDeg: base - r });
+    clearTimeout(this.t);
+    this.t = setTimeout(() => this.land(k), dur + 120);
+  }
+  land(k) {
+    this.setState({ phase: 'landed', revealedCount: k + 1 });
+    this.t = setTimeout(() => {
+      if (k + 1 < this.list.length) this.spinTo(k + 1);
+      else this.setState({ phase: 'done' });
+    }, this.props.pauseMs ?? 1500);
+  }
+  renderVals() {
+    const st = this.state;
+    const N = this.list.length;
+    const done = st.phase === 'done';
+    const landed = st.phase === 'landed';
+    const shown = this.list.slice(0, st.revealedCount);
+    const recent = done ? shown : (landed ? shown.slice(0, -1) : shown).slice(-3).reverse();
+    return {
+      done, notDone: !done, landed, spinning: !landed && !done,
+      drumDeg: st.drumDeg, dur: st.dur,
+      faces: st.faces.map((name, i) => {
+        const win = landed && i === st.targetSlot;
+        const bg = win ? '#F6DDE2' : (i % 2 ? '#FFFFFF' : '#FBF3EC');
+        return { name, style: 'transform: rotateX(' + (i * this.STEP) + 'deg) translateZ(105px); background: ' + bg + '; color: ' + (win ? '#8B1E2F' : '#2C2C2A') + '; border: 1px solid ' + (win ? '#E9B5C0' : '#E8DCD2') + ';' };
+      }),
+      frameCls: landed ? (st.k % 2 ? 'pk-glow' : 'pk-glow') : '',
+      cardCls: st.k % 2 ? 'pk-a' : 'pk-b',
+      cur: this.list[st.k],
+      question: '¿A quién le toca el turno ' + (st.k + 1) + '?',
+      progress: done ? N + ' de ' + N : 'Turno ' + (st.k + 1) + ' de ' + N,
+      revealedLabel: done ? 'Orden completo' : (recent.length ? 'Ya salieron' : 'Los turnos aparecerán aquí'),
+      revealed: recent.map((r) => ({ ...r, style: r.me ? 'background: #F6DDE2; border: 1.5px solid #E9B5C0;' : 'background: #FFFFFF; border: 1px solid #E8DCD2;' })),
+      skip: () => { clearTimeout(this.t); this.setState({ phase: 'done', revealedCount: N, k: N - 1 }); },
+      replay: () => { clearTimeout(this.t); this.setState({ revealedCount: 0, phase: 'landed', k: 0 }, () => this.spinTo(0)); }
+    };
+  }
+}
+</script>
+</body>
+</html>

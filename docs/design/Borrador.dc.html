@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Borrador del sorteo</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#8B1E2F}a:hover{color:#5C1220}button{font-family:inherit}</style>
+</helmet>
+<div style="width: 360px; height: 1000px; box-sizing: border-box; background: #FBF3EC; color: #2C2C2A; font-family: Nunito, Poppins, system-ui, sans-serif; display: flex; flex-direction: column;">
+  <header style="padding: 12px 8px 0; display: flex; align-items: center; gap: 4px;">
+    <a href="LobbyAnfitrion.dc.html" aria-label="Volver a la sala" style="width: 44px; height: 44px; border-radius: 999px; color: #2C2C2A; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></a>
+    <h1 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Borrador del sorteo</h1>
+  </header>
+  <div style="margin: 12px 16px 0; display: flex; gap: 10px; align-items: center; padding: 12px 14px; border-radius: 12px; background: #FAEEDA; color: #633806;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0;"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+    <span style="font-size: 15px; line-height: 22px;"><b>Solo tú ves este borrador.</b> Ajusta el orden si hace falta y luego anúncialo.</span>
+  </div>
+  <sc-if value="{{showError}}" hint-placeholder-val="{{false}}">
+    <div role="alert" style="margin: 12px 16px 0; display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1px solid #F2B8B5; border-radius: 12px; background: #FCEBEB; color: #B3261E;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-size: 15px; line-height: 22px; color: #2C2C2A;">No pudimos anunciar el sorteo. Tu borrador sigue aquí; intenta de nuevo.</span>
+        <button type="button" style="align-self: flex-start; height: 32px; padding: 0 12px; border: 1.5px solid #B3261E; border-radius: 999px; background: #FFFFFF; color: #B3261E; font-size: 13px; font-weight: 700;">Reintentar</button>
+      </div>
+    </div>
+  </sc-if>
+  <div style="padding: 16px 16px 0; display: flex; justify-content: space-between; align-items: baseline;">
+    <h2 style="margin: 0; font-size: 17px; line-height: 24px; font-weight: 700;">Orden de cobro</h2>
+    <span style="font-size: 13px; color: #6E5A55;">Arrastra o usa las flechas</span>
+  </div>
+  <ol style="margin: 10px 16px 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px;">
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+      <li style="display: flex; align-items: center; gap: 4px; padding: 2px 2px 2px 0; border-radius: 18px; background: #FFFFFF; {{r.rowStyle}}">
+        <span aria-hidden="true" style="width: 32px; height: 44px; display: flex; align-items: center; justify-content: center; color: {{r.grip}}; flex-shrink: 0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg></span>
+        <b style="width: 22px; font-size: 15px; color: #8B1E2F; flex-shrink: 0;">{{r.pos}}</b>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;"><b style="font-size: 15px; line-height: 20px;">{{r.name}}</b><span style="font-size: 13px; color: #6E5A55;">{{r.date}}</span></div>
+        <button type="button" aria-label="Subir a {{r.name}}" style="width: 40px; height: 44px; border: none; border-radius: 10px; background: transparent; color: #6E5A55; flex-shrink: 0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"></path></svg></button>
+        <button type="button" aria-label="Bajar a {{r.name}}" style="width: 40px; height: 44px; border: none; border-radius: 10px; background: transparent; color: #6E5A55; flex-shrink: 0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+      </li>
+    </sc-for>
+  </ol>
+  <div style="flex: 1;"></div>
+  <div style="padding: 16px; border-top: 1px solid #E8DCD2; display: flex; flex-direction: column; gap: 10px;">
+    <a href="ConfirmarSorteo.dc.html" style="height: 52px; border-radius: 999px; background: #8B1E2F; color: #FFFFFF; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Confirmar y anunciar</a>
+    <button type="button" style="height: 48px; border: 1.5px solid #8B1E2F; border-radius: 999px; background: #FFFFFF; color: #8B1E2F; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>Volver a sortear</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showError":{"editor":"boolean","default":false},"$preview":{"width":360,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const names = ['Carmen Choque', 'Luis Condori', 'Lucía Mamani', 'Juan Quispe', 'Sofía Limachi', 'Pedro Huanca', 'Ana Flores', 'Marco Apaza'];
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto'];
+    return {
+      showError: this.props.showError ?? false,
+      rows: names.map((n, i) => {
+        const lifted = i === 3;
+        return {
+          pos: i + 1,
+          name: n,
+          date: months[i] + ' 2027',
+          grip: lifted ? '#8B1E2F' : '#9A8A84',
+          rowStyle: lifted
+            ? 'border: 1.5px solid #B5475A; box-shadow: 0 8px 24px rgba(92,18,32,0.12); transform: translateX(6px) rotate(-1deg);'
+            : 'border: 1px solid #E8DCD2;'
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

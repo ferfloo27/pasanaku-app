@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Estados transversales</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#8B1E2F}a:hover{color:#5C1220}button{font-family:inherit}
+@keyframes pk-spin{to{transform:rotate(360deg)}}.pk-spin{animation:pk-spin .9s linear infinite}
+@keyframes pk-pulse{0%,100%{opacity:1}50%{opacity:.55}}.pk-skel{animation:pk-pulse 1.4s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.pk-spin,.pk-skel{animation:none}}</style>
+</helmet>
+<div style="width: 1256px; height: 1300px; box-sizing: border-box; padding: 48px; background: #F1E8E0; color: #2C2C2A; font-family: Nunito, Poppins, system-ui, sans-serif; display: flex; flex-direction: column; gap: 32px;">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+    <h1 style="margin: 0; font-size: 28px; line-height: 34px; font-weight: 700;">Estados transversales</h1>
+    <span style="font-size: 13px; color: #6E5A55;">Qué pasó + qué hacer. Sin culpar, sin signos de exclamación.</span>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(3, 360px); gap: 40px;">
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <b style="font-size: 15px;">Sala no encontrada</b>
+      <div style="width: 360px; height: 500px; box-sizing: border-box; background: #FBF3EC; border: 1px solid #E8DCD2; border-radius: 4px; display: flex; flex-direction: column; padding: 48px 16px 16px; gap: 12px; text-align: center; align-items: center;">
+        <svg width="120" height="96" viewBox="0 0 120 96" aria-hidden="true"><path d="M60 6L104 48L60 90L16 48Z" fill="#F6DDE2"></path><path d="M60 22L88 48L60 74L32 48Z" fill="none" stroke="#B5475A" stroke-width="3" stroke-dasharray="6 5"></path><path d="M54 40l12 16M66 40 54 56" stroke="#8B1E2F" stroke-width="4" stroke-linecap="round"></path></svg>
+        <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">No encontramos esta sala</h2>
+        <p style="margin: 0; font-size: 15px; line-height: 22px; color: #6E5A55;">El link puede estar incompleto o la sala ya no existe. Pide el código otra vez a quien organiza.</p>
+        <div style="flex: 1;"></div>
+        <a href="Unirse.dc.html" style="align-self: stretch; height: 52px; border-radius: 999px; background: #8B1E2F; color: #FFFFFF; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Escribir un código</a>
+        <a href="Inicio.dc.html" style="align-self: stretch; height: 44px; border-radius: 999px; color: #8B1E2F; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Ir al inicio</a>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <b style="font-size: 15px;">Sala cancelada (estando dentro)</b>
+      <div style="width: 360px; height: 500px; box-sizing: border-box; position: relative; overflow: hidden; background: #FBF3EC; border: 1px solid #E8DCD2; border-radius: 4px;">
+        <div aria-hidden="true" style="padding: 24px 16px; display: flex; flex-direction: column; gap: 10px;">
+          <b style="font-size: 22px;">Tanda de la oficina</b>
+          <div style="height: 64px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E8DCD2;"></div>
+          <div style="height: 180px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E8DCD2;"></div>
+        </div>
+        <div style="position: absolute; inset: 0; background: rgba(44,44,42,0.5); display: flex; align-items: center; padding: 16px; box-sizing: border-box;">
+          <div role="alertdialog" aria-labelledby="sc" style="width: 100%; background: #FFFFFF; border-radius: 24px; padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 24px rgba(92,18,32,0.12);">
+            <span aria-hidden="true" style="width: 48px; height: 48px; border-radius: 999px; background: #E8DCD2; color: #6E5A55; display: flex; align-items: center; justify-content: center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></span>
+            <h2 id="sc" style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Rosa canceló la sala</h2>
+            <p style="margin: 0; font-size: 15px; line-height: 22px; color: #6E5A55;">“Tanda de la oficina” ya no está activa. Te llevamos al inicio.</p>
+            <a href="InicioVacio.dc.html" style="height: 52px; border-radius: 999px; background: #8B1E2F; color: #FFFFFF; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Ir al inicio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <b style="font-size: 15px;">Te eliminaron de la sala</b>
+      <div style="width: 360px; height: 500px; box-sizing: border-box; background: #FBF3EC; border: 1px solid #E8DCD2; border-radius: 4px; display: flex; flex-direction: column; padding: 48px 16px 16px; gap: 12px; text-align: center; align-items: center;">
+        <span aria-hidden="true" style="width: 72px; height: 72px; border-radius: 999px; background: #F6DDE2; color: #8B1E2F; display: flex; align-items: center; justify-content: center;"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M17 11h6"></path></svg></span>
+        <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Ya no estás en esta sala</h2>
+        <p style="margin: 0; font-size: 15px; line-height: 22px; color: #6E5A55;">Rosa te quitó de “Tanda de la oficina”. Si fue un error, pídele el código y vuelve a unirte.</p>
+        <div style="flex: 1;"></div>
+        <a href="Inicio.dc.html" style="align-self: stretch; height: 52px; border-radius: 999px; background: #8B1E2F; color: #FFFFFF; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Ir al inicio</a>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <b style="font-size: 15px;">Reconectando (no bloquea)</b>
+      <div style="width: 360px; height: 500px; box-sizing: border-box; position: relative; background: #FBF3EC; border: 1px solid #E8DCD2; border-radius: 4px; padding: 24px 16px; display: flex; flex-direction: column; gap: 12px;">
+        <div role="status" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); display: inline-flex; gap: 8px; align-items: center; height: 30px; padding: 0 12px; border-radius: 999px; background: #FAEEDA; color: #633806; font-size: 13px; font-weight: 700; white-space: nowrap; box-shadow: 0 8px 24px rgba(92,18,32,0.12);"><svg class="pk-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.2-8.6"></path></svg>Reconectando…</div>
+        <b style="font-size: 22px; line-height: 28px; margin-top: 28px;">Pasanaku Familia Mamani</b>
+        <b style="font-size: 17px;">Participantes (8/30)</b>
+        <div style="border: 1px solid #E8DCD2; border-radius: 18px; background: #FFFFFF;">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid #E8DCD2;"><span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 999px; background: #8B1E2F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">LM</span><b style="font-size: 15px;">Lucía Mamani</b></div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid #E8DCD2;"><span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 999px; background: #F6DDE2; color: #5C1220; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">JQ</span><b style="font-size: 15px;">Juan Quispe</b></div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 10px 14px;"><span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 999px; background: #F6DDE2; color: #5C1220; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">CC</span><b style="font-size: 15px;">Carmen Choque</b></div>
+        </div>
+        <span style="font-size: 13px; line-height: 18px; color: #6E5A55;">Puedes seguir mirando. Los cambios llegan apenas vuelva la conexión.</span>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <b style="font-size: 15px;">Cargando (skeletons)</b>
+      <div aria-busy="true" aria-label="Cargando la sala" style="width: 360px; height: 500px; box-sizing: border-box; background: #FBF3EC; border: 1px solid #E8DCD2; border-radius: 4px; padding: 24px 16px; display: flex; flex-direction: column; gap: 12px;">
+        <div class="pk-skel" style="height: 24px; width: 70%; border-radius: 8px; background: #E8DCD2;"></div>
+        <div class="pk-skel" style="height: 16px; width: 30%; border-radius: 8px; background: #EFE4DB;"></div>
+        <div class="pk-skel" style="height: 96px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E8DCD2;"></div>
+        <div class="pk-skel" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;"><div style="height: 56px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E8DCD2;"></div><div style="height: 56px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E8DCD2;"></div><div style="height: 56px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E8DCD2;"></div></div>
+        <div class="pk-skel" style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #E8DCD2; border-radius: 18px; background: #FFFFFF;"><div style="width: 36px; height: 36px; border-radius: 999px; background: #E8DCD2;"></div><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><div style="height: 12px; width: 60%; border-radius: 6px; background: #E8DCD2;"></div><div style="height: 10px; width: 35%; border-radius: 6px; background: #EFE4DB;"></div></div></div>
+        <div class="pk-skel" style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #E8DCD2; border-radius: 18px; background: #FFFFFF;"><div style="width: 36px; height: 36px; border-radius: 999px; background: #E8DCD2;"></div><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><div style="height: 12px; width: 50%; border-radius: 6px; background: #E8DCD2;"></div><div style="height: 10px; width: 25%; border-radius: 6px; background: #EFE4DB;"></div></div></div>
+        <div class="pk-skel" style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #E8DCD2; border-radius: 18px; background: #FFFFFF;"><div style="width: 36px; height: 36px; border-radius: 999px; background: #E8DCD2;"></div><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><div style="height: 12px; width: 65%; border-radius: 6px; background: #E8DCD2;"></div><div style="height: 10px; width: 30%; border-radius: 6px; background: #EFE4DB;"></div></div></div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <b style="font-size: 15px;">Sin conexión</b>
+      <div style="width: 360px; height: 500px; box-sizing: border-box; background: #FBF3EC; border: 1px solid #E8DCD2; border-radius: 4px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+        <div role="alert" style="display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1px solid #F2B8B5; border-radius: 12px; background: #FCEBEB; color: #B3261E;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px;"><path d="M12 20h.01"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path><path d="M2 8.82a15 15 0 0 1 4.17-2.65"></path><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"></path><path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"></path><path d="M5 13a10 10 0 0 1 5.24-2.76"></path><path d="M2 2l20 20"></path></svg>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+            <span style="font-size: 15px; line-height: 22px; color: #2C2C2A;">Sin conexión. Te mostramos lo último que vimos.</span>
+            <button type="button" style="align-self: flex-start; height: 32px; padding: 0 12px; border: 1.5px solid #B3261E; border-radius: 999px; background: #FFFFFF; color: #B3261E; font-size: 13px; font-weight: 700;">Reintentar</button>
+          </div>
+        </div>
+        <b style="font-size: 22px; line-height: 28px;">Pasanaku Familia Mamani</b>
+        <div style="padding: 14px 16px; border-radius: 18px; background: #8B1E2F; color: #FFFFFF; display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 13px; color: #F6DDE2; font-weight: 700;">Tu turno</span><b style="font-size: 22px;">Marzo 2027</b></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; padding: 12px 14px; border: 1px solid #E8DCD2; border-radius: 18px; background: #FFFFFF; font-size: 15px;"><b>1 · Carmen Choque</b><span style="color: #6E5A55;">Ene 2027</span></div>
+          <div style="display: flex; justify-content: space-between; padding: 12px 14px; border: 1px solid #E8DCD2; border-radius: 18px; background: #FFFFFF; font-size: 15px;"><b>2 · Luis Condori</b><span style="color: #6E5A55;">Feb 2027</span></div>
+        </div>
+        <button type="button" disabled style="height: 48px; border: none; border-radius: 999px; background: #E8DCD2; color: #9A8A84; font-size: 15px; font-weight: 700; margin-top: auto;">Compartir</button>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1256,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

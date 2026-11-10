@@ -1,0 +1,50 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-11-08T12:00:00Z"},
+  "title": "Pasanaku",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 1280, "h": 1880, "title": "Sistema de diseño"},
+    "Componentes.dc.html": {"x": 1360, "y": 0, "w": 1280, "h": 2160, "title": "Componentes"},
+    "Perfil.dc.html": {"x": 0, "y": 2580, "w": 360, "h": 760, "title": "6.1 Nombre de perfil"},
+    "Inicio.dc.html": {"x": 440, "y": 2580, "w": 360, "h": 980, "title": "6.2 Inicio"},
+    "InicioVacio.dc.html": {"x": 880, "y": 2580, "w": 360, "h": 760, "title": "6.2 Inicio · vacío"},
+    "Crear.dc.html": {"x": 1320, "y": 2580, "w": 360, "h": 1000, "title": "6.3 Crear sala"},
+    "SalaLista.dc.html": {"x": 1760, "y": 2580, "w": 360, "h": 800, "title": "6.3 Sala lista"},
+    "Unirse.dc.html": {"x": 2200, "y": 2580, "w": 360, "h": 760, "title": "6.4 Unirse"},
+    "PreUnion.dc.html": {"x": 2640, "y": 2580, "w": 360, "h": 800, "title": "6.4 Pre-unión"},
+    "UnirseErrores.dc.html": {"x": 3080, "y": 2580, "w": 360, "h": 1000, "title": "6.4 Errores al unirse"},
+    "LobbyAnfitrion.dc.html": {"x": 0, "y": 4000, "w": 360, "h": 1100, "title": "6.5 Lobby · anfitrión"},
+    "LobbyParticipante.dc.html": {"x": 440, "y": 4000, "w": 360, "h": 1000, "title": "6.5 Lobby · participante"},
+    "LobbyEspera.dc.html": {"x": 880, "y": 4000, "w": 360, "h": 820, "title": "6.5 Lobby · menos de 2 + menú"},
+    "EliminarParticipante.dc.html": {"x": 1320, "y": 4000, "w": 360, "h": 760, "title": "6.5 Eliminar participante"},
+    "Borrador.dc.html": {"x": 1760, "y": 4000, "w": 360, "h": 1000, "title": "6.6 Borrador del sorteo"},
+    "ConfirmarSorteo.dc.html": {"x": 2200, "y": 4000, "w": 360, "h": 760, "title": "6.6 Confirmar y anunciar"},
+    "Revelacion.dc.html": {"x": 2640, "y": 4000, "w": 360, "h": 880, "title": "6.7 Revelación", "is_interactive": true},
+    "Resultados.dc.html": {"x": 3080, "y": 4000, "w": 360, "h": 1100, "title": "6.8 Resultados"},
+    "Estados.dc.html": {"x": 0, "y": 5520, "w": 1256, "h": 1300, "title": "6.9 Estados transversales"},
+    "Prototipo.dc.html": {"x": 1336, "y": 5520, "w": 360, "h": 760, "title": "Prototipo · flujo principal", "is_interactive": true},
+    "Oscuro.dc.html": {"x": 0, "y": 7240, "w": 1280, "h": 2000, "title": "Modo oscuro · tokens y componentes"},
+    "InicioOscuro.dc.html": {"x": 1360, "y": 7240, "w": 360, "h": 980, "title": "Oscuro · Inicio"},
+    "LobbyOscuro.dc.html": {"x": 1800, "y": 7240, "w": 360, "h": 1100, "title": "Oscuro · Lobby anfitrión"},
+    "BorradorOscuro.dc.html": {"x": 2240, "y": 7240, "w": 360, "h": 1000, "title": "Oscuro · Borrador"},
+    "RevelacionOscuro.dc.html": {"x": 2680, "y": 7240, "w": 360, "h": 880, "title": "Oscuro · Revelación", "is_interactive": true},
+    "ResultadosOscuro.dc.html": {"x": 3120, "y": 7240, "w": 360, "h": 1100, "title": "Oscuro · Resultados"}
+  },
+  "order": [
+    "Main.dc.html", "Componentes.dc.html",
+    "Perfil.dc.html", "Inicio.dc.html", "InicioVacio.dc.html", "Crear.dc.html", "SalaLista.dc.html", "Unirse.dc.html", "PreUnion.dc.html", "UnirseErrores.dc.html",
+    "LobbyAnfitrion.dc.html", "LobbyParticipante.dc.html", "LobbyEspera.dc.html", "EliminarParticipante.dc.html", "Borrador.dc.html", "ConfirmarSorteo.dc.html", "Revelacion.dc.html", "Resultados.dc.html",
+    "Estados.dc.html", "Prototipo.dc.html",
+    "Oscuro.dc.html", "InicioOscuro.dc.html", "LobbyOscuro.dc.html", "BorradorOscuro.dc.html", "RevelacionOscuro.dc.html", "ResultadosOscuro.dc.html"
+  ],
+  "notes": {
+    "t0": {"x": 0, "y": -300, "text": "Sistema y componentes", "kind": "title1", "maxW": 2640},
+    "t1": {"x": 0, "y": 2280, "text": "Inicio, crear y unirse", "kind": "title1", "maxW": 3440},
+    "t2": {"x": 0, "y": 3700, "text": "Sala: lobby, sorteo y resultados", "kind": "title1", "maxW": 3440},
+    "t3": {"x": 0, "y": 5220, "text": "Estados transversales y prototipo", "kind": "title1", "maxW": 1696},
+    "t4": {"x": 0, "y": 6940, "text": "Modo oscuro", "kind": "title1", "maxW": 3480}
+  },
+  "designSystems": []
+}

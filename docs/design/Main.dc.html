@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pasanaku · Sistema de diseño</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#8B1E2F}a:hover{color:#5C1220}
+</style>
+</helmet>
+<div style="width: 1280px; height: 1880px; box-sizing: border-box; background: #FBF3EC; color: #2C2C2A; font-family: Nunito, Poppins, system-ui, sans-serif; display: flex; flex-direction: column;">
+  <svg width="100%" height="12" aria-hidden="true" style="display: block;"><defs><pattern id="agA" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="#8B1E2F"></rect><path d="M12 1L18 6L12 11L6 6Z" fill="#D9A441"></path><path d="M12 4L14 6L12 8L10 6Z" fill="#8B1E2F"></path><path d="M0 0L3 6L0 12Z" fill="#B5475A"></path><path d="M24 0L21 6L24 12Z" fill="#B5475A"></path></pattern></defs><rect width="100%" height="12" fill="url(#agA)"></rect></svg>
+
+  <div style="padding: 56px 64px 40px; display: flex; justify-content: space-between; align-items: flex-end; gap: 48px;">
+    <div style="display: flex; flex-direction: column; gap: 12px; max-width: 720px;">
+      <p style="margin: 0; font-size: 13px; line-height: 18px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #6E5A55;">Pasanaku · Sistema de diseño v1</p>
+      <h1 style="margin: 0; font-size: 48px; line-height: 54px; font-weight: 800; color: #8B1E2F;">Cálida, cercana, de confianza.</h1>
+      <p style="margin: 0; font-size: 17px; line-height: 26px; color: #6E5A55;">Ahorro grupal boliviano hecho app. Fondos crema, vino como marca, tipografía redondeada y el aguayo solo en los momentos que importan: la franja de arriba, el código de sala y la revelación.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; line-height: 18px; color: #6E5A55; text-align: right;">
+      <span>Mobile-first · 360px (mín. 320px)</span>
+      <span>Español (Bolivia) · Bs</span>
+      <span>Modo oscuro: solo tokens</span>
+    </div>
+  </div>
+
+  <div style="padding: 0 64px 64px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px;">
+
+    <section style="grid-column: span 2; background: #FFFFFF; border: 1px solid #E8DCD2; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Color · primitivos</h2>
+        <span style="font-size: 13px; color: #6E5A55;">Los componentes no los usan directo: pasan por tokens semánticos</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 16px;">
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #5C1220;"></div><b style="font-size: 13px;">vino-900</b><span style="font-size: 13px; color: #6E5A55;">#5C1220 · hover primario</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #8B1E2F;"></div><b style="font-size: 13px;">vino-700 · marca</b><span style="font-size: 13px; color: #6E5A55;">#8B1E2F · primario</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #B5475A;"></div><b style="font-size: 13px;">vino-500</b><span style="font-size: 13px; color: #6E5A55;">#B5475A · foco, detalles</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #E9B5C0;"></div><b style="font-size: 13px;">rosa-200</b><span style="font-size: 13px; color: #6E5A55;">#E9B5C0 · borde destacado</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #F6DDE2;"></div><b style="font-size: 13px;">rosa-100</b><span style="font-size: 13px; color: #6E5A55;">#F6DDE2 · fondo destacado</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #D9A441;"></div><b style="font-size: 13px;">oro-500</b><span style="font-size: 13px; color: #6E5A55;">#D9A441 · solo decorativo</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #2E6B4F;"></div><b style="font-size: 13px;">verde (patrón)</b><span style="font-size: 13px; color: #6E5A55;">#2E6B4F · solo en aguayo</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #FBF3EC; border: 1px solid #E8DCD2;"></div><b style="font-size: 13px;">crema-50</b><span style="font-size: 13px; color: #6E5A55;">#FBF3EC · fondo</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #E8DCD2;"></div><b style="font-size: 13px;">crema-200</b><span style="font-size: 13px; color: #6E5A55;">#E8DCD2 · borde tarjeta</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #D9C8BE;"></div><b style="font-size: 13px;">crema-300</b><span style="font-size: 13px; color: #6E5A55;">#D9C8BE · borde campo</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #FFFFFF; border: 1px solid #E8DCD2;"></div><b style="font-size: 13px;">blanco</b><span style="font-size: 13px; color: #6E5A55;">#FFFFFF · superficie</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #2C2C2A;"></div><b style="font-size: 13px;">tinta-900</b><span style="font-size: 13px; color: #6E5A55;">#2C2C2A · texto</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #6E5A55;"></div><b style="font-size: 13px;">tinta-600</b><span style="font-size: 13px; color: #6E5A55;">#6E5A55 · secundario</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px;"><div style="height: 88px; border-radius: 12px; background: #9A8A84;"></div><b style="font-size: 13px;">tinta-400</b><span style="font-size: 13px; color: #6E5A55;">#9A8A84 · deshabilitado</span></div>
+      </div>
+    </section>
+
+    <section style="background: #FFFFFF; border: 1px solid #E8DCD2; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 16px;">
+      <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Color · semánticos</h2>
+      <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 0; font-size: 13px; line-height: 18px;">
+        <b style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; color: #6E5A55;">Token</b><b style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; color: #6E5A55;">Claro</b><b style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; color: #6E5A55;">Oscuro (prov.)</b>
+        <code style="padding: 8px 0; border-bottom: 1px solid #E8DCD2;">--color-bg</code><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #FBF3EC; border: 1px solid #D9C8BE;"></i>crema-50</span><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #1C1416;"></i>#1C1416</span>
+        <code style="padding: 8px 0; border-bottom: 1px solid #E8DCD2;">--color-surface</code><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #FFFFFF; border: 1px solid #D9C8BE;"></i>blanco</span><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #2A1F22;"></i>#2A1F22</span>
+        <code style="padding: 8px 0; border-bottom: 1px solid #E8DCD2;">--color-border</code><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #E8DCD2;"></i>crema-200</span><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #3D2E32;"></i>#3D2E32</span>
+        <code style="padding: 8px 0; border-bottom: 1px solid #E8DCD2;">--color-text</code><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #2C2C2A;"></i>tinta-900</span><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #F3ECE8; border: 1px solid #D9C8BE;"></i>#F3ECE8</span>
+        <code style="padding: 8px 0; border-bottom: 1px solid #E8DCD2;">--color-text-muted</code><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #6E5A55;"></i>tinta-600</span><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #BFAFA9;"></i>#BFAFA9</span>
+        <code style="padding: 8px 0; border-bottom: 1px solid #E8DCD2;">--color-primary</code><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #8B1E2F;"></i>vino-700</span><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #D06A7C;"></i>#D06A7C</span>
+        <code style="padding: 8px 0; border-bottom: 1px solid #E8DCD2;">--color-on-primary</code><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #FFFFFF; border: 1px solid #D9C8BE;"></i>blanco</span><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #1C1416;"></i>#1C1416</span>
+        <code style="padding: 8px 0; border-bottom: 1px solid #E8DCD2;">--color-accent-soft</code><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #F6DDE2;"></i>rosa-100</span><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #4A2630;"></i>#4A2630</span>
+        <code style="padding: 8px 0; border-bottom: 1px solid #E8DCD2;">--color-accent</code><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #D9A441;"></i>oro-500</span><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #E0B45C;"></i>#E0B45C</span>
+        <code style="padding: 8px 0; border-bottom: 1px solid #E8DCD2;">--color-danger / -soft</code><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #B3261E;"></i><i style="width: 14px; height: 14px; border-radius: 4px; background: #FCEBEB; border: 1px solid #D9C8BE;"></i></span><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #F2867E;"></i><i style="width: 14px; height: 14px; border-radius: 4px; background: #4A1E1E;"></i></span>
+        <code style="padding: 8px 0; border-bottom: 1px solid #E8DCD2;">--color-success / -soft</code><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #27500A;"></i><i style="width: 14px; height: 14px; border-radius: 4px; background: #E3F1E4; border: 1px solid #D9C8BE;"></i></span><span style="padding: 8px 0; border-bottom: 1px solid #E8DCD2; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #9CCB7A;"></i><i style="width: 14px; height: 14px; border-radius: 4px; background: #1F3318;"></i></span>
+        <code style="padding: 8px 0;">--color-warning / -soft</code><span style="padding: 8px 0; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #633806;"></i><i style="width: 14px; height: 14px; border-radius: 4px; background: #FAEEDA; border: 1px solid #D9C8BE;"></i></span><span style="padding: 8px 0; display: flex; gap: 8px; align-items: center;"><i style="width: 14px; height: 14px; border-radius: 4px; background: #F0C27A;"></i><i style="width: 14px; height: 14px; border-radius: 4px; background: #3D2A10;"></i></span>
+      </div>
+    </section>
+
+    <section style="background: #FFFFFF; border: 1px solid #E8DCD2; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 16px;">
+      <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Contraste</h2>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+        <div style="background: #8B1E2F; color: #FFFFFF; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 4px;"><b style="font-size: 17px;">Crear sala</b><span style="font-size: 13px;">Blanco / vino-700 · 9.5:1 · AA</span></div>
+        <div style="background: #FBF3EC; color: #6E5A55; border: 1px solid #E8DCD2; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 4px;"><b style="font-size: 17px;">Texto secundario</b><span style="font-size: 13px;">tinta-600 / crema-50 · 6:1 · AA</span></div>
+        <div style="background: #F6DDE2; color: #5C1220; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 4px;"><b style="font-size: 17px;">Anfitrión</b><span style="font-size: 13px;">vino-900 / rosa-100 · AA</span></div>
+        <div style="background: #FBF3EC; border: 1px dashed #B3261E; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 4px;"><b style="font-size: 17px; color: #D9A441;">Oro como texto</b><span style="font-size: 13px; color: #B3261E;">No usar: falla contraste</span></div>
+      </div>
+      <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 22px; color: #6E5A55; display: flex; flex-direction: column; gap: 6px;">
+        <li>Texto normal ≥ 4.5:1. Texto grande y bordes de control ≥ 3:1.</li>
+        <li>Foco: anillo 2px vino-500 con 2px de separación, en todo interactivo.</li>
+        <li>Estados nunca solo por color: los chips siempre llevan texto.</li>
+      </ul>
+    </section>
+
+    <section style="background: #FFFFFF; border: 1px solid #E8DCD2; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 4px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px;">
+        <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Tipografía</h2>
+        <span style="font-size: 13px; color: #6E5A55;">Nunito 400 / 700 · JetBrains Mono 700</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E8DCD2;"><span style="font-size: 13px; color: #6E5A55;">Display 28/34</span><span style="font-size: 28px; line-height: 34px; font-weight: 700;">Hola, Lucía</span></div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E8DCD2;"><span style="font-size: 13px; color: #6E5A55;">Título 22/28</span><span style="font-size: 22px; line-height: 28px; font-weight: 700;">Pasanaku Familia Mamani</span></div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E8DCD2;"><span style="font-size: 13px; color: #6E5A55;">Subtítulo 17/24</span><span style="font-size: 17px; line-height: 24px; font-weight: 700;">Participantes (8/30)</span></div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E8DCD2;"><span style="font-size: 13px; color: #6E5A55;">Cuerpo 15/22</span><span style="font-size: 15px; line-height: 22px;">Cada turno recibe Bs 2.000. El sorteo lo hace la anfitriona.</span></div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E8DCD2;"><span style="font-size: 13px; color: #6E5A55;">Nota 13/18</span><span style="font-size: 13px; line-height: 18px; color: #6E5A55;">Entre 1 y 50 caracteres. Así te verán en las salas.</span></div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: baseline; padding: 12px 0;"><span style="font-size: 13px; color: #6E5A55;">Código 24/28</span><span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 24px; line-height: 28px; font-weight: 700; letter-spacing: 0.2em; color: #8B1E2F;">K7QM3P</span></div>
+    </section>
+
+    <section style="background: #FFFFFF; border: 1px solid #E8DCD2; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+      <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Forma, espacio y elevación</h2>
+      <div style="display: flex; gap: 16px; align-items: flex-end;">
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;"><div style="width: 88px; height: 64px; border: 2px solid #8B1E2F; border-radius: 18px;"></div><span style="font-size: 13px; color: #6E5A55;">Tarjeta 18</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;"><div style="width: 88px; height: 44px; border: 2px solid #8B1E2F; border-radius: 12px;"></div><span style="font-size: 13px; color: #6E5A55;">Campo 12</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;"><div style="width: 88px; height: 44px; border: 2px solid #8B1E2F; border-radius: 999px;"></div><span style="font-size: 13px; color: #6E5A55;">Botón/chip pill</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;"><div style="width: 88px; height: 76px; border: 2px solid #8B1E2F; border-radius: 24px;"></div><span style="font-size: 13px; color: #6E5A55;">Modal 24</span></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <span style="font-size: 13px; font-weight: 700; color: #6E5A55;">Espaciado base 4 · margen lateral 16</span>
+        <div style="display: flex; gap: 16px; align-items: flex-end;">
+          <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;"><div style="width: 4px; height: 4px; background: #B5475A;"></div><span style="font-size: 13px;">4</span></div>
+          <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;"><div style="width: 8px; height: 8px; background: #B5475A;"></div><span style="font-size: 13px;">8</span></div>
+          <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;"><div style="width: 12px; height: 12px; background: #B5475A;"></div><span style="font-size: 13px;">12</span></div>
+          <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;"><div style="width: 16px; height: 16px; background: #B5475A;"></div><span style="font-size: 13px;">16</span></div>
+          <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;"><div style="width: 24px; height: 24px; background: #B5475A;"></div><span style="font-size: 13px;">24</span></div>
+          <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;"><div style="width: 32px; height: 32px; background: #B5475A;"></div><span style="font-size: 13px;">32</span></div>
+          <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;"><div style="width: 48px; height: 48px; background: #B5475A;"></div><span style="font-size: 13px;">48</span></div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 16px;">
+        <div style="flex: 1; border: 1px solid #E8DCD2; border-radius: 18px; padding: 16px; font-size: 13px; color: #6E5A55;"><b style="display: block; color: #2C2C2A; font-size: 15px;">Borde 1px</b>Tarjetas, listas, campos. Preferido.</div>
+        <div style="flex: 1; border-radius: 18px; padding: 16px; font-size: 13px; color: #6E5A55; box-shadow: 0 8px 24px rgba(92,18,32,0.12); background: #FFFFFF;"><b style="display: block; color: #2C2C2A; font-size: 15px;">Sombra</b>Solo modal, hoja inferior y toast.</div>
+        <div style="flex: 1; border: 1px dashed #D9C8BE; border-radius: 18px; padding: 16px; font-size: 13px; color: #6E5A55; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px;"><div style="width: 44px; height: 44px; border: 2px dashed #B5475A; border-radius: 8px;"></div>Táctil mín. 44×44</div>
+      </div>
+    </section>
+
+    <section style="background: #FFFFFF; border: 1px solid #E8DCD2; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Iconografía</h2>
+        <span style="font-size: 13px; color: #6E5A55;">Lucide · trazo 2 · 20px (24 en acciones)</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; color: #2C2C2A;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg><span style="font-size: 13px; color: #6E5A55;">Crear</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><path d="m10 17 5-5-5-5"></path><path d="M15 12H3"></path></svg><span style="font-size: 13px; color: #6E5A55;">Unirme</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span style="font-size: 13px; color: #6E5A55;">Copiar</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.6 13.5 6.8 4"></path><path d="m15.4 6.5-6.8 4"></path></svg><span style="font-size: 13px; color: #6E5A55;">Compartir</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg><span style="font-size: 13px; color: #6E5A55;">Sortear</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg><span style="font-size: 13px; color: #6E5A55;">Arrastrar</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span style="font-size: 13px; color: #6E5A55;">Personas</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg><span style="font-size: 13px; color: #6E5A55;">Fecha</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg><span style="font-size: 13px; color: #6E5A55;">Más</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg><span style="font-size: 13px; color: #6E5A55;">Eliminar</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg><span style="font-size: 13px; color: #6E5A55;">Reintentar</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border: 1px solid #E8DCD2; border-radius: 12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg><span style="font-size: 13px; color: #6E5A55;">Error</span></div>
+      </div>
+    </section>
+
+    <section style="grid-column: span 2; background: #FFFFFF; border: 1px solid #E8DCD2; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Acento aguayo</h2>
+        <span style="font-size: 13px; color: #6E5A55;">Rombos, triángulos escalonados y franjas · vectorial · legible a 8px</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <svg width="100%" height="12" aria-hidden="true" style="display: block; border-radius: 3px;"><defs><pattern id="agA2" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="#8B1E2F"></rect><path d="M12 1L18 6L12 11L6 6Z" fill="#D9A441"></path><path d="M12 4L14 6L12 8L10 6Z" fill="#8B1E2F"></path><path d="M0 0L3 6L0 12Z" fill="#B5475A"></path><path d="M24 0L21 6L24 12Z" fill="#B5475A"></path></pattern></defs><rect width="100%" height="12" fill="url(#agA2)"></rect></svg>
+          <svg width="100%" height="8" aria-hidden="true" style="display: block;"><defs><pattern id="agA3" width="16" height="8" patternUnits="userSpaceOnUse"><rect width="16" height="8" fill="#8B1E2F"></rect><path d="M8 0.5L12 4L8 7.5L4 4Z" fill="#D9A441"></path><path d="M8 2.5L9.5 4L8 5.5L6.5 4Z" fill="#8B1E2F"></path><path d="M0 0L2 4L0 8Z" fill="#B5475A"></path><path d="M16 0L14 4L16 8Z" fill="#B5475A"></path></pattern></defs><rect width="100%" height="8" fill="url(#agA3)"></rect></svg>
+          <b style="font-size: 15px;">A · Rombos</b>
+          <span style="font-size: 13px; line-height: 18px; color: #6E5A55;">Franja por defecto: cabecera de inicio y de sala. 12px y 8px.</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <svg width="100%" height="12" aria-hidden="true" style="display: block; border-radius: 3px;"><defs><pattern id="agB" width="8" height="12" patternUnits="userSpaceOnUse"><rect width="8" height="12" fill="#8B1E2F"></rect><rect y="2" width="8" height="1" fill="#D9A441"></rect><rect y="3" width="8" height="6" fill="#B5475A"></rect><path d="M0 9L4 3L8 9Z" fill="#F6DDE2"></path><path d="M2.5 9L4 6.5L5.5 9Z" fill="#2E6B4F"></path><rect y="9" width="8" height="1" fill="#D9A441"></rect></pattern></defs><rect width="100%" height="12" fill="url(#agB)"></rect></svg>
+          <svg width="100%" height="8" aria-hidden="true" style="display: block;"><defs><pattern id="agB2" width="6" height="8" patternUnits="userSpaceOnUse"><rect width="6" height="8" fill="#8B1E2F"></rect><rect y="1" width="6" height="1" fill="#D9A441"></rect><rect y="2" width="6" height="4" fill="#B5475A"></rect><path d="M0 6L3 2L6 6Z" fill="#F6DDE2"></path><rect y="6" width="6" height="1" fill="#D9A441"></rect></pattern></defs><rect width="100%" height="8" fill="url(#agB2)"></rect></svg>
+          <b style="font-size: 15px;">B · Franjas</b>
+          <span style="font-size: 13px; line-height: 18px; color: #6E5A55;">Marco del código de sala y bordes de tarjeta de resultados.</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <svg width="100%" height="12" aria-hidden="true" style="display: block; border-radius: 3px;"><defs><pattern id="agC" width="16" height="12" patternUnits="userSpaceOnUse"><rect width="16" height="12" fill="#D9A441"></rect><path d="M0 12V9H2V6H4V3H6V0H10V3H12V6H14V9H16V12Z" fill="#8B1E2F"></path><rect x="7" y="4" width="2" height="2" fill="#F6DDE2"></rect><rect x="7" y="8" width="2" height="4" fill="#B5475A"></rect></pattern></defs><rect width="100%" height="12" fill="url(#agC)"></rect></svg>
+          <svg width="100%" height="8" aria-hidden="true" style="display: block;"><defs><pattern id="agC2" width="12" height="8" patternUnits="userSpaceOnUse"><rect width="12" height="8" fill="#D9A441"></rect><path d="M0 8V6H2V4H4V2H5V0H7V2H8V4H10V6H12V8Z" fill="#8B1E2F"></path><rect x="5" y="3" width="2" height="2" fill="#F6DDE2"></rect></pattern></defs><rect width="100%" height="8" fill="url(#agC2)"></rect></svg>
+          <b style="font-size: 15px;">C · Escalonado</b>
+          <span style="font-size: 13px; line-height: 18px; color: #6E5A55;">Celebración: revelación y final de resultados.</span>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 24px; align-items: stretch;">
+        <div style="border-radius: 18px; overflow: hidden; height: 200px;">
+          <svg width="100%" height="200" aria-hidden="true" style="display: block;"><defs><pattern id="agL" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#8B1E2F"></rect><path d="M20 2L38 20L20 38L2 20Z" fill="#B5475A"></path><path d="M20 8L32 20L20 32L8 20Z" fill="#D9A441"></path><path d="M20 13L27 20L20 27L13 20Z" fill="#8B1E2F"></path><path d="M20 17L23 20L20 23L17 20Z" fill="#F6DDE2"></path><path d="M0 0H4L0 4Z M40 0H36L40 4Z M0 40H4L0 36Z M40 40H36L40 36Z" fill="#2E6B4F"></path></pattern></defs><rect width="100%" height="200" fill="url(#agL)"></rect></svg>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 22px;">
+          <b style="color: #27500A;">Dónde sí</b>
+          <span style="color: #6E5A55;">Franja superior de inicio y sala (8–12px)</span>
+          <span style="color: #6E5A55;">Marco del código de sala</span>
+          <span style="color: #6E5A55;">Revelación y resultados finales (protagonista)</span>
+          <span style="color: #6E5A55;">Ilustraciones de estados vacíos</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 22px;">
+          <b style="color: #B3261E;">Dónde no</b>
+          <span style="color: #6E5A55;">Detrás de texto</span>
+          <span style="color: #6E5A55;">En formularios</span>
+          <span style="color: #6E5A55;">En tarjetas de lista</span>
+          <span style="color: #6E5A55;">En botones</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1880}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

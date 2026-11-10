@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Errores al unirse</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#8B1E2F}a:hover{color:#5C1220}button,input{font-family:inherit}</style>
+</helmet>
+<div style="width: 360px; height: 1000px; box-sizing: border-box; background: #FBF3EC; color: #2C2C2A; font-family: Nunito, Poppins, system-ui, sans-serif; display: flex; flex-direction: column;">
+  <header style="padding: 12px 8px 4px; display: flex; align-items: center; gap: 4px;">
+    <a href="Inicio.dc.html" aria-label="Volver al inicio" style="width: 44px; height: 44px; border-radius: 999px; color: #2C2C2A; display: flex; align-items: center; justify-content: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></a>
+    <h1 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Unirme a una sala</h1>
+  </header>
+  <div style="padding: 20px 16px 0; display: flex; flex-direction: column; gap: 8px;">
+    <span id="el" style="font-size: 15px; font-weight: 700;">Código de sala</span>
+    <input aria-labelledby="el" aria-invalid="true" aria-describedby="em" value="K7QM9X" style="height: 56px; box-sizing: border-box; text-align: center; border: 1.5px solid #B3261E; border-radius: 12px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 24px; font-weight: 700; letter-spacing: 0.2em; color: #2C2C2A; background: #FFFFFF;">
+    <span id="em" style="display: flex; gap: 6px; align-items: flex-start; font-size: 13px; line-height: 18px; color: #B3261E;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>Ese código no existe. Revísalo e intenta de nuevo.</span>
+    <button type="button" style="margin-top: 8px; height: 52px; border: none; border-radius: 999px; background: #8B1E2F; color: #FFFFFF; font-size: 15px; font-weight: 700;">Buscar sala</button>
+  </div>
+  <div style="padding: 32px 16px 0; display: flex; flex-direction: column; gap: 12px;">
+    <h2 style="margin: 0; font-size: 17px; line-height: 24px; font-weight: 700;">Cuando la sala no admite más gente</h2>
+    <sc-for list="{{cases}}" as="c" hint-placeholder-count="3">
+      <div style="padding: 16px; border: 1px solid #E8DCD2; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+          <b style="font-size: 15px;">Tanda de la oficina</b>
+          <span style="flex-shrink: 0; display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 700; {{c.chipStyle}}">{{c.chip}}</span>
+        </div>
+        <div role="alert" style="display: flex; gap: 10px; align-items: flex-start; padding: 12px; border-radius: 12px; background: {{c.bg}};">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{c.ink}}" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+          <span style="font-size: 15px; line-height: 22px; color: #2C2C2A;">{{c.msg}}</span>
+        </div>
+        <a href="Inicio.dc.html" style="align-self: flex-start; height: 44px; padding: 0 4px; color: #8B1E2F; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center;">{{c.action}}</a>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":360,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      cases: [
+        { chip: 'Sorteada', chipStyle: 'background: #E3F1E4; color: #27500A;', bg: '#FAEEDA', ink: '#633806', msg: 'Esta sala ya hizo su sorteo, así que no entran más personas. Pide a Rosa que te agregue a una nueva.', action: 'Volver al inicio' },
+        { chip: 'Cancelada', chipStyle: 'background: #E8DCD2; color: #6E5A55;', bg: '#FCEBEB', ink: '#B3261E', msg: 'Rosa canceló esta sala. Si fue un error, pídele que cree otra y te pase el código.', action: 'Volver al inicio' },
+        { chip: 'Llena · 30/30', chipStyle: 'background: #FAEEDA; color: #633806;', bg: '#FAEEDA', ink: '#633806', msg: 'La sala llegó a su máximo de 30 personas. Habla con Rosa para que libere un lugar.', action: 'Volver al inicio' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

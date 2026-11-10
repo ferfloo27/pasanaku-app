@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Eliminar participante</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#8B1E2F}a:hover{color:#5C1220}button{font-family:inherit}</style>
+</helmet>
+<div style="width: 360px; height: 760px; position: relative; overflow: hidden; background: #FBF3EC; color: #2C2C2A; font-family: Nunito, Poppins, system-ui, sans-serif;">
+  <div aria-hidden="true" style="padding: 24px 16px; display: flex; flex-direction: column; gap: 12px;">
+    <b style="font-size: 22px;">Pasanaku Familia Mamani</b>
+    <div style="height: 64px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E8DCD2;"></div>
+    <b style="font-size: 17px; margin-top: 12px;">Participantes (8/30)</b>
+    <div style="height: 56px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E8DCD2;"></div>
+    <div style="height: 56px; border-radius: 18px; background: #FFFFFF; border: 1.5px solid #B5475A;"></div>
+    <div style="height: 56px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E8DCD2;"></div>
+  </div>
+  <div style="position: absolute; inset: 0; background: rgba(44,44,42,0.5);"></div>
+  <div role="alertdialog" aria-modal="true" aria-labelledby="dt" aria-describedby="dd" style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFFFFF; border-radius: 24px 24px 0 0; padding: 12px 16px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 8px 24px rgba(92,18,32,0.12);">
+    <div aria-hidden="true" style="align-self: center; width: 40px; height: 4px; border-radius: 999px; background: #D9C8BE;"></div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 999px; background: #F6DDE2; color: #5C1220; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">JQ</span>
+      <h2 id="dt" style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">¿Eliminar a Juan Quispe?</h2>
+    </div>
+    <p id="dd" style="margin: 0; font-size: 15px; line-height: 22px; color: #6E5A55;">Saldrá de la sala y verá un aviso. Puede volver a unirse con el código mientras no hagas el sorteo.</p>
+    <button type="button" style="height: 52px; border: none; border-radius: 999px; background: #B3261E; color: #FFFFFF; font-size: 15px; font-weight: 700;">Eliminar de la sala</button>
+    <a href="LobbyAnfitrion.dc.html" style="height: 44px; border-radius: 999px; color: #8B1E2F; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Volver</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":360,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
