@@ -32,7 +32,7 @@ Convenciones:
 
 - [x] 1.1 Inicializar `supabase/` (CLI) y levantar Supabase local.
 - [x] 1.2 `0001_schema.sql`: enums `room_status`, `room_frequency`; tablas `profiles`, `rooms`, `participants`, `turns` según `design.md`.
-- [ ] 1.3 `0002_rls.sql`: habilitar RLS, `revoke` de escritura directa, `is_room_participant`, políticas de lectura, políticas de `profiles`.
+- [x] 1.3 `0002_rls.sql`: habilitar RLS, `revoke` de escritura directa, `is_room_participant`, políticas de lectura, políticas de `profiles`.
 - [ ] 1.4 `0003_rpc.sql`: `create_room`, `get_room_preview`, `join_room`, `remove_participant`, `cancel_room`, `confirm_draw`, `list_my_rooms` con sus códigos de error.
 - [ ] 1.5 Habilitar Realtime para `rooms` y `participants`; `replica identity full` en `participants`.
 - [ ] 1.6 Panel de Supabase (manual): activar inicio de sesión anónimo, configurar Google OAuth y "manual linking".
