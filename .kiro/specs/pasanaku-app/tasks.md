@@ -66,7 +66,7 @@ Convenciones:
 - [x] 3.1 `features/auth/api/authApi.js`: `ensureSession`, `linkGoogle`, `onAuthChange`.
 - [x] 3.2 `app/AuthProvider.jsx` + `useAuth`: `{ user, isAnonymous, status, error, retry }`.
 - [x] 3.3 `features/profile`: `validateDisplayName` (domain + test), `profileApi`, `useProfile`.
-- [ ] 3.4 `ProfileNameSheet` (artboard 6.1) y guard `RequireProfile`.
+- [x] 3.4 `ProfileNameSheet` (artboard 6.1) y guard `RequireProfile`.
 - [ ] 3.5 Vincular Google en el inicio, conservando el nombre existente o sugiriendo el de Google (+ propiedad 13).
 - [ ] 3.6 Eliminar `utils/clientId.js` y su test.
 - _Requirements: 1.1–1.12_

@@ -23,6 +23,7 @@ import { formatMoney } from '../shared/format/money';
 import { formatTurnDate } from '../shared/format/dates';
 import { AppError, getErrorMessage } from '../shared/errors/appError';
 import './UiKitPage.css';
+import ProfilePreview from './ProfilePreview';
 
 const variants = [
   { variant: 'primary', name: 'Primario', text: 'Crear sala', loading: 'Creando…' },
@@ -141,6 +142,7 @@ export default function UiKitPage() {
           <p className="ui-kit-muted">Ejemplo de error de la aplicación:</p><ErrorBanner message={getErrorMessage(new AppError('ROOM_FULL'))} />
         </Showcase>
       </div>
+      <Showcase id="perfil" title="Nombre de perfil" note="Primer uso obligatorio y edición del nombre, con datos de muestra."><ProfilePreview /></Showcase>
       <footer className="ui-kit-footer"><AguayoStripe variant="steps" height={8} /><p>Pasanaku · Componentes compartidos · Diseño base a 360 px</p></footer>
     </main>
     <div className="ui-kit-toast-region"><Toast message={toast} onDismiss={() => setToast('')} /></div>
