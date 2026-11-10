@@ -5,10 +5,11 @@ compartir su código, reunir a los participantes y sortear el orden de cobro.
 
 ## Estado del proyecto
 
-La rama `v2` prepara la nueva versión por fases. Tras la Fase 0, las pantallas y
-los servicios activos siguen siendo los de v1. La identidad con Supabase Auth,
-las escrituras por RPC, el nuevo esquema y el sistema visual se implementarán
-en las fases siguientes. No se han aplicado cambios a ninguna base de datos.
+La rama `v2` prepara la nueva versión por fases. El entorno local ya dispone del
+esquema v2, RLS y RPC transaccionales. Las pantallas y los servicios activos del
+frontend siguen siendo los de v1; su conexión con las RPC llegará en fases
+posteriores. Las migraciones y pruebas se ejecutan solo en Supabase local.
+No se han modificado los datos ni la configuración de producción.
 
 La fuente de verdad, en orden, es:
 
@@ -55,8 +56,9 @@ npm run dev
 
 Abre la dirección que muestra Vite. El cliente falla al iniciar si falta alguna
 de las dos variables. El frontend v1 necesita un backend compatible con su
-esquema actual (`client_id`, `start_month`, `assigned_month`); las migraciones v2
-todavía no están disponibles. Un Supabase local vacío no basta para usar v1.
+esquema actual (`client_id`, `start_month`, `assigned_month`). El esquema local v2
+no es compatible con los servicios v1: esta fase verifica la base de datos;
+todavía no permite probar el flujo v2 desde las pantallas.
 
 ## Comprobaciones
 
@@ -72,34 +74,71 @@ npm run build
 observación. Las pruebas actuales simulan Supabase y no requieren una base de
 datos en ejecución. El build genera `dist/`; `npm run preview` permite revisarlo.
 
-## Supabase local (Fase 1)
+## Supabase local
 
-Esta sección describe la preparación para la siguiente fase; la Fase 0 no crea
-`supabase/`, migraciones ni políticas. Desde la raíz, con Docker en ejecución:
-
-```bash
-# Una sola vez, cuando se inicie la Fase 1 y aún no exista supabase/config.toml:
-npx supabase init
-npx supabase start
-```
-
-Configura las variables del frontend con la URL de API y la clave `anon` del
-entorno local. Cuando estén versionadas las migraciones de v2, se aplicarán con:
+`supabase/config.toml` fue generado con Supabase CLI `2.120.0`. La CLI se ejecuta
+con `npx`, sin añadir dependencias al frontend. Con Docker en ejecución:
 
 ```bash
-npx supabase db reset --local
+npx --yes supabase@2.120.0 start
 ```
 
-Este último comando reinicia la base de datos local y descarta sus datos.
-Las migraciones vivirán en `supabase/migrations/` y sus pruebas en
-`supabase/tests/`. Nunca ejecutes migraciones ni pruebas de base de datos contra
-producción. Un proyecto de desarrollo dedicado también sirve para esas pruebas.
-Los tests de RPC y RLS se incorporarán en la tarea 1.7.
+El proyecto local se llama `pasanaku-app`. Usa puertos propios para convivir con
+otros proyectos: API `http://127.0.0.1:55321`, PostgreSQL `55322` y Studio
+`http://127.0.0.1:55323`. Auth anónimo y manual linking están habilitados en local.
+Storage, Edge Functions y Analytics están desactivados porque esta app no los usa.
 
-La persona dueña del proyecto realizará la configuración manual de Auth (tarea
-1.6): activar el inicio de sesión anónimo, configurar Google OAuth y sus URLs de
-retorno, y habilitar la vinculación manual de identidades. Esa configuración y
-la integración de Auth en el frontend quedan pendientes en esta fase.
+Para aplicar migraciones pendientes sin reiniciar los datos locales:
+
+```bash
+npx --yes supabase@2.120.0 migration up --local
+```
+
+Para reconstruir **solo la base local**, descartando sus datos:
+
+```bash
+npx --yes supabase@2.120.0 db reset --local
+```
+
+Las migraciones viven en `supabase/migrations/` y las pruebas en `supabase/tests/`.
+No vincules este entorno al proyecto de producción ni uses `--linked`,
+`--remote` o una URL remota para migraciones y pruebas. La configuración sigue el
+[flujo local de Supabase](https://supabase.com/docs/guides/local-development/cli-workflows).
+
+Para detener los servicios y conservar sus datos locales:
+
+```bash
+npx --yes supabase@2.120.0 stop
+```
+
+Cuando se integre el frontend v2, la persona dueña del entorno configurará las
+variables del frontend con la URL y la clave `anon` locales. Los valores no se
+guardan en este README ni se incluyen en los tests.
+
+### Configuración manual del panel (tarea 1.6, pendiente de la persona dueña)
+
+En el proyecto Supabase de desarrollo, realiza estos pasos:
+
+1. En **Authentication**, habilita **Allow anonymous sign-ins** y **Allow manual
+   linking**. Las sesiones anónimas usan el rol `authenticated`; `anon` es una
+   petición sin sesión. Consulta [Auth anónimo](https://supabase.com/docs/guides/auth/auth-anonymous).
+2. En Google Cloud, crea un cliente OAuth de tipo aplicación web. Registra los
+   orígenes de la app y la URL de callback indicada por el proveedor Google de
+   Supabase. Para este entorno local, el callback es
+   `http://127.0.0.1:55321/auth/v1/callback`.
+3. En el proveedor **Google** de Supabase, configura el Client ID y Client Secret
+   y habilítalo. El secreto queda en la configuración del servidor, nunca en
+   `VITE_*`. Sigue la [guía oficial de Google](https://supabase.com/docs/guides/auth/social-sign-in/auth-google).
+4. En **URL Configuration**, configura la Site URL y permite las URLs de retorno
+   del frontend, por ejemplo `http://localhost:5173` en desarrollo y el dominio
+   exacto del despliegue para el entorno correspondiente. Son distintas del
+   callback de Google: consulta [URLs de retorno](https://supabase.com/docs/guides/auth/redirect-urls).
+5. Cuando se implemente la Fase 3, comprueba la vinculación con Google: conservar
+   el `auth.uid()` y el nombre de perfil, cancelar sin perder la sesión y volver
+   al frontend correcto.
+
+Google OAuth no se ha configurado ni validado aquí. Las opciones locales de
+Auth anónimo y manual linking no configuran automáticamente el proyecto remoto.
 
 ## Estructura
 

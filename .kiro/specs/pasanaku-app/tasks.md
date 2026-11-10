@@ -36,7 +36,9 @@ Convenciones:
 - [x] 1.4 `0003_rpc.sql`: `create_room`, `get_room_preview`, `join_room`, `remove_participant`, `cancel_room`, `confirm_draw`, `list_my_rooms` con sus códigos de error.
 - [x] 1.5 Habilitar Realtime para `rooms` y `participants`; `replica identity full` en `participants`.
 - [ ] 1.6 Panel de Supabase (manual): activar inicio de sesión anónimo, configurar Google OAuth y "manual linking".
+  - Guía documentada en README; ejecución y verificación del panel pendientes de la persona dueña del proyecto.
 - [ ] 1.7 Tests de base de datos: propiedades 8, 9, 10, 11 y 12 de `design.md`.
+  - La paridad SQL/`turnDate` (propiedad 12) se pospone a la Fase 6 por decisión del 10-11-2026; no adelantar la función de dominio.
 - [ ] 1.8 Plan de migración de los datos actuales (salas sin `host_user_id`/`name`): decidir si se descartan o se migran con valores por defecto.
 - _Requirements: 3.5, 4.2, 4.7, 5.7, 5.8, 5.10, 6.8, 6.10, 6.11, 6.12, 10.1–10.7_
 
