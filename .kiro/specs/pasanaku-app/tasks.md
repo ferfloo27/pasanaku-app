@@ -17,7 +17,7 @@ Convenciones:
 
 ## Fase 0: Base del proyecto
 
-- [ ] 0.1 Arreglar los 3 tests rotos (`fc.stringOf` ya no existe en fast-check v4 → `fc.string({ unit: … })`) para partir en verde.
+- [x] 0.1 Arreglar los 3 tests rotos (`fc.stringOf` ya no existe en fast-check v4 → `fc.string({ unit: … })`) para partir en verde.
 - [ ] 0.2 Crear la estructura `app/`, `features/`, `shared/`, `pages/` de `design.md` y mover `roomCode`, `fisherYates` y `formatMonth` a su `domain`/`format` correspondiente con sus tests.
 - [ ] 0.3 Eliminar `services/fetchService.js` y `services/joinRoomService.js` (duplicados).
 - [ ] 0.4 Configurar la regla ESLint `no-restricted-imports` que impide importar `shared/lib/supabase` fuera de `features/*/api`.

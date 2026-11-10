@@ -73,7 +73,7 @@ describe('CreateRoomForm — Property 4: Validación de nombre rechaza entradas 
     await fc.assert(
       fc.asyncProperty(
         // Generate strings containing only space characters (length 1–100)
-        fc.stringOf(fc.constant(' '), { minLength: 1, maxLength: 100 }),
+        fc.string({ unit: fc.constant(' '), minLength: 1, maxLength: 100 }),
         async (name) => {
           await submitWithName(name);
           expect(mockCreateRoom).not.toHaveBeenCalled();
@@ -110,7 +110,7 @@ describe('CreateRoomForm — Property 4: Validación de nombre rechaza entradas 
       // Empty string
       fc.constant(''),
       // Whitespace-only (1–100 spaces)
-      fc.stringOf(fc.constant(' '), { minLength: 1, maxLength: 100 }),
+      fc.string({ unit: fc.constant(' '), minLength: 1, maxLength: 100 }),
       // Strings longer than 50 characters (with at least one non-space char to avoid overlap)
       fc.string({ minLength: 51, maxLength: 200 }).filter(s => s.trim().length > 50)
     );

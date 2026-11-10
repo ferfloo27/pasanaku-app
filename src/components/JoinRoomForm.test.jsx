@@ -81,10 +81,11 @@ describe('JoinRoomForm — Property 4: validación de nombre rechaza entradas in
      *   (b) whitespace-only strings (spaces, tabs, newlines)
      *   (c) strings longer than 50 characters
      */
-    const whitespaceOnly = fc.stringOf(
-      fc.constantFrom(' ', '\t', '\n', '\r'),
-      { minLength: 1, maxLength: 100 }
-    );
+    const whitespaceOnly = fc.string({
+      unit: fc.constantFrom(' ', '\t', '\n', '\r'),
+      minLength: 1,
+      maxLength: 100,
+    });
     const tooLong = fc.string({ minLength: 51, maxLength: 200 });
     const invalidName = fc.oneof(
       fc.constant(''),
