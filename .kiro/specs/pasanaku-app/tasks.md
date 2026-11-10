@@ -2,189 +2,152 @@
 
 ## Overview
 
-Plan de implementación incremental para la aplicación Pasanaku: una tanda de ahorro grupal sin registro, construida con React + Vite y Supabase como backend. Las tareas siguen el orden de dependencia: utilidades puras → servicio de datos → páginas y componentes → integración final.
+Plan incremental en 9 fases. Orden: base del proyecto → base de datos (migraciones, RLS, RPC) → sistema de diseño → identidad → inicio y crear/unirse → lobby → sorteo → revelación y resultados → realtime, estados y cierre.
+
+Referencias: `requirements.md`, `design.md`, `docs/design-brief.md` y el canvas "Pasanaku" de Claude Design (cada pantalla indica su artboard).
+
+Convenciones:
+- Lógica pura en `features/*/domain` con tests de propiedades (`fast-check`).
+- Ningún componente importa `supabase`; solo `features/*/api`.
+- Cada tarea termina con `npm test`, `npm run lint` y `npm run build` sin errores.
+
+---
 
 ## Tasks
 
-- [x] 1. Configurar estructura de proyecto y dependencias base
-  - Instalar `react-router-dom` como dependencia de producción
-  - Instalar framework de pruebas: `vitest`, `@vitest/coverage-v8`, `fast-check` (property-based testing) y `@testing-library/react`
-  - Configurar `vite.config.js` para incluir el bloque `test` de Vitest con `environment: 'jsdom'`
-  - Crear los directorios `src/utils/`, `src/services/`, `src/pages/`, `src/components/`
-  - Verificar que `src/lib/supabaseClient.js` expone el cliente Supabase correctamente
-  - _Requirements: 1.1, 1.2, 1.3_
+## Fase 0: Base del proyecto
 
-- [x] 2. Implementar utilidades puras
-  - [x] 2.1 Implementar `src/utils/clientId.js`
-    - Escribir `getOrCreateClientId()` usando `crypto.randomUUID()` y `localStorage`
-    - _Requirements: 1.1, 1.2_
+- [ ] 0.1 Arreglar los 3 tests rotos (`fc.stringOf` ya no existe en fast-check v4 → `fc.string({ unit: … })`) para partir en verde.
+- [ ] 0.2 Crear la estructura `app/`, `features/`, `shared/`, `pages/` de `design.md` y mover `roomCode`, `fisherYates` y `formatMonth` a su `domain`/`format` correspondiente con sus tests.
+- [ ] 0.3 Eliminar `services/fetchService.js` y `services/joinRoomService.js` (duplicados).
+- [ ] 0.4 Configurar la regla ESLint `no-restricted-imports` que impide importar `shared/lib/supabase` fuera de `features/*/api`.
+- [ ] 0.5 Reemplazar el README de la plantilla por uno del proyecto (cómo correrlo, variables de entorno, Supabase local).
+- _Requirements: 11.3_
 
-  - [x]* 2.2 Escribir property test para `getOrCreateClientId` — Property 1
-    - **Property 1: Client ID idempotencia**
-    - Usar `fast-check` para generar UUIDs arbitrarios, almacenarlos en `localStorage` y verificar que llamadas sucesivas retornan el mismo valor
-    - **Validates: Requirements 1.2**
+---
 
-  - [x]* 2.3 Escribir property test para `getOrCreateClientId` — Property 2
-    - **Property 2: Client ID es UUID v4 válido en primer uso**
-    - Usar `fast-check` para simular estado de `localStorage` vacío y verificar que el UUID retornado cumple el patrón `/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i`
-    - **Validates: Requirements 1.1**
+## Fase 1: Base de datos versionada
 
-  - [x] 2.4 Implementar `src/utils/roomCode.js`
-    - Escribir `generateRoomCode()` usando el charset `[A-Z0-9]` y longitud 6
-    - _Requirements: 3.2_
+> Requiere Supabase CLI. Lo que se configura en el panel (proveedores de Auth) va documentado en el README.
 
-  - [x]* 2.5 Escribir property test para `generateRoomCode` — Property 3
-    - **Property 3: Código de sala tiene formato correcto**
-    - Usar `fast-check` con `fc.assert` para verificar que múltiples invocaciones retornan strings de exactamente 6 caracteres pertenecientes a `[A-Z0-9]`
-    - **Validates: Requirements 3.2**
+- [ ] 1.1 Inicializar `supabase/` (CLI) y levantar Supabase local.
+- [ ] 1.2 `0001_schema.sql`: enums `room_status`, `room_frequency`; tablas `profiles`, `rooms`, `participants`, `turns` según `design.md`.
+- [ ] 1.3 `0002_rls.sql`: habilitar RLS, `revoke` de escritura directa, `is_room_participant`, políticas de lectura, políticas de `profiles`.
+- [ ] 1.4 `0003_rpc.sql`: `create_room`, `get_room_preview`, `join_room`, `remove_participant`, `cancel_room`, `confirm_draw`, `list_my_rooms` con sus códigos de error.
+- [ ] 1.5 Habilitar Realtime para `rooms` y `participants`; `replica identity full` en `participants`.
+- [ ] 1.6 Panel de Supabase (manual): activar inicio de sesión anónimo, configurar Google OAuth y "manual linking".
+- [ ] 1.7 Tests de base de datos: propiedades 8, 9, 10, 11 y 12 de `design.md`.
+- [ ] 1.8 Plan de migración de los datos actuales (salas sin `host_user_id`/`name`): decidir si se descartan o se migran con valores por defecto.
+- _Requirements: 3.5, 4.2, 4.7, 5.7, 5.8, 5.10, 6.8, 6.10, 6.11, 6.12, 10.1–10.7_
 
-  - [x] 2.6 Implementar `src/utils/fisherYates.js`
-    - Escribir `shuffle(arr)` que retorna una copia barajada con el algoritmo Fisher-Yates
-    - _Requirements: 6.1_
+---
 
-  - [x]* 2.7 Escribir property test para `shuffle` — Property 5
-    - **Property 5: Fisher-Yates produce permutación completa**
-    - Usar `fast-check` con arrays de longitud variable; verificar que el resultado tiene la misma longitud y los mismos elementos (sin duplicados ni omisiones)
-    - **Validates: Requirements 6.1**
+## Fase 2: Sistema de diseño (`shared/`)
 
-  - [x] 2.8 Implementar `src/utils/formatMonth.js`
-    - Escribir `formatMonth(dateStr)` usando el array `MONTHS_ES` para devolver `"Mes YYYY"` en español
-    - _Requirements: 8.4_
+> Fuente: artboards "Sistema de diseño", "Componentes" y "Modo oscuro".
 
-  - [x]* 2.9 Escribir property test para `formatMonth` — Property 9
-    - **Property 9: Formato de mes en español**
-    - Usar `fast-check` con `fc.integer({ min: 1900, max: 2100 })` y `fc.integer({ min: 1, max: 12 })` para verificar que `formatMonth` retorna el formato `"<NombreMesEspañol> <YYYY>"` correcto para cualquier fecha válida
-    - **Validates: Requirements 8.4**
+- [ ] 2.1 `shared/styles/tokens.css`: primitivos y semánticos claro/oscuro (oscuro definido, desactivado); `base.css` con Nunito/JetBrains Mono, reset y foco visible. Quitar el CSS de la plantilla de Vite.
+- [ ] 2.2 Componentes de acción: `Button` (primario, secundario, texto, peligro; cargando, deshabilitado), `IconButton`, `Chip`, `Avatar`.
+- [ ] 2.3 Componentes de formulario: `TextField`, `CodeInput` (6 casillas, pegar, mayúsculas), `MoneyField` (Bs), `Segmented` (frecuencia), `DateField` (mes/año o día).
+- [ ] 2.4 Contenedores: `Card`, `Sheet` (modal inferior), `Menu` (⋯), `EmptyState`, `AguayoStripe`.
+- [ ] 2.5 Feedback: `ErrorBanner`, `Toast`, `Skeleton`, `Spinner`, `ReconnectingChip`.
+- [ ] 2.6 `shared/format`: `formatMoney`, `formatTurnDate` (+ propiedad 6) y `shared/errors/appError.js`.
+- [ ] 2.7 Página interna `/dev/ui` (solo en desarrollo) que muestra todos los componentes y estados, para compararlos con el canvas.
+- _Requirements: 11.1–11.7_
 
-- [x] 3. Checkpoint — verificar utilidades puras
-  - Asegurar que todos los tests pasen con `vitest --run`, preguntar al usuario si hay dudas.
+---
 
-- [x] 4. Implementar `src/services/roomService.js`
-  - [x] 4.1 Implementar función `createRoom({ hostName, startMonth, clientId })`
-    - Generar código con reintento por colisión (máx. 5 intentos)
-    - Insertar en `rooms` y luego en `participants`
-    - Retornar `{ data, error }` con la sala creada
-    - _Requirements: 3.2, 3.3, 3.4, 3.6_
+## Fase 3: Identidad y perfil
 
-  - [x] 4.2 Implementar función `joinRoom({ code, name, clientId })`
-    - Buscar sala por código (case-insensitive usando `.ilike`)
-    - Validar existencia y `status !== 'drawn'`
-    - Insertar participante
-    - Retornar `{ data, error }` con mensaje descriptivo en cada fallo
-    - _Requirements: 4.2, 4.3, 4.4, 4.5, 4.7_
+- [ ] 3.1 `features/auth/api/authApi.js`: `ensureSession`, `linkGoogle`, `onAuthChange`.
+- [ ] 3.2 `app/AuthProvider.jsx` + `useAuth`: `{ user, isAnonymous, status, error, retry }`.
+- [ ] 3.3 `features/profile`: `validateDisplayName` (domain + test), `profileApi`, `useProfile`.
+- [ ] 3.4 `ProfileNameSheet` (artboard 6.1) y guard `RequireProfile`.
+- [ ] 3.5 Vincular Google en el inicio, conservando el nombre existente o sugiriendo el de Google (+ propiedad 13).
+- [ ] 3.6 Eliminar `utils/clientId.js` y su test.
+- _Requirements: 1.1–1.12_
 
-  - [x] 4.3 Implementar funciones `fetchRoom(code)` y `fetchTurns(roomId)`
-    - `fetchRoom`: select en `rooms` filtrando por `code`
-    - `fetchTurns`: join entre `turns` y `participants` ordenado por `position` asc
-    - _Requirements: 5.1, 8.2, 8.3_
+---
 
-  - [x] 4.4 Implementar función `drawTurns({ roomId, participants, startMonth })`
-    - Implementar `addMonths(dateStr, n)` internamente para calcular `assigned_month`
-    - Barajar con `shuffle()`, calcular posición y mes por participante
-    - Batch insert en `turns`, luego update `rooms.status = 'drawn'`
-    - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
+## Fase 4: Inicio, crear y unirse
 
-  - [ ]* 4.5 Escribir property test para `drawTurns` — Property 6
-    - **Property 6: Posiciones y meses cubren todos los participantes sin duplicados**
-    - Mockear Supabase; usar `fast-check` con arrays de participantes de longitud N (1..20) y `start_month` arbitrario; verificar que los turnos generados tienen exactamente N registros, posiciones `[1..N]` sin repetición y `assigned_month` correcto para cada posición
-    - **Validates: Requirements 6.2, 6.3**
+- [ ] 4.1 Rutas `/`, `/new`, `/join`, `/room/:code` en `app/routes.jsx`.
+- [ ] 4.2 `roomsApi.listMyRooms` + `useMyRooms`; `HomePage` con saludo, acciones, "Tus salas", estado vacío y aviso único de sala cancelada (artboards 6.2 Inicio e Inicio vacío).
+- [ ] 4.3 `domain/roomForm.js`: `validateRoomForm`, `payoutPerTurn` (+ propiedad 7).
+- [ ] 4.4 `CreateRoomForm` con resumen en vivo (artboard 6.3 Crear sala) y `RoomReady` con código, copiar y compartir (artboard 6.3 Sala lista).
+- [ ] 4.5 `domain/roomCode.js` (+ propiedad 1) y `JoinCodeForm` (artboards 6.4 Unirse y Errores).
+- [ ] 4.6 `getRoomPreview` + `RoomPreview` con "Unirme" / "Ahora no" y los casos sorteada, cancelada y llena (artboard 6.4 Pre-unión).
+- _Requirements: 2.1–2.7, 3.1–3.7, 4.1–4.10_
 
-- [x] 5. Implementar `App.jsx` con React Router
-  - Configurar `BrowserRouter` con rutas `/` → `HomePage` y `/room/:code` → `RoomPage`
-  - _Requirements: 2.1_
+---
 
-- [x] 6. Implementar componentes de formulario
-  - [x] 6.1 Implementar `src/components/CreateRoomForm.jsx`
-    - Inputs: nombre del anfitrión (max 50 chars, requerido) y mes de inicio (`<input type="month">`, `min` = mes actual, requerido)
-    - Validación client-side antes de llamar a `createRoom()`
-    - En éxito, navegar con `useNavigate` a `/room/:code`
-    - En error, mostrar mensaje descriptivo sin navegar
-    - _Requirements: 3.1, 3.5, 3.6_
+## Fase 5: Sala y lobby
 
-  - [ ]* 6.2 Escribir property test para validación de nombre — Property 4 (CreateRoomForm)
-    - **Property 4: Validación de nombre rechaza entradas inválidas**
-    - Usar `fast-check` con strings vacíos, sólo espacios, y strings de longitud > 50; verificar que `createRoom` nunca es invocado
-    - **Validates: Requirements 3.1**
+- [ ] 5.1 `domain/roomMachine.js`: reducer con estados `loading`, `not_found`, `preview`, `lobby`, `drafting`, `revealing`, `results`, `cancelled`, `removed` (tests del reducer).
+- [ ] 5.2 `roomChannel.js` (un canal por sala) + `useRoomSession(code)` con carga inicial y eventos de Realtime.
+- [ ] 5.3 `Lobby` variante participante (artboard 6.5 Lobby participante).
+- [ ] 5.4 `Lobby` variante anfitrión: "Sortear orden", eliminar participante, menú ⋯ con "Cancelar sala", estado de menos de 2 (artboards 6.5 Lobby anfitrión y Lobby menos de 2 + menú).
+- [ ] 5.5 `RemoveParticipantSheet` y `CancelRoomSheet` con sus RPC (artboard 6.5 Eliminar participante).
+- [ ] 5.6 Vistas de "Ya no estás en esta sala" y "Rosa canceló la sala" (artboard 6.9).
+- _Requirements: 5.1–5.11, 9.1_
 
-  - [x] 6.3 Implementar `src/components/JoinRoomForm.jsx`
-    - Inputs: nombre (max 50 chars, requerido) y código de sala (6 chars, normalizado a mayúsculas)
-    - Validación client-side antes de llamar a `joinRoom()`
-    - En éxito, navegar a `/room/:code`; en error, mostrar mensaje descriptivo
-    - _Requirements: 4.1, 4.3, 4.4, 4.6, 4.7_
+---
 
-  - [ ]* 6.4 Escribir property test para validación de nombre — Property 4 (JoinRoomForm)
-    - **Property 4: Validación de nombre rechaza entradas inválidas**
-    - Misma estrategia que 6.2 aplicada a `JoinRoomForm`; verificar que `joinRoom` nunca es invocado con entradas inválidas
-    - **Validates: Requirements 4.1**
+## Fase 6: Borrador y confirmación
 
-- [x] 7. Implementar `pages/HomePage.jsx`
-  - Estado local `view: null | 'create' | 'join'`
-  - Renderizar botones "Crear sala" y "Unirse a sala" cuando `view === null`
-  - Renderizar `CreateRoomForm` o `JoinRoomForm` según `view`, con `onBack` para volver
-  - _Requirements: 2.1, 2.2, 2.3_
+- [ ] 6.1 `domain/schedule.js` `turnDate` (+ propiedad 5) y `domain/shuffle.js` con `random` inyectable (+ propiedad 2).
+- [ ] 6.2 `domain/draft.js`: `buildDraft`, `moveDraftItem`, `draftToOrder` (+ propiedades 3 y 4).
+- [ ] 6.3 Instalar `@dnd-kit/core` y `@dnd-kit/sortable`; `DraftEditor` con arrastre, botones subir/bajar y "Volver a sortear" (artboard 6.6 Borrador).
+- [ ] 6.4 `ConfirmDrawSheet` (artboard 6.6 Confirmar y anunciar) y `drawApi.confirmDraw` con manejo de `PARTICIPANTS_CHANGED`, `ROOM_NOT_WAITING` y error genérico con borrador conservado.
+- _Requirements: 6.1–6.13_
 
-- [x] 8. Implementar `components/Lobby.jsx`
-  - [x] 8.1 Mostrar código de sala prominente y lista de participantes
-    - Recibir `room`, `participants`, `setParticipants` y `clientId` como props
-    - Suscribir a canal Realtime `participants-{roomId}` (evento INSERT) para actualizar la lista en tiempo real
-    - Limpiar suscripción en el unmount
-    - _Requirements: 5.1, 5.2, 5.3, 5.4_
+---
 
-  - [x] 8.2 Implementar botón "Sortear orden" con lógica de visibilidad y habilitación
-    - Mostrar el botón sólo si `clientId` coincide con el `client_id` del primer participante insertado (anfitrión)
-    - Deshabilitar el botón si `participants.length < 2` y mostrar texto explicativo
-    - Al hacer clic, llamar a `drawTurns()`; en error mostrar mensaje al anfitrión
-    - _Requirements: 5.5, 5.6, 6.1–6.7_
+## Fase 7: Revelación y resultados
 
-  - [ ]* 8.3 Escribir property test para visibilidad del botón — Property 7
-    - **Property 7: Botón de sorteo habilitado sólo con ≥ 2 participantes**
-    - Usar `fast-check` con `fc.array(fc.string(), { minLength: 0, maxLength: 20 })` para generar listas de participantes y verificar estado `disabled` del botón
-    - **Validates: Requirements 6.7**
+- [ ] 7.1 `useReveal`: avance por posición, "Saltar", "Ver de nuevo", reducción de movimiento (tests con timers falsos).
+- [ ] 7.2 `Reveal` con rótulo "Sorteado al azar", tarjeta grande, lista revelada, `aria-live` y franja aguayo (artboard 6.7 Revelación).
+- [ ] 7.3 `Results`: "Tu turno", resumen, orden de cobro con fila propia destacada, "Copiar resultados" y "Compartir" (artboard 6.8 Resultados).
+- [ ] 7.4 Entrada directa a una sala `drawn` → resultados sin revelación.
+- _Requirements: 7.1–7.8, 8.1–8.6_
 
-  - [ ]* 8.4 Escribir property test para visibilidad del botón — Property 8
-    - **Property 8: Visibilidad del botón de sorteo según client_id**
-    - Usar `fast-check` con `clientId` arbitrarios y listas de participantes; verificar que el botón es visible si y sólo si `clientId === participants[0].client_id`
-    - **Validates: Requirements 5.5, 5.6**
+---
 
-- [x] 9. Implementar `components/ResultsView.jsx`
-  - Llamar a `fetchTurns(room.id)` al montar
-  - Renderizar tabla con columnas: Posición, Mes asignado (`formatMonth`), Participante
-  - Ordenar filas por `position` ascendente
-  - _Requirements: 8.1, 8.2, 8.3, 8.4_
+## Fase 8: Resiliencia, estados y cierre
 
-- [x] 10. Implementar `pages/RoomPage.jsx`
-  - Cargar sala con `fetchRoom(code)` al montar
-  - Suscribir a canal Realtime `room-{roomId}` (evento UPDATE en `rooms`) para detectar cambio de `status`
-  - Renderizar `<Lobby>` si `status === 'waiting'`, `<ResultsView>` si `status === 'drawn'`
-  - Manejar acceso directo a sala con `status === 'drawn'` mostrando `ResultsView` directamente
-  - Limpiar suscripción en el unmount
-  - _Requirements: 5.1, 7.1, 7.2, 7.3, 8.1, 8.5_
+- [ ] 8.1 Resync en `useRoomSession`: `visibilitychange` y reconexión del canal; `ReconnectingChip`.
+- [ ] 8.2 Estado "Sin conexión" con últimos datos y "Reintentar"; skeletons de carga (artboard 6.9).
+- [ ] 8.3 Vista "No encontramos esta sala" para links inválidos (artboard 6.9).
+- [ ] 8.4 Revisión de accesibilidad: foco, contraste, 44px, lector de pantalla en revelación y borrador.
+- [ ] 8.5 Revisión a 320px y 360px de todas las pantallas contra el canvas.
+- [ ] 8.6 Prueba de punta a punta del flujo principal con dos navegadores (anfitrión y participante).
+- _Requirements: 9.2–9.4, 11.1, 11.5, 11.6_
 
-- [x] 11. Checkpoint final — integración completa
-  - Verificar que todas las rutas navegan correctamente
-  - Asegurar que todos los tests pasen con `vitest --run`
-  - Preguntar al usuario si hay dudas antes de considerar la implementación completa.
+---
 
 ## Notes
 
-- Las tareas marcadas con `*` son opcionales y pueden omitirse para un MVP más rápido
-- Cada tarea referencia los requisitos específicos para trazabilidad
-- Los checkpoints garantizan validación incremental
-- Los property tests usan `fast-check`; los tests de componentes usan `@testing-library/react` + `vitest`
-- `react-router-dom` no está en `package.json` actual — debe instalarse en la tarea 1
-- El proyecto no tiene framework de pruebas configurado aún — la tarea 1 lo establece completo
+- Las fases 1 y 2 son independientes entre sí y pueden hacerse en paralelo.
+- El borrador vive solo en el navegador del anfitrión; recargar lo descarta.
+- "Quincenal" = periodo fijo de 15 días desde la fecha de inicio (Requirement 6.12).
+- Modo oscuro: tokens en la Fase 2; activarlo queda fuera de alcance.
+- Los tests de base de datos (1.7) necesitan Supabase local o un proyecto de pruebas, nunca el de producción.
+
+---
 
 ## Task Dependency Graph
 
 ```json
 {
   "waves": [
-    { "id": 0, "tasks": ["2.1", "2.4", "2.6", "2.8"] },
-    { "id": 1, "tasks": ["2.2", "2.3", "2.5", "2.7", "2.9", "4.1", "4.2", "4.3"] },
-    { "id": 2, "tasks": ["4.4", "6.1", "6.3"] },
-    { "id": 3, "tasks": ["4.5", "6.2", "6.4", "8.1"] },
-    { "id": 4, "tasks": ["8.2", "9"] },
-    { "id": 5, "tasks": ["8.3", "8.4"] }
+    { "id": 0, "label": "Base del proyecto", "tasks": ["0.1", "0.2", "0.3", "0.4", "0.5"] },
+    { "id": 1, "label": "Base de datos y sistema de diseño (en paralelo)", "tasks": ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7"] },
+    { "id": 2, "label": "Identidad", "tasks": ["3.1", "3.2", "3.3", "3.4", "3.5", "3.6"] },
+    { "id": 3, "label": "Inicio, crear y unirse", "tasks": ["4.1", "4.2", "4.3", "4.4", "4.5", "4.6"] },
+    { "id": 4, "label": "Sala y lobby", "tasks": ["5.1", "5.2", "5.3", "5.4", "5.5", "5.6"] },
+    { "id": 5, "label": "Borrador y confirmación", "tasks": ["6.1", "6.2", "6.3", "6.4"] },
+    { "id": 6, "label": "Revelación y resultados", "tasks": ["7.1", "7.2", "7.3", "7.4"] },
+    { "id": 7, "label": "Resiliencia y cierre", "tasks": ["8.1", "8.2", "8.3", "8.4", "8.5", "8.6"] }
   ]
 }
 ```
