@@ -5,6 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   test: {
+    // Evita que muchos entornos jsdom compitan por CPU y agoten los tests de propiedades.
+    maxWorkers: 2,
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/test/setup.js',
