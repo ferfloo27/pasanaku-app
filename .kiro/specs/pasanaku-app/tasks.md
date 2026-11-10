@@ -55,7 +55,7 @@ Convenciones:
 - [x] 2.3 Componentes de formulario: `TextField`, `CodeInput` (6 casillas, pegar, mayúsculas), `MoneyField` (Bs), `Segmented` (frecuencia), `DateField` (mes/año o día).
 - [x] 2.4 Contenedores: `Card`, `Sheet` (modal inferior), `Menu` (⋯), `EmptyState`, `AguayoStripe`.
 - [x] 2.5 Feedback: `ErrorBanner`, `Toast`, `Skeleton`, `Spinner`, `ReconnectingChip`.
-- [ ] 2.6 `shared/format`: `formatMoney`, `formatTurnDate` (+ propiedad 6) y `shared/errors/appError.js`.
+- [x] 2.6 `shared/format`: `formatMoney`, `formatTurnDate` (+ propiedad 6) y `shared/errors/appError.js`.
 - [ ] 2.7 Página interna `/dev/ui` (solo en desarrollo) que muestra todos los componentes y estados, para compararlos con el canvas.
 - _Requirements: 11.1–11.7_
 
