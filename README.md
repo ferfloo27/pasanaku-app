@@ -63,6 +63,10 @@ de las dos variables. El frontend v1 necesita un backend compatible con su
 esquema actual (`client_id`, `start_month`, `assigned_month`). El esquema local v2
 no es compatible con los servicios v1: todavía no permite probar el flujo
 completo de salas v2 desde las pantallas.
+Los consumidores heredados reciben ya el `user.id` de Auth en su argumento
+temporal `clientId`; no se genera ni se consulta una identidad de dispositivo.
+Ese argumento y las columnas antiguas se retirarán al migrar los flujos de salas.
+Los formularios heredados toman ya el nombre del perfil, sin pedir uno por sala.
 
 ### Identidad y nombre (Fase 3)
 
@@ -211,7 +215,6 @@ src/
   pages/        páginas actuales de v1
   components/   componentes de v1 durante la transición
   services/     roomService.js de v1 durante la transición
-  utils/        identidad local de v1, hasta la Fase 3
 ```
 
 Los tests de dominio y formato acompañan a sus módulos. Las carpetas pendientes

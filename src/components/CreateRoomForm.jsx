@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createRoom } from '../services/roomService';
-import { getOrCreateClientId } from '../utils/clientId';
+import { useAuth } from '../features/auth/hooks/useAuth';
+import { useProfile } from '../features/profile/hooks/useProfile';
+import { validateDisplayName } from '../features/profile/domain/displayName';
 
 export default function CreateRoomForm({ onBack }) {
+  const { user } = useAuth();
+  const { profile } = useProfile();
   const navigate = useNavigate();
-  const [hostName, setHostName] = useState('');
   const [startMonth, setStartMonth] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,9 +20,9 @@ export default function CreateRoomForm({ onBack }) {
     e.preventDefault();
     setError('');
 
-    const trimmedName = hostName.trim();
-    if (!trimmedName || trimmedName.length > 50) {
-      setError('El nombre debe tener entre 1 y 50 caracteres.');
+    const name = validateDisplayName(profile?.display_name);
+    if (!name.ok) {
+      setError('Guarda tu nombre desde el inicio antes de continuar.');
       return;
     }
     if (!startMonth) {
@@ -27,9 +30,10 @@ export default function CreateRoomForm({ onBack }) {
       return;
     }
 
+    const clientId = user?.id;
+    if (!clientId) { setError('No pudimos iniciar tu sesión. Reintenta para continuar.'); return; }
     setLoading(true);
-    const clientId = getOrCreateClientId();
-    const { data, error: svcError } = await createRoom({ hostName: trimmedName, startMonth: startMonth + '-01', clientId });
+    const { data, error: svcError } = await createRoom({ hostName: name.value, startMonth: startMonth + '-01', clientId });
     setLoading(false);
 
     if (svcError) {
@@ -43,16 +47,7 @@ export default function CreateRoomForm({ onBack }) {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Crear sala</h2>
-      <label>
-        Tu nombre
-        <input
-          type="text"
-          value={hostName}
-          onChange={e => setHostName(e.target.value)}
-          maxLength={50}
-          required
-        />
-      </label>
+      <p>Entrarás como <strong>{profile?.display_name}</strong>.</p>
       <label>
         Mes de inicio
         <input

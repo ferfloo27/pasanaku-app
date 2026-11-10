@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { joinRoom } from '../services/roomService';
-import { getOrCreateClientId } from '../utils/clientId';
+import { useAuth } from '../features/auth/hooks/useAuth';
+import { useProfile } from '../features/profile/hooks/useProfile';
+import { validateDisplayName } from '../features/profile/domain/displayName';
 
 export default function JoinRoomForm({ onBack }) {
+  const { user } = useAuth();
+  const { profile } = useProfile();
   const navigate = useNavigate();
-  const [name, setName] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -14,9 +17,9 @@ export default function JoinRoomForm({ onBack }) {
     e.preventDefault();
     setError('');
 
-    const trimmedName = name.trim();
-    if (!trimmedName || trimmedName.length > 50) {
-      setError('El nombre debe tener entre 1 y 50 caracteres.');
+    const name = validateDisplayName(profile?.display_name);
+    if (!name.ok) {
+      setError('Guarda tu nombre desde el inicio antes de continuar.');
       return;
     }
     const normalizedCode = code.trim().toUpperCase();
@@ -25,9 +28,10 @@ export default function JoinRoomForm({ onBack }) {
       return;
     }
 
+    const clientId = user?.id;
+    if (!clientId) { setError('No pudimos iniciar tu sesión. Reintenta para continuar.'); return; }
     setLoading(true);
-    const clientId = getOrCreateClientId();
-    const { data, error: svcError } = await joinRoom({ code: normalizedCode, name: trimmedName, clientId });
+    const { data, error: svcError } = await joinRoom({ code: normalizedCode, name: name.value, clientId });
     setLoading(false);
 
     if (svcError) {
@@ -41,16 +45,7 @@ export default function JoinRoomForm({ onBack }) {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Unirse a sala</h2>
-      <label>
-        Tu nombre
-        <input
-          type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          maxLength={50}
-          required
-        />
-      </label>
+      <p>Entrarás como <strong>{profile?.display_name}</strong>.</p>
       <label>
         Código de sala
         <input

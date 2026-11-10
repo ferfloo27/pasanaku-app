@@ -26,27 +26,27 @@ vi.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-// Mock getOrCreateClientId so it doesn't touch localStorage
-vi.mock('../utils/clientId', () => ({
-  getOrCreateClientId: () => 'test-client-id',
-}));
+vi.mock('../features/auth/hooks/useAuth', () => ({ useAuth: () => ({ user: { id: 'auth-user-id' } }) }));
+const { profileMock } = vi.hoisted(() => ({ profileMock: { profile: null } }));
+vi.mock('../features/profile/hooks/useProfile', () => ({ useProfile: () => profileMock }));
 
 import { joinRoom } from '../services/roomService';
 
 const VALID_CODE = 'ABCDEF';
+let currentView;
 
 function renderForm() {
   const onBack = vi.fn();
-  render(<JoinRoomForm onBack={onBack} />);
+  currentView = render(<JoinRoomForm onBack={onBack} />);
 }
 
 async function submitWithName(name) {
-  const nameInput = screen.getByLabelText(/tu nombre/i);
+  profileMock.profile = { display_name: name };
+  currentView.rerender(<JoinRoomForm onBack={vi.fn()} />);
   const codeInput = screen.getByLabelText(/código de sala/i);
   const submitButton = screen.getByRole('button', { name: /unirse/i });
 
   await act(async () => {
-    fireEvent.change(nameInput, { target: { value: name } });
     fireEvent.change(codeInput, { target: { value: VALID_CODE } });
     fireEvent.click(submitButton);
   });
@@ -72,7 +72,7 @@ describe('JoinRoomForm — Property 4: validación de nombre rechaza entradas in
     expect(joinRoom).toHaveBeenCalledWith({
       code: VALID_CODE,
       name: 'Lucía',
-      clientId: 'test-client-id',
+      clientId: 'auth-user-id',
     });
     expect(mockNavigate).toHaveBeenCalledWith('/room/ABCDEF');
   });
@@ -118,7 +118,7 @@ describe('JoinRoomForm — Property 4: validación de nombre rechaza entradas in
         expect(joinRoom).not.toHaveBeenCalled();
 
         // Clean up DOM between iterations
-        document.body.innerHTML = '';
+        currentView.unmount();
       }),
       { numRuns: 100 }
     );

@@ -15,10 +15,9 @@ vi.mock('../services/roomService', () => ({
   createRoom: (...args) => mockCreateRoom(...args),
 }));
 
-// Mock getOrCreateClientId
-vi.mock('../utils/clientId', () => ({
-  getOrCreateClientId: () => 'test-client-id',
-}));
+vi.mock('../features/auth/hooks/useAuth', () => ({ useAuth: () => ({ user: { id: 'auth-user-id' } }) }));
+const { profileMock } = vi.hoisted(() => ({ profileMock: { profile: null } }));
+vi.mock('../features/profile/hooks/useProfile', () => ({ useProfile: () => profileMock }));
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -36,19 +35,18 @@ describe('CreateRoomForm — Property 4: Validación de nombre rechaza entradas 
   const validMonth = '2099-12';
 
   /**
-   * Helper: renders the form, types a name, fills in a valid month, and submits.
+   * Helper: renders with a profile name, fills in a valid month, and submits.
    * Returns after all async state updates have settled.
    */
   async function submitWithName(name) {
     vi.clearAllMocks();
+    profileMock.profile = { display_name: name };
     const { unmount } = render(<CreateRoomForm onBack={vi.fn()} />);
 
-    const nameInput = screen.getByRole('textbox', { name: /tu nombre/i });
     const monthInput = document.querySelector('input[type="month"]');
     const submitButton = screen.getByRole('button', { name: /crear sala/i });
 
     await act(async () => {
-      fireEvent.change(nameInput, { target: { value: name } });
       fireEvent.change(monthInput, { target: { value: validMonth } });
       fireEvent.click(submitButton);
     });
@@ -68,6 +66,15 @@ describe('CreateRoomForm — Property 4: Validación de nombre rechaza entradas 
       ),
       { numRuns: 1 }
     );
+  });
+  it('usa el uid de Auth al crear, sin generar ni guardar una identidad local', async () => {
+    mockCreateRoom.mockResolvedValue({ data: { code: 'ABC123' }, error: null });
+    const storage = vi.spyOn(Storage.prototype, 'setItem');
+    try {
+      await submitWithName('Lucía');
+      expect(mockCreateRoom).toHaveBeenCalledWith({ hostName: 'Lucía', startMonth: '2099-12-01', clientId: 'auth-user-id' });
+      expect(storage).not.toHaveBeenCalled();
+    } finally { storage.mockRestore(); }
   });
 
   it('Property 4b — whitespace-only strings: createRoom is never called', async () => {
