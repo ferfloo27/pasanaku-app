@@ -5,7 +5,7 @@ import * as fc from 'fast-check';
 // Mock the Supabase client module BEFORE importing roomService so that
 // roomService.js never calls createClient (which requires env vars).
 // ---------------------------------------------------------------------------
-vi.mock('../lib/supabaseClient', () => {
+vi.mock('../shared/lib/supabase', () => {
   // We'll replace these with fresh spies in beforeEach via the mutable ref below.
   return {
     supabase: {
@@ -16,7 +16,7 @@ vi.mock('../lib/supabaseClient', () => {
 
 // Import after mock is in place
 import { drawTurns } from './roomService';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../shared/lib/supabase';
 
 // ---------------------------------------------------------------------------
 // Helper: re-implement addMonths to compute expected assigned_month values

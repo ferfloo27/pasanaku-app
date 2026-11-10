@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchRoom } from '../services/roomService';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../shared/lib/supabase';
 import { getOrCreateClientId } from '../utils/clientId';
 import Lobby from '../components/Lobby';
 import ResultsView from '../components/ResultsView';

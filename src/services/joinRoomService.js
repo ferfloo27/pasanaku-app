@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../shared/lib/supabase';
 
 /**
  * Finds a room by code (case-insensitive) and joins as participant.

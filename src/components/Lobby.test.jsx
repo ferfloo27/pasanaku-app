@@ -4,7 +4,7 @@ import * as fc from 'fast-check';
 import Lobby from './Lobby';
 
 // Mock Supabase client to prevent real network/Realtime connections
-vi.mock('../lib/supabaseClient', () => {
+vi.mock('../shared/lib/supabase', () => {
   const channel = {
     on: vi.fn().mockReturnThis(),
     subscribe: vi.fn().mockReturnThis(),

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
-import { shuffle } from './fisherYates';
+import { shuffle } from './shuffle';
 
 describe('shuffle', () => {
   it('returns an array of the same length', () => {

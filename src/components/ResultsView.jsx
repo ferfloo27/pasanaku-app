@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchTurns } from '../services/roomService';
-import { formatMonth } from '../utils/formatMonth';
+import { formatMonth } from '../shared/format/dates';
 
 export default function ResultsView({ room }) {
   const [turns, setTurns] = useState([]);

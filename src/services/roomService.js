@@ -1,6 +1,6 @@
-import { supabase } from '../lib/supabaseClient';
-import { generateRoomCode } from '../utils/roomCode';
-import { shuffle } from '../utils/fisherYates';
+import { supabase } from '../shared/lib/supabase';
+import { generateRoomCode } from '../features/rooms/domain/roomCode';
+import { shuffle } from '../features/draw/domain/shuffle';
 
 /**
  * Creates a new room and inserts the host as first participant.

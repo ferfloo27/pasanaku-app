@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../shared/lib/supabase';
 import { drawTurns } from '../services/roomService';
 
 export default function Lobby({ room, participants, setParticipants, clientId }) {
