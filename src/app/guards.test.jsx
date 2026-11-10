@@ -55,3 +55,12 @@ it('no muestra un error por mover el foco antes de escribir en el primer uso', (
   fireEvent.blur(screen.getByRole('textbox', { name: 'Tu nombre' }));
   expect(screen.queryByText('Escribe un nombre de 1 a 50 caracteres.')).not.toBeInTheDocument();
 });
+it('sugiere Google cuando falta perfil y deja editar antes de guardar', async () => {
+  const save = vi.fn().mockResolvedValue({ data: { display_name: 'Rosa' } });
+  renderGuard({ ...session, user: { id: 'one', is_anonymous: false, user_metadata: { full_name: 'Lucía Google' } } }, { ...profile, save });
+  const input = screen.getByRole('textbox', { name: 'Tu nombre' });
+  expect(input).toHaveValue('Lucía Google'); expect(save).not.toHaveBeenCalled();
+  fireEvent.change(input, { target: { value: 'Rosa' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
+  await waitFor(() => expect(save).toHaveBeenCalledWith('Rosa'));
+});

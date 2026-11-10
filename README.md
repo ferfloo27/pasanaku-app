@@ -5,10 +5,11 @@ compartir su código, reunir a los participantes y sortear el orden de cobro.
 
 ## Estado del proyecto
 
-La rama `v2` prepara la nueva versión por fases. El entorno local ya dispone del
-esquema v2, RLS y RPC transaccionales. Las pantallas y los servicios activos del
-frontend siguen siendo los de v1; su conexión con las RPC llegará en fases
-posteriores. Las migraciones y pruebas se ejecutan solo en Supabase local.
+La rama `v2` prepara la nueva versión por fases. El entorno local dispone del
+esquema v2, RLS y RPC transaccionales. El sistema visual, la sesión anónima y el
+perfil están implementados. Los formularios y servicios de salas siguen en
+transición desde v1; su conexión con las RPC llegará en las fases 4–6.
+Las migraciones y pruebas se ejecutan solo en Supabase local.
 No se han modificado los datos ni la configuración de producción.
 
 La fecha mínima para crear salas se calcula en `America/La_Paz`. Las salas
@@ -60,8 +61,28 @@ npm run dev
 Abre la dirección que muestra Vite. El cliente falla al iniciar si falta alguna
 de las dos variables. El frontend v1 necesita un backend compatible con su
 esquema actual (`client_id`, `start_month`, `assigned_month`). El esquema local v2
-no es compatible con los servicios v1: esta fase verifica la base de datos;
-todavía no permite probar el flujo v2 desde las pantallas.
+no es compatible con los servicios v1: todavía no permite probar el flujo
+completo de salas v2 desde las pantallas.
+
+### Identidad y nombre (Fase 3)
+
+Las rutas de la app esperan una sesión válida y un perfil con nombre antes de
+mostrar acciones. Se reutiliza la sesión guardada; si no existe, se inicia una
+anónima. Los errores permiten reintentar. El nombre se guarda en `profiles`,
+protegido por RLS; esta tabla permite escrituras propias según `design.md`.
+Cambiarlo desde el inicio no modifica los nombres de participaciones anteriores.
+
+Google se vincula mediante `linkIdentity`, conservando el `auth.uid()` y el nombre
+existente. Cuando falta nombre, el de Google aparece como sugerencia editable;
+no se guarda automáticamente. La app vuelve a `/` y muestra un aviso si se
+cancela o falla la vinculación. Registra `<origen>/` entre las URLs de retorno
+permitidas de Supabase. Un marcador temporal en `sessionStorage` detecta volver
+atrás; no almacena identificadores ni credenciales.
+
+La galería `/dev/ui` incluye una muestra del perfil y de los estados de cuenta
+que no inicia sesiones ni guarda datos en Supabase. Las pruebas de identidad
+simulan el cliente; la validación real de Google depende de la configuración
+manual de la tarea 1.6 y sigue pendiente de la persona dueña del proyecto.
 
 ## Comprobaciones
 
@@ -153,7 +174,7 @@ En el proyecto Supabase de desarrollo, realiza estos pasos:
    del frontend, por ejemplo `http://localhost:5173` en desarrollo y el dominio
    exacto del despliegue para el entorno correspondiente. Son distintas del
    callback de Google: consulta [URLs de retorno](https://supabase.com/docs/guides/auth/redirect-urls).
-5. Cuando se implemente la Fase 3, comprueba la vinculación con Google: conservar
+5. Comprueba la vinculación con Google: conservar
    el `auth.uid()` y el nombre de perfil, cancelar sin perder la sesión y volver
    al frontend correcto.
 
@@ -175,18 +196,18 @@ Los contratos de los componentes están en [Componentes compartidos](docs/ui-com
 
 ```text
 src/
-  app/          App y router; sesión y guards en fases posteriores
+  app/          App, router, sesión/perfil compartidos y guards
   features/
     auth/       api/, hooks/
     profile/    api/, domain/, hooks/, ui/
     rooms/      api/, domain/roomCode.js, hooks/, ui/
     draw/       api/, domain/shuffle.js, hooks/, ui/
   shared/
-    format/     dates.js: formatMonth
+    format/     montos y fechas en español
     lib/        supabase.js: cliente único
-    errors/     pendiente de Fase 2
-    styles/     pendiente de Fase 2
-    ui/         pendiente de Fase 2
+    errors/     AppError y mensajes en español
+    styles/     tokens, base y modo oscuro definido pero desactivado
+    ui/         componentes del sistema visual
   pages/        páginas actuales de v1
   components/   componentes de v1 durante la transición
   services/     roomService.js de v1 durante la transición

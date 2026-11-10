@@ -2,6 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, expect, it, vi } from 'vitest';
 import { useProfileState } from './useProfileState';
 import { AppError } from '../../../shared/errors/appError';
+import fc from 'fast-check';
 const { api } = vi.hoisted(() => ({ api: { getProfile: vi.fn(), saveDisplayName: vi.fn() } }));
 vi.mock('../api/profileApi', () => api);
 beforeEach(() => vi.resetAllMocks());
@@ -47,4 +48,17 @@ it('rechaza guardar durante la carga sin invalidar la lectura pendiente', async 
   expect(api.saveDisplayName).not.toHaveBeenCalled();
   await act(async () => resolve({ data: { user_id: 'one', display_name: 'Lucía' } }));
   expect(result.current.profile.display_name).toBe('Lucía');
+});
+it('propiedad 13: el perfil real conserva cualquier nombre al actualizar la identidad con Google', async () => {
+  await fc.assert(fc.asyncProperty(fc.string({ minLength: 1, maxLength: 50 }).filter(name => !!name.trim()), fc.string(), async (name, googleName) => {
+    api.getProfile.mockReset().mockResolvedValue({ data: { user_id: 'one', display_name: name } });
+    const { result, rerender, unmount } = renderHook(({ user }) => useProfileState(user), { initialProps: { user: { id: 'one', is_anonymous: true } } });
+    try {
+      await waitFor(() => expect(result.current.status).toBe('ready'));
+      rerender({ user: { id: 'one', is_anonymous: false, user_metadata: { full_name: googleName } } });
+      expect(result.current.profile.display_name).toBe(name);
+      expect(api.getProfile).toHaveBeenCalledTimes(1);
+      expect(api.saveDisplayName).not.toHaveBeenCalled();
+    } finally { unmount(); }
+  }), { numRuns: 20 });
 });
