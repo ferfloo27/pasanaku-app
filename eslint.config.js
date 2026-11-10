@@ -18,4 +18,36 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  {
+    files: ['src/**/*.{js,jsx}'],
+    ignores: ['src/features/*/api/**/*.{js,jsx}'],
+    rules: {
+      'no-restricted-imports': ['error', {
+        patterns: [{
+          regex: '(^|/)(supabase|supabaseClient)(\\.[cm]?js)?([?#].*)?$|^@supabase/',
+          message: 'Accede a Supabase solo desde features/*/api; usa esa capa desde hooks y UI.',
+        }],
+      }],
+    },
+  },
+  {
+    files: ['src/shared/lib/supabase.js'],
+    rules: {
+      // El módulo compartido crea el cliente; sus consumidores están restringidos arriba.
+      'no-restricted-imports': 'off',
+    },
+  },
+  {
+    // Excepción temporal de v1: retirar al migrar servicios y Realtime a features/*/api.
+    // Lista cerrada para que ningún componente, hook o servicio nuevo herede la excepción.
+    files: [
+      'src/services/roomService.js',
+      'src/services/roomService.test.js',
+      'src/components/Lobby.jsx',
+      'src/pages/RoomPage.jsx',
+    ],
+    rules: {
+      'no-restricted-imports': 'off',
+    },
+  },
 ])
