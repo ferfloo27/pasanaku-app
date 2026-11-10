@@ -7,6 +7,10 @@ export class AppError extends Error {
 }
 
 export const MESSAGES = Object.freeze({
+  AUTH_FAILED: 'No pudimos iniciar tu sesión. Reintenta para continuar.',
+  AUTH_LINK_FAILED: 'No se vinculó Google. Tu sesión sigue aquí; intenta de nuevo.',
+  PROFILE_LOAD_FAILED: 'No pudimos cargar tu nombre. Intenta de nuevo.',
+  PROFILE_SAVE_FAILED: 'No pudimos guardar tu nombre. Intenta de nuevo.',
   ROOM_NOT_FOUND: 'Ese código no existe. Revísalo e intenta de nuevo.',
   ROOM_DRAWN: 'Esta sala ya hizo su sorteo, así que no entran más personas.',
   ROOM_CANCELLED: 'Esta sala fue cancelada.',

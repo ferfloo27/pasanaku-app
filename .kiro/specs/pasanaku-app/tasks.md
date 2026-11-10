@@ -63,7 +63,7 @@ Convenciones:
 
 ## Fase 3: Identidad y perfil
 
-- [ ] 3.1 `features/auth/api/authApi.js`: `ensureSession`, `linkGoogle`, `onAuthChange`.
+- [x] 3.1 `features/auth/api/authApi.js`: `ensureSession`, `linkGoogle`, `onAuthChange`.
 - [ ] 3.2 `app/AuthProvider.jsx` + `useAuth`: `{ user, isAnonymous, status, error, retry }`.
 - [ ] 3.3 `features/profile`: `validateDisplayName` (domain + test), `profileApi`, `useProfile`.
 - [ ] 3.4 `ProfileNameSheet` (artboard 6.1) y guard `RequireProfile`.
