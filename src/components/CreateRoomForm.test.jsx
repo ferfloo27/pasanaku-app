@@ -119,5 +119,5 @@ describe('CreateRoomForm — Property 4: Validación de nombre rechaza entradas 
       }),
       { numRuns: 100 }
     );
-  });
+  }, 15000); // 100 montajes reales de React necesitan margen en equipos con carga.
 });

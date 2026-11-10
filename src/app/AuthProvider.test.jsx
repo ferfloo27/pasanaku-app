@@ -7,6 +7,7 @@ import { AppError } from '../shared/errors/appError';
 
 const { api } = vi.hoisted(() => ({ api: { ensureSession: vi.fn(), onAuthChange: vi.fn() } }));
 vi.mock('../features/auth/api/authApi', () => api);
+vi.mock('../features/profile/api/profileApi', () => ({ getProfile: async () => ({ data: null }), saveDisplayName: vi.fn() }));
 let listener; const stop = vi.fn();
 const anon = { user: { id: 'one', is_anonymous: true } };
 function Consumer() {

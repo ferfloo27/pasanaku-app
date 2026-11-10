@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ensureSession, onAuthChange } from '../features/auth/api/authApi';
 import { AuthContext } from './authContext';
+import { useProfileState } from '../features/profile/hooks/useProfileState';
 
 export default function AuthProvider({ children }) {
   const [auth, setAuth] = useState({ user: null, status: 'loading', error: null });
   const [attempt, setAttempt] = useState(0);
+  const profileState = useProfileState(auth.user);
   const retry = useCallback(() => {
     setAuth({ user: null, status: 'loading', error: null });
     setAttempt(value => value + 1);
@@ -27,5 +29,5 @@ export default function AuthProvider({ children }) {
     return () => { active = false; stop(); };
   }, [attempt, retry]);
 
-  return <AuthContext.Provider value={{ ...auth, isAnonymous: auth.user?.is_anonymous === true, retry }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ ...auth, isAnonymous: auth.user?.is_anonymous === true, retry, profileState }}>{children}</AuthContext.Provider>;
 }
