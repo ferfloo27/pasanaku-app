@@ -7,6 +7,7 @@ language plpgsql security definer set search_path = public
 as $$
 declare
   caller uuid := auth.uid();
+  business_today date := (statement_timestamp() at time zone 'America/La_Paz')::date;
   display_name text;
   new_room public.rooms;
   new_code text;
@@ -22,10 +23,10 @@ begin
     raise exception 'INVALID_INPUT';
   end if;
   if frequency = 'monthly' then
-    if extract(day from start_date) <> 1 or start_date < date_trunc('month', current_date)::date then
+    if extract(day from start_date) <> 1 or start_date < date_trunc('month', business_today)::date then
       raise exception 'INVALID_INPUT';
     end if;
-  elsif start_date < current_date then
+  elsif start_date < business_today then
     raise exception 'INVALID_INPUT';
   end if;
 

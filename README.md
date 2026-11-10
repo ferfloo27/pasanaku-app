@@ -11,6 +11,9 @@ frontend siguen siendo los de v1; su conexión con las RPC llegará en fases
 posteriores. Las migraciones y pruebas se ejecutan solo en Supabase local.
 No se han modificado los datos ni la configuración de producción.
 
+La fecha mínima para crear salas se calcula en `America/La_Paz`. Las salas
+canceladas se devuelven durante 30 días para el aviso único por dispositivo.
+
 La fuente de verdad, en orden, es:
 
 1. [Requisitos](.kiro/specs/pasanaku-app/requirements.md).
@@ -73,6 +76,23 @@ npm run build
 `npm test` ejecuta la suite una vez. `npm run test:watch` mantiene las pruebas en
 observación. Las pruebas actuales simulan Supabase y no requieren una base de
 datos en ejecución. El build genera `dist/`; `npm run preview` permite revisarlo.
+
+Con Supabase local iniciado y sus migraciones aplicadas, ejecuta las pruebas de
+base de datos por separado:
+
+```bash
+npm run test:db
+```
+
+La suite ejecuta pgTAP para esquema, RLS, RPC y publicación Realtime. Después usa
+conexiones reales al contenedor local `supabase_db_pasanaku-app` para comprobar dos
+uniones al último cupo, dos confirmaciones simultáneas, reversión ante un fallo
+durante la escritura y fechas semanales/quincenales. No lee archivos de entorno.
+Los datos creados por los tests se revierten o se eliminan al terminar.
+
+La propiedad 12, que compara fechas SQL con `domain/schedule.js`, queda pendiente
+hasta la Fase 6 por decisión del 10-11-2026. Las pruebas actuales de fechas usan
+resultados esperados independientes y no sustituyen esa comparación.
 
 ## Supabase local
 

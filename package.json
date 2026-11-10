@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest --run",
+    "test:db": "npx --yes supabase@2.120.0 test db --local && node --test supabase/tests/*.integration.mjs",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage"
   },

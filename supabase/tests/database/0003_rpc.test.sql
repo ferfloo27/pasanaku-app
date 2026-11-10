@@ -22,7 +22,7 @@ set local request.jwt.claim.sub = '12000000-0000-4000-8000-000000000001';
 select throws_ok($$select public.create_room(' ', 200, 'monthly', '2099-01-01', 3)$$, 'P0001', 'INVALID_INPUT', 'Crear rechaza nombres vacíos');
 select throws_ok($$select public.create_room('Familia', 0, 'monthly', '2099-01-01', 3)$$, 'P0001', 'INVALID_INPUT', 'Crear rechaza cuotas inválidas');
 select throws_ok($$select public.create_room('Familia', 200, 'monthly', '2099-01-02', 3)$$, 'P0001', 'INVALID_INPUT', 'La frecuencia mensual empieza el día 1');
-select throws_ok($$select public.create_room('Familia', 200, 'weekly', current_date - 1, 3)$$, 'P0001', 'INVALID_INPUT', 'No se crean salas con fechas pasadas');
+select throws_ok($$select public.create_room('Familia', 200, 'weekly', (statement_timestamp() at time zone 'America/La_Paz')::date - 1, 3)$$, 'P0001', 'INVALID_INPUT', 'No se crean salas con fechas pasadas');
 select throws_ok($$select public.create_room('Familia', 200, 'monthly', '2099-01-01', 31)$$, 'P0001', 'INVALID_INPUT', 'Crear rechaza cupos fuera de rango');
 select lives_ok($$select public.create_room('  Familia  ', 200, 'monthly', '2099-01-01', 3)$$, 'Crear sala es atómico e incorpora al anfitrión');
 reset role;

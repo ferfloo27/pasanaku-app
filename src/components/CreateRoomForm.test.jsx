@@ -40,6 +40,7 @@ describe('CreateRoomForm — Property 4: Validación de nombre rechaza entradas 
    * Returns after all async state updates have settled.
    */
   async function submitWithName(name) {
+    vi.clearAllMocks();
     const { unmount } = render(<CreateRoomForm onBack={vi.fn()} />);
 
     const nameInput = screen.getByRole('textbox', { name: /tu nombre/i });
@@ -87,15 +88,10 @@ describe('CreateRoomForm — Property 4: Validación de nombre rechaza entradas 
   it('Property 4c — strings longer than 50 chars: createRoom is never called', async () => {
     await fc.assert(
       fc.asyncProperty(
-        // Generate strings with length strictly > 50 (51–200 chars, no whitespace-only restriction)
-        fc.string({ minLength: 51, maxLength: 200 }),
+        // La validación cuenta los caracteres después de quitar espacios exteriores.
+        fc.string({ minLength: 51, maxLength: 200 }).filter(s => s.trim().length > 50),
         async (name) => {
-          // Ensure the string has at least one non-space character so it's not whitespace-only
-          // (that edge case is tested separately above). We pad with 'x' if needed.
-          const testName = name.trim().length === 0 ? 'x'.repeat(51) : name;
-          // Only run this sub-test if the raw string is > 50 chars
-          // (trimming could reduce it, but the input itself exceeds the max)
-          await submitWithName(testName.length > 50 ? testName : 'x'.repeat(51));
+          await submitWithName(name);
           expect(mockCreateRoom).not.toHaveBeenCalled();
           vi.clearAllMocks();
         }

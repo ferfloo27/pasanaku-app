@@ -81,7 +81,7 @@ Referencias de diseño: `docs/design-brief.md` y el canvas "Pasanaku" de Claude 
 #### Acceptance Criteria
 
 1. THE App SHALL presentar en `/new` un formulario con: **Nombre de la sala** (obligatorio, 1–60 caracteres), **Cuota por persona** (entero en Bs, 1–100 000), **Frecuencia** (Semanal · Quincenal · Mensual, por defecto Mensual), **Fecha de inicio** y **Máx. participantes** (entero 2–30, por defecto 30). El nombre del anfitrión se toma del Perfil.
-2. WHILE la frecuencia es Mensual, THE App SHALL pedir mes y año de inicio (no anterior al mes actual); WHILE es Semanal o Quincenal, SHALL pedir un día (no anterior a hoy).
+2. WHILE la frecuencia es Mensual, THE App SHALL pedir mes y año de inicio (no anterior al mes actual); WHILE es Semanal o Quincenal, SHALL pedir un día (no anterior a hoy). El día y el mes actuales se determinan con la zona horaria `America/La_Paz`.
 3. THE App SHALL mostrar un resumen en vivo: "Cada turno recibe Bs {cuota} × participantes", con un ejemplo calculado.
 4. IF algún campo es inválido, THEN THE App SHALL mostrar el error debajo del campo y SHALL NOT enviar el formulario.
 5. WHEN el anfitrión envía el formulario válido, THE App SHALL invocar la RPC `create_room`, que en una sola transacción genera un código único (reintentando ante colisión), inserta la sala con `status = 'waiting'` e inserta al anfitrión como participante.

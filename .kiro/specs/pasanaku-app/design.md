@@ -254,6 +254,10 @@ formatTurnDate('2027-01-15', 'weekly')  // "15 ene 2027"
 
 `random` se inyecta para poder hacer tests deterministas.
 
+La validación de la fecha de creación usa el día y el mes actuales en
+`America/La_Paz` (decisión del 10-11-2026), independientemente de la zona de la
+sesión PostgreSQL. Las fechas de turno siguen siendo fechas ISO sin hora.
+
 ---
 
 ## API layer y errores

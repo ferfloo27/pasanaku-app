@@ -101,7 +101,7 @@ describe('JoinRoomForm — Property 4: validación de nombre rechaza entradas in
       minLength: 1,
       maxLength: 100,
     });
-    const tooLong = fc.string({ minLength: 51, maxLength: 200 });
+    const tooLong = fc.string({ minLength: 51, maxLength: 200 }).filter(s => s.trim().length > 50);
     const invalidName = fc.oneof(
       fc.constant(''),
       whitespaceOnly,
