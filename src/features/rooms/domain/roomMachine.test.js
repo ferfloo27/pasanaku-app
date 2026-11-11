@@ -14,6 +14,12 @@ it('revela solamente el cambio en vivo waiting→drawn y conserva resultados al 
   expect(roomReducer(live, { type: 'SYNCED', data: { room: { ...room, status: 'drawn' }, participants, turns: [{ id: 'turn' }], isMember: true } }).status).toBe('revealing');
   expect(roomReducer(live, { type: 'REVEAL_FINISHED' }).status).toBe('results');
 });
+it('descubrir un sorteo por resync de un lobby abierto revela una vez y no repite al terminar', () => {
+  const sync = { type: 'SYNCED', data: { room: { ...room, status: 'drawn' }, participants, turns: [{ id: 'turn' }], isMember: true } };
+  const live = roomReducer(load(), sync);
+  expect(live.status).toBe('revealing');
+  expect(roomReducer(roomReducer(live, { type: 'REVEAL_FINISHED' }), sync).status).toBe('results');
+});
 it('elimina por PK, distingue la propia membresía y conserva los datos del anfitrión', () => {
   const otherRemoved = roomReducer(load(), { type: 'PARTICIPANT_DELETED', participantId: 'other' });
   expect(otherRemoved.status).toBe('lobby'); expect(otherRemoved.participants).toHaveLength(1);

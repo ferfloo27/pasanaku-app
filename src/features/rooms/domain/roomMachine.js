@@ -21,6 +21,7 @@ export function roomReducer(state, action) {
         : !isMember ? (wasMember ? 'removed' : 'preview')
           : room.status === 'drawn' ? 'results' : 'lobby';
       if (action.type === 'SYNCED' && isMember) {
+        if (['lobby', 'drafting'].includes(state.status) && state.room?.status === 'waiting' && room.status === 'drawn') status = 'revealing';
         if (state.status === 'revealing' && room.status === 'drawn') status = 'revealing';
         if (state.status === 'drafting' && room.status === 'waiting') status = 'drafting';
       }

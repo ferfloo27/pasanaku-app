@@ -11,18 +11,22 @@ it('revela el orden persistido, anuncia cada posición y termina con el turno pr
   expect(screen.getByText('Sorteado al azar')).toBeVisible();
   const live = screen.getByRole('status');
   expect(live).toHaveAttribute('aria-live', 'polite');
+  expect(live).toBeEmptyDOMElement();
+  act(() => vi.advanceTimersByTime(0));
   expect(live).toHaveTextContent('Le toca a Ana'); expect(live).toHaveTextContent('Turno 1 · Enero 2027');
   act(() => vi.advanceTimersToNextTimer());
   expect(live).toHaveTextContent('Le toca a Bea'); expect(live).toHaveTextContent('Febrero 2027');
   expect(within(screen.getByRole('list', { name: 'Ya salieron' })).getByText('Ana · Tú')).toBeVisible();
   act(() => vi.advanceTimersToNextTimer());
   expect(screen.getByRole('heading', { name: 'Orden listo' })).toBeVisible();
-  expect(screen.getByText(/Tu turno es el 1/)).toHaveTextContent('Enero 2027');
+  expect(screen.getByText('Tu turno es el 1, en Enero 2027.')).toBeVisible();
   fireEvent.click(screen.getByRole('button', { name: 'Ver de nuevo' }));
+  expect(screen.getByRole('status')).toBe(live);
   expect(screen.getByRole('status')).toHaveTextContent('Le toca a Ana');
 });
 it('Saltar va directamente a resultados y cancela el reloj', () => {
   const onResults = vi.fn(); render(<Reveal room={room} participants={participants} turns={turns} userId="me" onResults={onResults} />);
+  act(() => vi.advanceTimersByTime(0));
   fireEvent.click(screen.getByRole('button', { name: 'Saltar' }));
   expect(onResults).toHaveBeenCalledOnce(); expect(vi.getTimerCount()).toBe(0);
 });

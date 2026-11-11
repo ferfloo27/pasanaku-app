@@ -16,11 +16,11 @@ vi.mock('../api/roomSessionApi', () => ({
     const { data: preview } = await getRoomPreview(code);
     if (!preview.is_member) return { data: { room: preview, participants: [], turns: [], isMember: false } };
     const { data } = await fetchMemberRoom(code);
-    return { data: { ...data, turns: [], isMember: true } };
+    return { data: { ...data, turns: data.turns || [], isMember: true } };
   },
   fetchRoomState: async () => {
     const { data } = await fetchMemberRoom('ABC123');
-    return { data: { ...data, turns: [], isMember: true } };
+    return { data: { ...data, turns: data.turns || [], isMember: true } };
   },
 }));
 const room = { code: 'ABC123', name: 'Familia', host_name: 'Rosa', participant_count: 2, max_participants: 3, contribution_bs: 150, frequency: 'monthly', start_date: '2027-01-01', status: 'waiting', is_member: false };
@@ -93,11 +93,36 @@ it('permite reintentar una unión fallida por red sin perder el nombre ni duplic
   expect(await screen.findByRole('heading', { name: 'Participantes (1/3)' })).toBeInTheDocument();
 });
 
-it('un miembro existente pasa directamente a su sala aunque ya se sorteó', async () => {
+const savedPeople = [{ id: 'p', user_id: 'u', name: 'Lucía' }, { id: 'q', user_id: 'other', name: 'Rosa' }];
+const savedTurns = [{ id: 't2', participant_id: 'p', position: 2, turn_date: '2027-02-01', payout_bs: 300 }, { id: 't1', participant_id: 'q', position: 1, turn_date: '2027-01-01', payout_bs: 300 }];
+it('una entrada directa o recarga de drawn muestra resultados sin reproducción', async () => {
   getRoomPreview.mockResolvedValue({ data: { ...room, status: 'drawn', is_member: true } });
-  show();
-  expect(await screen.findByRole('heading', { name: 'Participantes (1/3)' })).toBeInTheDocument();
+  fetchMemberRoom.mockResolvedValue({ data: { room: { ...room, id: 'r', status: 'drawn' }, participants: savedPeople, turns: savedTurns } });
+  const first = show();
+  expect(await screen.findByRole('region', { name: 'Tu turno' })).toHaveTextContent('Febrero 2027');
+  expect(screen.queryByText('Sorteado al azar')).not.toBeInTheDocument();
+  first.unmount(); show();
+  expect(await screen.findByRole('region', { name: 'Tu turno' })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Saltar' })).not.toBeInTheDocument();
   expect(joinRoom).not.toHaveBeenCalled();
+});
+it('un anuncio en vivo espera la lectura completa y Salta directamente a resultados', async () => {
+  getRoomPreview.mockResolvedValue({ data: { ...room, is_member: true } });
+  fetchMemberRoom.mockResolvedValue({ data: { room: { ...room, id: 'r', host_user_id: 'other' }, participants: savedPeople } });
+  show(); await screen.findByRole('heading', { name: 'Participantes (2/3)' });
+  const handlers = subscribeRoomChannel.mock.calls.at(-1)[1];
+  let finish; fetchMemberRoom.mockImplementationOnce(() => new Promise(resolve => { finish = resolve; }));
+  act(() => handlers.onRoomUpdated({ id: 'r', status: 'drawn' }));
+  expect(screen.queryByText('Le toca a Rosa')).not.toBeInTheDocument();
+  expect(screen.getByText('Cargando resultados…')).toBeInTheDocument();
+  await act(async () => {});
+  fetchMemberRoom.mockResolvedValue({ data: { room: { ...room, id: 'r', status: 'drawn' }, participants: savedPeople, turns: savedTurns } });
+  await act(async () => finish({ data: { room: { ...room, id: 'r', status: 'drawn' }, participants: savedPeople, turns: savedTurns } }));
+  expect(await screen.findByText('Le toca a Rosa')).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Saltar' }));
+  expect(await screen.findByRole('region', { name: 'Tu turno' })).toHaveTextContent('Febrero 2027');
+  await act(async () => handlers.onRoomUpdated({ id: 'r', status: 'drawn' }));
+  expect(screen.queryByText('Sorteado al azar')).not.toBeInTheDocument();
 });
 
 it('muestra sala inexistente al abrir un link y permite volver al inicio', async () => {
@@ -166,8 +191,10 @@ it('anunciar persiste una sola vez y actualiza la sala sorteada', async () => {
   fireEvent.click(await screen.findByRole('button', { name: 'Sortear orden' }));
   fireEvent.click(await screen.findByRole('button', { name: 'Confirmar y anunciar' }));
   getRoomPreview.mockResolvedValue({ data: { ...room, is_member: true, status: 'drawn' } });
-  fetchMemberRoom.mockResolvedValue({ data: { room: { ...hostRoom, status: 'drawn' }, participants: [{ id: 'self', user_id: 'u', name: 'Lucía' }, { id: 'guest', user_id: 'guest-user', name: 'Juan' }] } });
+  fetchMemberRoom.mockResolvedValue({ data: { room: { ...hostRoom, status: 'drawn' }, participants: [{ id: 'self', user_id: 'u', name: 'Lucía' }, { id: 'guest', user_id: 'guest-user', name: 'Juan' }], turns: [{ id: 't1', participant_id: 'self', position: 1, turn_date: '2027-01-01', payout_bs: 300 }, { id: 't2', participant_id: 'guest', position: 2, turn_date: '2027-02-01', payout_bs: 300 }] } });
   fireEvent.click(screen.getByRole('button', { name: 'Anunciar a todos' }));
+  expect(await screen.findByText('Sorteado al azar')).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Saltar' }));
   expect(await screen.findByText('Sorteada')).toBeInTheDocument();
   expect(confirmDraw).toHaveBeenCalledOnce();
   expect(confirmDraw.mock.calls[0][0]).toBe('r');
