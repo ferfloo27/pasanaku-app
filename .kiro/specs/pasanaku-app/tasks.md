@@ -87,7 +87,7 @@ Convenciones:
 
 ## Fase 5: Sala y lobby
 
-- [ ] 5.1 `domain/roomMachine.js`: reducer con estados `loading`, `not_found`, `preview`, `lobby`, `drafting`, `revealing`, `results`, `cancelled`, `removed` (tests del reducer).
+- [x] 5.1 `domain/roomMachine.js`: reducer con estados `loading`, `not_found`, `preview`, `lobby`, `drafting`, `revealing`, `results`, `cancelled`, `removed` (tests del reducer).
 - [ ] 5.2 `roomChannel.js` (un canal por sala) + `useRoomSession(code)` con carga inicial y eventos de Realtime.
 - [ ] 5.3 `Lobby` variante participante (artboard 6.5 Lobby participante).
 - [ ] 5.4 `Lobby` variante anfitrión: "Sortear orden", eliminar participante, menú ⋯ con "Cancelar sala", estado de menos de 2 (artboards 6.5 Lobby anfitrión y Lobby menos de 2 + menú).
