@@ -102,7 +102,7 @@ Convenciones:
 - [x] 6.1 `domain/schedule.js` `turnDate` (+ propiedad 5) y `domain/shuffle.js` con `random` inyectable (+ propiedad 2).
   - Propiedad 12 incluida en `transactions.integration.mjs`; ejecución pendiente por decisión del 11-11-2026 (Docker local no disponible). La tarea 1.7 continúa abierta.
 - [x] 6.2 `domain/draft.js`: `buildDraft`, `moveDraftItem`, `draftToOrder` (+ propiedades 3 y 4).
-- [ ] 6.3 Instalar `@dnd-kit/core` y `@dnd-kit/sortable`; `DraftEditor` con arrastre, botones subir/bajar y "Volver a sortear" (artboard 6.6 Borrador).
+- [x] 6.3 Instalar `@dnd-kit/core` y `@dnd-kit/sortable`; `DraftEditor` con arrastre, botones subir/bajar y "Volver a sortear" (artboard 6.6 Borrador).
 - [ ] 6.4 `ConfirmDrawSheet` (artboard 6.6 Confirmar y anunciar) y `drawApi.confirmDraw` con manejo de `PARTICIPANTS_CHANGED`, `ROOM_NOT_WAITING` y error genérico con borrador conservado.
 - _Requirements: 6.1–6.13_
 

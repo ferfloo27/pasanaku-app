@@ -8,6 +8,8 @@ import Lobby from '../features/rooms/ui/Lobby';
 import RemoveParticipantSheet from '../features/rooms/ui/RemoveParticipantSheet';
 import CancelRoomSheet from '../features/rooms/ui/CancelRoomSheet';
 import { RemovedRoom, CancelledRoom } from '../features/rooms/ui/RoomStateViews';
+import DraftEditor from '../features/draw/ui/DraftEditor';
+import { useDraft } from '../features/draw/hooks/useDraft';
 import EmptyState from '../shared/ui/EmptyState';
 import Button from '../shared/ui/Button';
 import { AppError } from '../shared/errors/appError';
@@ -16,6 +18,11 @@ import ProfileNameSheet from '../features/profile/ui/ProfileNameSheet';
 import '../features/auth/ui/identity.css';
 
 const sample = { id: 'sample', name: 'Pasanaku Familia Mamani', code: 'K7QM3P', contribution_bs: 200, frequency: 'monthly', start_date: '2027-01-01', max_participants: 30, participant_count: 8, host_name: 'Rosa Mamani', status: 'waiting', is_host: true };
+
+function DraftPreview({ participants, room, onBack }) {
+  const { draft, move, reshuffle } = useDraft(participants, room);
+  return <DraftEditor room={room} draft={draft} onMove={move} onReshuffle={reshuffle} onBack={onBack} />;
+}
 
 // Se importa exclusivamente desde la ruta de desarrollo. No accede a APIs.
 export default function RoomsPreview() {
@@ -43,6 +50,7 @@ export default function RoomsPreview() {
       <Button compact variant="text" onClick={() => setView('alone')}>Lobby vacío</Button>
       <Button compact variant="text" onClick={() => setView('removed')}>Persona eliminada</Button>
       <Button compact variant="text" onClick={() => setView('cancelled')}>Sala cancelada</Button>
+      <Button compact variant="text" onClick={() => setView('draft')}>Borrador</Button>
     </nav>
     {view === 'home' && <><h1>Hola, Lucía</h1><h2>Tus salas</h2><RoomCard room={sample} /><RoomCard room={{ ...sample, id: 'drawn', name: 'Amigas del cole', status: 'drawn', is_host: false }} /><EmptyState /></>}
     {view === 'create' && <CreateRoomForm onBack={() => setView('home')} onSubmit={async values => {
@@ -54,7 +62,8 @@ export default function RoomsPreview() {
     {view === 'preview' && <><RoomPreview room={room} displayName={name} onChangeName={() => setEditing(true)} onCancel={() => setView('home')} onJoin={() => setView('home')} />
       <div><Button variant="text" onClick={() => setRoom({ ...sample, status: 'drawn' })}>Ver sorteada</Button><Button variant="text" onClick={() => setRoom({ ...sample, status: 'cancelled' })}>Ver cancelada</Button><Button variant="text" onClick={() => setRoom({ ...sample, participant_count: 30 })}>Ver llena</Button></div></>}
     <ProfileNameSheet open={editing} initialName={name} onClose={() => setEditing(false)} />
-    {['host', 'participant', 'alone'].includes(view) && <Lobby room={lobbyRoom} participants={view === 'alone' ? people.filter(person => person.user_id === 'host') : people} userId={view === 'participant' ? 'lucia' : 'host'} onRemoveParticipant={participant => setSelection({ type: 'remove', participant })} onCancelRoom={() => setSelection({ type: 'cancel' })} />}
+    {['host', 'participant', 'alone'].includes(view) && <Lobby room={lobbyRoom} participants={view === 'alone' ? people.filter(person => person.user_id === 'host') : people} userId={view === 'participant' ? 'lucia' : 'host'} onDraw={() => setView('draft')} onRemoveParticipant={participant => setSelection({ type: 'remove', participant })} onCancelRoom={() => setSelection({ type: 'cancel' })} />}
+    {view === 'draft' && <DraftPreview participants={people} room={lobbyRoom} onBack={() => setView('host')} />}
     {view === 'removed' && <RemovedRoom room={lobbyRoom} onHome={() => setView('home')} />}
     {view === 'cancelled' && <CancelledRoom room={lobbyRoom} onHome={() => setView('home')} />}
     <RemoveParticipantSheet open={selection?.type === 'remove'} participant={selection?.participant} onClose={() => setSelection(null)} onConfirm={() => { setPeople(current => current.filter(person => person.id !== selection.participant.id)); setSelection(null); }} />
