@@ -132,9 +132,10 @@ uniones al último cupo, dos confirmaciones simultáneas, reversión ante un fal
 durante la escritura y fechas semanales/quincenales. No lee archivos de entorno.
 Los datos creados por los tests se revierten o se eliminan al terminar.
 
-La propiedad 12, que compara fechas SQL con `domain/schedule.js`, está preparada
-en `transactions.integration.mjs`. Su ejecución sigue pendiente por decisión del
-11-11-2026. El cierre y las comprobaciones pendientes de la Fase 8 se registran en
+La propiedad 12 compara las fechas persistidas por SQL con `domain/schedule.js`
+para las frecuencias mensual, semanal y quincenal en `transactions.integration.mjs`.
+Verificada en Supabase local el 11-11-2026: 98 comprobaciones pgTAP y 5 tests de
+integración pasan, sin omisiones. El cierre y la evidencia se registran en
 `docs/phase8-verification.md`.
 
 ## Supabase local

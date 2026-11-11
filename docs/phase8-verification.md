@@ -59,4 +59,10 @@ Se ampliaron las muestras de desarrollo con estados transversales y nombre oblig
 
 Evidencia local en la carpeta de visualizaciones de esta conversación: `phase8-live-host.png` y `phase8-live-participant.png`. Los datos de prueba quedan solo en Supabase local; no se desplegó ni se modificó producción.
 
-La paridad SQL de la tarea 1.7 permanece pendiente según la decisión anterior del usuario. Las tareas manuales de Google/Auth (1.6) siguen a cargo de la persona dueña del proyecto.
+## Cierre de la tarea 1.7 — paridad de fechas
+
+Por solicitud del usuario, se retomó la prueba aplazada el 11-11-2026. Se verificó el contenedor local `supabase_db_pasanaku-app` en ejecución y las migraciones 0001–0004 aplicadas, sin reiniciar la base ni tocar producción.
+
+`npm run test:db` terminó con código 0: **98 comprobaciones pgTAP en 5 archivos y 5 tests de integración pasan**, sin fallos ni omisiones. La propiedad 12 compara las fechas guardadas por `confirm_draw` con `turnDate` para mensual, semanal y quincenal: cuatro casos generados por frecuencia, con años entre 2096 y 2104 y entre dos y ocho participantes. Las demás pruebas verifican permisos, cupo concurrente, confirmaciones simultáneas, reversión de escrituras y cambios de mes/año. Se limpiaron únicamente los datos creados por las propias pruebas.
+
+La tarea 1.7 queda cerrada. Las tareas manuales de Google/Auth (1.6) siguen a cargo de la persona dueña del proyecto.
