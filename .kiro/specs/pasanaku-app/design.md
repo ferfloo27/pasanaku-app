@@ -318,9 +318,9 @@ Un canal por sala: `room:{roomId}`.
 |---|---|---|
 | `UPDATE rooms` | `id=eq.{roomId}` | `drawn` → `revealing` (si estaba en lobby/drafting); `cancelled` → `cancelled` |
 | `INSERT participants` | `room_id=eq.{roomId}` | agregar a la lista (marcar como nuevo para el destaque) |
-| `DELETE participants` | `room_id=eq.{roomId}` | quitar de la lista; si es el usuario → `removed` |
+| `DELETE participants` | correlación local por PK (`old.id`) | quitar de la lista; si es el usuario → `removed`; volver a consultar la membresía |
 
-Requisitos de Supabase: tablas en la publicación `supabase_realtime` y `replica identity full` en `participants` (para recibir `room_id`/`user_id` en el DELETE).
+Requisitos de Supabase: tablas en la publicación `supabase_realtime` y `replica identity full` en `participants`. Con RLS activo, el registro `old` de un DELETE puede contener solo la clave primaria, aunque se use `full`; no se depende de `old.room_id` ni de `old.user_id`. Se escucha DELETE sin filtro por sala, se correlaciona la PK con los participantes conocidos y se verifica la membresía mediante una lectura protegida por RLS. Los eventos ajenos no incorporan datos a la sala. Véase [Supabase: Postgres Changes](https://supabase.com/docs/guides/realtime/postgres-changes).
 
 **Resync:** ante `visibilitychange` a visible, o cuando el canal vuelve a `SUBSCRIBED` tras `CHANNEL_ERROR`/`TIMED_OUT`/`CLOSED`, se llama `fetchRoomState(roomId)` (sala + participantes + turnos) y se despacha `SYNCED`. Mientras el canal no esté `SUBSCRIBED` se muestra `ReconnectingChip`.
 
