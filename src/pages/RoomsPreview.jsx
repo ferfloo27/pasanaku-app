@@ -10,6 +10,7 @@ import CancelRoomSheet from '../features/rooms/ui/CancelRoomSheet';
 import { RemovedRoom, CancelledRoom } from '../features/rooms/ui/RoomStateViews';
 import DraftEditor from '../features/draw/ui/DraftEditor';
 import { useDraft } from '../features/draw/hooks/useDraft';
+import ConfirmDrawSheet from '../features/draw/ui/ConfirmDrawSheet';
 import EmptyState from '../shared/ui/EmptyState';
 import Button from '../shared/ui/Button';
 import { AppError } from '../shared/errors/appError';
@@ -21,7 +22,12 @@ const sample = { id: 'sample', name: 'Pasanaku Familia Mamani', code: 'K7QM3P', 
 
 function DraftPreview({ participants, room, onBack }) {
   const { draft, move, reshuffle } = useDraft(participants, room);
-  return <DraftEditor room={room} draft={draft} onMove={move} onReshuffle={reshuffle} onBack={onBack} />;
+  const [confirming, setConfirming] = useState(false);
+  const [announced, setAnnounced] = useState(false);
+  return <>{announced && <p role="status">Orden de muestra anunciado.</p>}
+    <DraftEditor room={room} draft={draft} onMove={move} onReshuffle={reshuffle} onBack={onBack} onConfirm={() => setConfirming(true)} />
+    <ConfirmDrawSheet open={confirming} room={room} draft={draft} onClose={() => setConfirming(false)} onConfirm={() => { setConfirming(false); setAnnounced(true); }} />
+  </>;
 }
 
 // Se importa exclusivamente desde la ruta de desarrollo. No accede a APIs.
@@ -37,7 +43,7 @@ export default function RoomsPreview() {
   ]);
   const [selection, setSelection] = useState(null);
   const lobbyRoom = { ...sample, host_user_id: 'host' };
-  return <AuthContext.Provider value={{ profileState: { isSaving: false, save: async value => { setName(value); return { data: { display_name: value } }; } } }}><div className="identity-home"><main className={['preview', 'host', 'participant', 'alone', 'removed', 'cancelled'].includes(view) ? 'room-entry' : 'identity-home__body'}>
+  return <AuthContext.Provider value={{ profileState: { isSaving: false, save: async value => { setName(value); return { data: { display_name: value } }; } } }}><div className="identity-home"><main className={['preview', 'host', 'participant', 'alone', 'removed', 'cancelled', 'draft'].includes(view) ? 'room-entry' : 'identity-home__body'}>
     <p>Vista de muestra · sin conexión a Supabase</p>
     <nav className="ui-kit-inline" aria-label="Pantallas de muestra">
       <Button compact variant="text" onClick={() => setView('home')}>Inicio</Button>

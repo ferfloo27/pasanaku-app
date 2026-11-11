@@ -5,6 +5,8 @@ import { AuthContext } from '../../../app/authContext';
 import { AppError } from '../../../shared/errors/appError';
 import RoomEntry from './RoomEntry';
 import JoinPage from '../../../pages/JoinPage';
+const { confirmDraw } = vi.hoisted(() => ({ confirmDraw: vi.fn() }));
+vi.mock('../../draw/api/drawApi', () => ({ confirmDraw }));
 const { getRoomPreview, joinRoom, fetchMemberRoom, removeParticipant, cancelRoom, subscribeRoomChannel } = vi.hoisted(() => ({ getRoomPreview: vi.fn(), joinRoom: vi.fn(), fetchMemberRoom: vi.fn(), removeParticipant: vi.fn(), cancelRoom: vi.fn(), subscribeRoomChannel: vi.fn() }));
 vi.mock('../api/previewApi', () => ({ getRoomPreview, joinRoom, fetchMemberRoom }));
 vi.mock('../api/roomManagementApi', () => ({ removeParticipant, cancelRoom }));
@@ -150,6 +152,27 @@ function existingHost() {
   fetchMemberRoom.mockResolvedValue({ data: { room: memberRoom, participants: [{ id: 'self', user_id: 'u', name: 'Lucía' }, { id: 'guest', user_id: 'guest-user', name: 'Juan' }] } });
   return memberRoom;
 }
+
+it('abre el borrador solo en el navegador del anfitrión y no persiste al sortear', async () => {
+  existingHost(); show();
+  fireEvent.click(await screen.findByRole('button', { name: 'Sortear orden' }));
+  expect(await screen.findByRole('heading', { name: 'Borrador del sorteo' })).toBeInTheDocument();
+  expect(confirmDraw).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole('button', { name: 'Volver a la sala' }));
+  expect(await screen.findByRole('heading', { name: 'Participantes (2/3)' })).toBeInTheDocument();
+});
+it('anunciar persiste una sola vez y actualiza la sala sorteada', async () => {
+  const hostRoom = existingHost(); confirmDraw.mockResolvedValue({ data: null }); show();
+  fireEvent.click(await screen.findByRole('button', { name: 'Sortear orden' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Confirmar y anunciar' }));
+  getRoomPreview.mockResolvedValue({ data: { ...room, is_member: true, status: 'drawn' } });
+  fetchMemberRoom.mockResolvedValue({ data: { room: { ...hostRoom, status: 'drawn' }, participants: [{ id: 'self', user_id: 'u', name: 'Lucía' }, { id: 'guest', user_id: 'guest-user', name: 'Juan' }] } });
+  fireEvent.click(screen.getByRole('button', { name: 'Anunciar a todos' }));
+  expect(await screen.findByText('Sorteada')).toBeInTheDocument();
+  expect(confirmDraw).toHaveBeenCalledOnce();
+  expect(confirmDraw.mock.calls[0][0]).toBe('r');
+  expect([...confirmDraw.mock.calls[0][1]].sort()).toEqual(['guest', 'self']);
+});
 
 it('el anfitrión confirma quitar una participación y el lobby se actualiza tras RPC', async () => {
   const memberRoom = existingHost();

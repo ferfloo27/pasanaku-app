@@ -14,6 +14,7 @@ import ReconnectingChip from '../../../shared/ui/ReconnectingChip';
 import RoomPreview from './RoomPreview';
 import MemberRoom from './MemberRoom';
 import Lobby from './Lobby';
+import DrawFlow from '../../draw/ui/DrawFlow';
 import RemoveParticipantSheet from './RemoveParticipantSheet';
 import CancelRoomSheet from './CancelRoomSheet';
 import { RemovedRoom } from './RoomStateViews';
@@ -31,7 +32,7 @@ function Entry({ code, userId }) {
   });
   if (status === 'cancelled' && room) return <Navigate to="/" replace state={{ roomNotice: { type: 'cancelled', room } }} />;
   const selection = management.selection;
-  const memberView = ['results', 'revealing', 'drafting'].includes(status);
+  const memberView = ['results', 'revealing'].includes(status);
   return <main className="room-entry"><AguayoStripe />
     {status === 'loading' && !error && <div className="room-entry__state" role="status"><Spinner decorative /><p>Cargando sala…</p></div>}
     {(status === 'not_found' || (status === 'loading' && error)) && <div className="room-entry__state">
@@ -47,7 +48,13 @@ function Entry({ code, userId }) {
       {channelStatus && channelStatus !== 'SUBSCRIBED' && <ReconnectingChip />}
       {error && <ErrorBanner message={getErrorMessage(error)} onRetry={retry} />}
       <Lobby room={room} participants={participants} userId={userId} newParticipantIds={state.newParticipantIds}
+        onDraw={() => dispatch({ type: 'START_DRAFT' })}
         onRemoveParticipant={management.selectParticipant} onCancelRoom={() => management.selectCancellation(room)} busy={management.loading} />
+    </>}
+    {status === 'drafting' && room?.host_user_id === userId && <>
+      {error && <ErrorBanner message={getErrorMessage(error)} onRetry={retry} />}
+      <DrawFlow room={room} participants={participants} onBack={() => dispatch({ type: 'CANCEL_DRAFT' })} onResync={refresh}
+        onConfirmed={() => { dispatch({ type: 'ROOM_UPDATED', room: { ...room, status: 'drawn' } }); refresh(); }} />
     </>}
     {memberView && room && <MemberRoom room={room} participants={participants} userId={userId} onHome={() => navigate('/')} />}
     {status === 'removed' && room && <RemovedRoom room={room} onHome={() => navigate('/')} />}

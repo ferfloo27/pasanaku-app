@@ -18,7 +18,7 @@ function DraftRow({ row, frequency, count, onMove, disabled }) {
     <IconButton label={`Bajar a ${row.name}`} disabled={disabled || row.position === count} onClick={() => onMove(row.position - 1, row.position)}>↓</IconButton>
   </li>;
 }
-export default function DraftEditor({ room, draft, onMove, onReshuffle, onConfirm, onBack, busy = false, participantsChanged = false, error, onRetry, canReshuffle = true }) {
+export default function DraftEditor({ room, draft, onMove, onReshuffle, onConfirm, onBack, busy = false, participantsChanged = false, error, onRetry, canReshuffle = true, readOnly = false }) {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
   const name = id => draft.find(row => row.participantId === id)?.name || 'Participante';
   const announcements = {
@@ -28,7 +28,7 @@ export default function DraftEditor({ room, draft, onMove, onReshuffle, onConfir
     onDragCancel: () => 'Movimiento cancelado.',
   };
   function finish({ active, over }) {
-    if (busy || participantsChanged || !over || active.id === over.id) return;
+    if (busy || readOnly || participantsChanged || !over || active.id === over.id) return;
     const from = draft.findIndex(row => row.participantId === active.id), to = draft.findIndex(row => row.participantId === over.id);
     if (from >= 0 && to >= 0) onMove(from, to);
   }
@@ -40,7 +40,7 @@ export default function DraftEditor({ room, draft, onMove, onReshuffle, onConfir
     <h2>Orden de cobro</h2><p className="draft-editor__hint">Arrastra o usa las flechas</p>
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={finish} accessibility={{ announcements, screenReaderInstructions: { draggable: 'Pulsa espacio para levantar. Usa las flechas para mover, espacio para soltar y Escape para cancelar.' } }}>
       <SortableContext items={draft.map(row => row.participantId)} strategy={verticalListSortingStrategy}>
-        <ol className="draft-editor__list" aria-label="Orden de cobro">{draft.map(row => <DraftRow key={row.participantId} row={row} frequency={room.frequency} count={draft.length} onMove={onMove} disabled={busy || participantsChanged} />)}</ol>
+        <ol className="draft-editor__list" aria-label="Orden de cobro">{draft.map(row => <DraftRow key={row.participantId} row={row} frequency={room.frequency} count={draft.length} onMove={onMove} disabled={busy || readOnly || participantsChanged} />)}</ol>
       </SortableContext>
     </DndContext>
     <footer className="draft-editor__actions"><Button fullWidth disabled={busy || participantsChanged || draft.length < 2 || !onConfirm} onClick={onConfirm}>Confirmar y anunciar</Button>
