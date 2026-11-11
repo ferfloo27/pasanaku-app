@@ -238,3 +238,11 @@ it('muestra el aviso de expulsión cuando Realtime borra la participación propi
   fireEvent.click(screen.getByRole('button', { name: 'Ir al inicio' }));
   expect(await screen.findByText('Inicio')).toBeInTheDocument();
 });
+it('el indicador de reconexión sigue visible durante el borrador sin bloquearlo', async () => {
+  existingHost(); show();
+  fireEvent.click(await screen.findByRole('button', { name: 'Sortear orden' }));
+  const handlers = subscribeRoomChannel.mock.calls.at(-1)[1];
+  act(() => handlers.onStatus('CHANNEL_ERROR'));
+  expect(screen.getByText('Reconectando…')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Confirmar y anunciar' })).toBeEnabled();
+});

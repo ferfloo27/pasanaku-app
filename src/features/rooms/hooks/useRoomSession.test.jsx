@@ -104,6 +104,24 @@ it('reintenta errores iniciales, resincroniza reconexión y vuelve a detectar ca
   expect(result.current.status).toBe('cancelled');
   expect(result.current.room.host_name).toBe('Rosa');
 });
+it('al volver visible recarga todos los datos y limpia el listener al salir', async () => {
+  const { result, unmount } = renderHook(() => useRoomSession('ABC123'), { wrapper });
+  await waitFor(() => expect(result.current.status).toBe('lobby'));
+  const visibility = vi.spyOn(document, 'visibilityState', 'get');
+  try {
+    visibility.mockReturnValue('hidden');
+    act(() => document.dispatchEvent(new Event('visibilitychange')));
+    expect(loadRoomSession).toHaveBeenCalledTimes(1);
+    loadRoomSession.mockResolvedValue(member({ participants: [...participants, { id: 'new', user_id: 'v', name: 'Ana' }] }));
+    visibility.mockReturnValue('visible');
+    act(() => document.dispatchEvent(new Event('visibilitychange')));
+    await waitFor(() => expect(result.current.participants).toHaveLength(2));
+    const calls = loadRoomSession.mock.calls.length;
+    unmount();
+    act(() => document.dispatchEvent(new Event('visibilitychange')));
+    expect(loadRoomSession).toHaveBeenCalledTimes(calls);
+  } finally { visibility.mockRestore(); }
+});
 it('drawn al entrar no revela y el código inexistente usa not_found', async () => {
   loadRoomSession.mockResolvedValueOnce(member({ room: { ...room, status: 'drawn' } }));
   const first = renderHook(() => useRoomSession('ABC123'), { wrapper });

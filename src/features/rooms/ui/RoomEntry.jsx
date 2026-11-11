@@ -38,6 +38,7 @@ function Entry({ code, userId }) {
   const memberView = ['results', 'revealing'].includes(status);
   const drawReady = memberView && hasCompleteDraw(turns, participants);
   return <main className="room-entry">{!memberView && <AguayoStripe />}
+    {['lobby', 'drafting', 'revealing', 'results'].includes(status) && channelStatus && channelStatus !== 'SUBSCRIBED' && <ReconnectingChip />}
     {status === 'loading' && !error && <div className="room-entry__state" role="status"><Spinner decorative /><p>Cargando sala…</p></div>}
     {(status === 'not_found' || (status === 'loading' && error)) && <div className="room-entry__state">
       {status === 'not_found' ? <><h1>No encontramos esta sala</h1><p>Revisa el código o pide un nuevo link a quien organiza.</p></>
@@ -48,7 +49,6 @@ function Entry({ code, userId }) {
       onJoin={join} loading={joining} error={error} onChangeName={() => setEditing(true)} onCancel={() => navigate('/')} />}
     {status === 'lobby' && room && <>
       <Button variant="text" compact onClick={() => navigate('/')} className="room-entry__back">← Volver al inicio</Button>
-      {channelStatus && channelStatus !== 'SUBSCRIBED' && <ReconnectingChip />}
       {error && <ErrorBanner message={getErrorMessage(error)} onRetry={retry} />}
       <Lobby room={room} participants={participants} userId={userId} newParticipantIds={state.newParticipantIds}
         onDraw={() => dispatch({ type: 'START_DRAFT' })}
@@ -60,7 +60,6 @@ function Entry({ code, userId }) {
         onConfirmed={() => { dispatch({ type: 'ROOM_UPDATED', room: { ...room, status: 'drawn' } }); refresh(); }} />
     </>}
     {memberView && room && <>
-      {channelStatus && channelStatus !== 'SUBSCRIBED' && <ReconnectingChip />}
       {error && <ErrorBanner message={getErrorMessage(error)} onRetry={retry} />}
       {!drawReady ? <div className="room-entry__state"><Skeleton label="Cargando resultados…" lines={3} /></div>
         : status === 'revealing' ? <Reveal room={room} turns={turns} participants={participants} userId={userId} onResults={() => dispatch({ type: 'REVEAL_FINISHED' })} />
