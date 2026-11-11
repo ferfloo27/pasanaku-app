@@ -1,72 +1,61 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../auth/hooks/useAuth';
 import { useProfile } from '../../profile/hooks/useProfile';
 import ProfileNameSheet from '../../profile/ui/ProfileNameSheet';
-import { fetchMemberRoom, getRoomPreview, joinRoom } from '../api/previewApi';
+import { useRoomSession } from '../hooks/useRoomSession';
+import { useRoomManagement } from '../hooks/useRoomManagement';
 import { getErrorMessage } from '../../../shared/errors/appError';
 import AguayoStripe from '../../../shared/ui/AguayoStripe';
 import Button from '../../../shared/ui/Button';
 import ErrorBanner from '../../../shared/ui/ErrorBanner';
 import Spinner from '../../../shared/ui/Spinner';
+import ReconnectingChip from '../../../shared/ui/ReconnectingChip';
 import RoomPreview from './RoomPreview';
 import MemberRoom from './MemberRoom';
+import Lobby from './Lobby';
+import RemoveParticipantSheet from './RemoveParticipantSheet';
+import CancelRoomSheet from './CancelRoomSheet';
+import { RemovedRoom } from './RoomStateViews';
 import './roomEntry.css';
 
 function Entry({ code, userId }) {
   const navigate = useNavigate();
   const { profile } = useProfile();
-  const [state, setState] = useState({ status: 'loading' });
-  const [attempt, setAttempt] = useState(0);
-  const [joining, setJoining] = useState(false);
-  const [joinError, setJoinError] = useState(null);
+  const session = useRoomSession(code);
+  const { state, status, room, participants, error, retry, joining, join, channelStatus, dispatch, refresh } = session;
   const [editing, setEditing] = useState(false);
-  const active = useRef(false);
-  const joinLock = useRef(false);
-  const loadTicket = useRef(null);
-  useEffect(() => {
-    active.current = true;
-    const ticket = Symbol();
-    loadTicket.current = ticket;
-    getRoomPreview(code).then(async ({ data: preview }) => {
-      if (!active.current || loadTicket.current !== ticket) return;
-      if (preview.is_member) {
-        const { data } = await fetchMemberRoom(code);
-        if (active.current && loadTicket.current === ticket) setState({ status: 'member', ...data });
-      } else setState({ status: 'preview', room: preview });
-    }).catch(error => {
-      if (active.current && loadTicket.current === ticket) setState({ status: 'error', error });
-    });
-    return () => { active.current = false; loadTicket.current = null; };
-  }, [code, attempt]);
-  async function join() {
-    if (joinLock.current) return;
-    joinLock.current = true;
-    setJoining(true); setJoinError(null);
-    try {
-      await joinRoom(code);
-      if (!active.current) return;
-      const { data } = await fetchMemberRoom(code);
-      if (active.current) setState({ status: 'member', ...data });
-    } catch (error) {
-      if (active.current) setJoinError(error);
-    } finally {
-      joinLock.current = false;
-      if (active.current) setJoining(false);
-    }
-  }
-  function retry() { setState({ status: 'loading' }); setAttempt(value => value + 1); }
+  const management = useRoomManagement({
+    onRemoved: participant => { dispatch({ type: 'PARTICIPANT_DELETED', participantId: participant.id }); refresh(); },
+    onCancelled: cancelledRoom => dispatch({ type: 'CANCELLED', room: cancelledRoom }),
+  });
+  if (status === 'cancelled' && room) return <Navigate to="/" replace state={{ roomNotice: { type: 'cancelled', room } }} />;
+  const selection = management.selection;
+  const memberView = ['results', 'revealing', 'drafting'].includes(status);
   return <main className="room-entry"><AguayoStripe />
-    {state.status === 'loading' && <div className="room-entry__state" role="status"><Spinner decorative /><p>Cargando sala…</p></div>}
-    {state.status === 'error' && <div className="room-entry__state">
-      {state.error?.code === 'ROOM_NOT_FOUND' ? <><h1>No encontramos esta sala</h1><p>Revisa el código o pide un nuevo link a quien organiza.</p></>
-        : <ErrorBanner message={getErrorMessage(state.error)} onRetry={retry} />}
+    {status === 'loading' && !error && <div className="room-entry__state" role="status"><Spinner decorative /><p>Cargando sala…</p></div>}
+    {(status === 'not_found' || (status === 'loading' && error)) && <div className="room-entry__state">
+      {status === 'not_found' ? <><h1>No encontramos esta sala</h1><p>Revisa el código o pide un nuevo link a quien organiza.</p></>
+        : <ErrorBanner message={getErrorMessage(error)} onRetry={retry} />}
       <Button variant="text" onClick={() => navigate('/')}>Volver al inicio</Button>
     </div>}
-    {state.status === 'preview' && <RoomPreview room={state.room} displayName={profile?.display_name || ''}
-      onJoin={join} loading={joining} error={joinError} onChangeName={() => setEditing(true)} onCancel={() => navigate('/')} />}
-    {state.status === 'member' && <MemberRoom room={state.room} participants={state.participants} userId={userId} onHome={() => navigate('/')} />}
-    <ProfileNameSheet open={editing} initialName={profile?.display_name || ''} onClose={() => setEditing(false)} />
+    {status === 'preview' && room && <RoomPreview room={room} displayName={profile?.display_name || ''}
+      onJoin={join} loading={joining} error={error} onChangeName={() => setEditing(true)} onCancel={() => navigate('/')} />}
+    {status === 'lobby' && room && <>
+      <Button variant="text" onClick={() => navigate('/')}>Volver al inicio</Button>
+      <Button variant="text" compact onClick={() => navigate('/')} className="room-entry__back">← Volver al inicio</Button>
+      {channelStatus && channelStatus !== 'SUBSCRIBED' && <ReconnectingChip />}
+      {error && <ErrorBanner message={getErrorMessage(error)} onRetry={retry} />}
+      <Lobby room={room} participants={participants} userId={userId} newParticipantIds={state.newParticipantIds}
+        onRemoveParticipant={management.selectParticipant} onCancelRoom={() => management.selectCancellation(room)} busy={management.loading} />
+    </>}
+    {memberView && room && <MemberRoom room={room} participants={participants} userId={userId} onHome={() => navigate('/')} />}
+    {status === 'removed' && room && <RemovedRoom room={room} onHome={() => navigate('/')} />}
+    <ProfileNameSheet open={editing && status === 'preview'} initialName={profile?.display_name || ''} onClose={() => setEditing(false)} />
+    <RemoveParticipantSheet open={status === 'lobby' && selection?.type === 'remove'} participant={selection?.participant}
+      onClose={management.close} onConfirm={management.confirm} loading={management.loading} error={management.error} />
+    <CancelRoomSheet open={status === 'lobby' && selection?.type === 'cancel'} room={selection?.room}
+      onClose={management.close} onConfirm={management.confirm} loading={management.loading} error={management.error} />
   </main>;
 }
 export default function RoomEntry() {

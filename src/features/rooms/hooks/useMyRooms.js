@@ -1,18 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../auth/hooks/useAuth';
 import { listMyRooms } from '../api/roomsApi';
+import { hasSeenCancellation, markCancellationSeen } from './cancelledNotices';
 
-const seenInMemory = new Set();
-const noticeKey = (userId, roomId) => `pasanaku:cancelled-notice:${userId}:${roomId}`;
 function takeUnseenNotices(data, userId) {
   return data.filter(room => {
     if (room.status !== 'cancelled') return false;
-    const key = noticeKey(userId, room.id);
-    let seen = seenInMemory.has(key);
-    try { seen ||= localStorage.getItem(key) === 'seen'; } catch { /* Memoria si se bloqueó el almacenamiento. */ }
-    if (seen) return false;
-    seenInMemory.add(key);
-    try { localStorage.setItem(key, 'seen'); } catch { /* El aviso sigue siendo cerrable. */ }
+    if (hasSeenCancellation(userId, room.id)) return false;
+    markCancellationSeen(userId, room.id);
     return true;
   });
 }

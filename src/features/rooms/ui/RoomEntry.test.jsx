@@ -1,19 +1,34 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, expect, it, vi } from 'vitest';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../../app/authContext';
 import { AppError } from '../../../shared/errors/appError';
 import RoomEntry from './RoomEntry';
 import JoinPage from '../../../pages/JoinPage';
-const { getRoomPreview, joinRoom, fetchMemberRoom } = vi.hoisted(() => ({ getRoomPreview: vi.fn(), joinRoom: vi.fn(), fetchMemberRoom: vi.fn() }));
+const { getRoomPreview, joinRoom, fetchMemberRoom, removeParticipant, cancelRoom, subscribeRoomChannel } = vi.hoisted(() => ({ getRoomPreview: vi.fn(), joinRoom: vi.fn(), fetchMemberRoom: vi.fn(), removeParticipant: vi.fn(), cancelRoom: vi.fn(), subscribeRoomChannel: vi.fn() }));
 vi.mock('../api/previewApi', () => ({ getRoomPreview, joinRoom, fetchMemberRoom }));
+vi.mock('../api/roomManagementApi', () => ({ removeParticipant, cancelRoom }));
+vi.mock('../api/roomChannel', () => ({ subscribeRoomChannel }));
+vi.mock('../api/roomSessionApi', () => ({
+  loadRoomSession: async code => {
+    const { data: preview } = await getRoomPreview(code);
+    if (!preview.is_member) return { data: { room: preview, participants: [], turns: [], isMember: false } };
+    const { data } = await fetchMemberRoom(code);
+    return { data: { ...data, turns: [], isMember: true } };
+  },
+  fetchRoomState: async () => {
+    const { data } = await fetchMemberRoom('ABC123');
+    return { data: { ...data, turns: [], isMember: true } };
+  },
+}));
 const room = { code: 'ABC123', name: 'Familia', host_name: 'Rosa', participant_count: 2, max_participants: 3, contribution_bs: 150, frequency: 'monthly', start_date: '2027-01-01', status: 'waiting', is_member: false };
 const auth = { user: { id: 'u' }, profileState: { profile: { display_name: 'Lucía' } } };
+function Home() { const location = useLocation(); return <><p>Inicio</p>{location.state?.roomNotice && <p>{location.state.roomNotice.room.host_name} canceló {location.state.roomNotice.room.name}</p>}</>; }
 function show(path = '/room/ABC123', context = auth) {
   const tree = value => <AuthContext.Provider value={value}><MemoryRouter initialEntries={[path]}><Routes>
     <Route path="/join" element={<JoinPage />} />
     <Route path="/room/:code" element={<RoomEntry />} />
-    <Route path="/" element={<p>Inicio</p>} />
+    <Route path="/" element={<Home />} />
   </Routes></MemoryRouter></AuthContext.Provider>;
   const result = render(tree(context));
   return { ...result, changeAuth: value => result.rerender(tree(value)) };
@@ -21,8 +36,13 @@ function show(path = '/room/ABC123', context = auth) {
 beforeEach(() => {
   vi.resetAllMocks();
   getRoomPreview.mockResolvedValue({ data: room });
-  joinRoom.mockResolvedValue({ data: { ...room, id: 'r' } });
+  joinRoom.mockImplementation(async () => {
+    getRoomPreview.mockResolvedValue({ data: { ...room, is_member: true } });
+    return { data: { ...room, id: 'r' } };
+  });
   fetchMemberRoom.mockResolvedValue({ data: { room: { ...room, id: 'r', host_user_id: 'host' }, participants: [{ id: 'p', user_id: 'u', name: 'Lucía' }] } });
+  subscribeRoomChannel.mockReturnValue(() => {});
+  removeParticipant.mockResolvedValue({ data: null }); cancelRoom.mockResolvedValue({ data: null });
 });
 
 it('muestra el resumen antes de unirse y después carga la sala del miembro', async () => {
@@ -99,7 +119,7 @@ it('ignora una carga vieja después de desmontar la sala', async () => {
   const view = show();
   view.unmount();
   await act(async () => finish({ data: { ...room, is_member: true } }));
-  expect(fetchMemberRoom).not.toHaveBeenCalled();
+  expect(subscribeRoomChannel).not.toHaveBeenCalled();
 });
 
 it('descarta la pre-unión de una identidad anterior aunque responda al final', async () => {
@@ -110,7 +130,7 @@ it('descarta la pre-unión de una identidad anterior aunque responda al final', 
   expect(await screen.findByRole('button', { name: 'Unirme' })).toBeInTheDocument();
   await act(async () => finish({ data: { ...room, name: 'Sala privada anterior', is_member: true } }));
   expect(screen.queryByText('Sala privada anterior')).not.toBeInTheDocument();
-  expect(fetchMemberRoom).not.toHaveBeenCalled();
+  expect(subscribeRoomChannel).not.toHaveBeenCalled();
 });
 
 it('abre Cambiar y guarda el nombre mediante la hoja de perfil existente', async () => {
@@ -122,4 +142,49 @@ it('abre Cambiar y guarda el nombre mediante la hoja de perfil existente', async
   await act(async () => {});
   expect(save).toHaveBeenCalledWith('Ana');
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+});
+
+function existingHost() {
+  const memberRoom = { ...room, id: 'r', host_user_id: 'u' };
+  getRoomPreview.mockResolvedValue({ data: { ...room, is_member: true } });
+  fetchMemberRoom.mockResolvedValue({ data: { room: memberRoom, participants: [{ id: 'self', user_id: 'u', name: 'Lucía' }, { id: 'guest', user_id: 'guest-user', name: 'Juan' }] } });
+  return memberRoom;
+}
+
+it('el anfitrión confirma quitar una participación y el lobby se actualiza tras RPC', async () => {
+  const memberRoom = existingHost();
+  show();
+  fireEvent.click(await screen.findByRole('button', { name: 'Eliminar a Juan' }));
+  expect(removeParticipant).not.toHaveBeenCalled();
+  fetchMemberRoom.mockResolvedValue({ data: { room: memberRoom, participants: [{ id: 'self', user_id: 'u', name: 'Lucía' }] } });
+  fireEvent.click(screen.getByRole('button', { name: 'Eliminar de la sala' }));
+  expect(await screen.findByRole('heading', { name: 'Participantes (1/3)' })).toBeInTheDocument();
+  expect(removeParticipant).toHaveBeenCalledExactlyOnceWith('guest');
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+});
+
+it('cancelar desde el menú confirma y vuelve al inicio llevando un aviso persistente', async () => {
+  existingHost();
+  show();
+  fireEvent.click(await screen.findByRole('button', { name: 'Más acciones de la sala' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: 'Cancelar sala' }));
+  expect(cancelRoom).not.toHaveBeenCalled();
+  await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Cancelar sala' })));
+  await waitFor(() => {
+    expect(screen.getByText('Inicio')).toBeInTheDocument();
+    expect(screen.getByText('Rosa canceló Familia')).toBeInTheDocument();
+  });
+  expect(cancelRoom).toHaveBeenCalledExactlyOnceWith('r');
+});
+
+it('muestra el aviso de expulsión cuando Realtime borra la participación propia', async () => {
+  getRoomPreview.mockResolvedValue({ data: { ...room, is_member: true } });
+  show();
+  await screen.findByRole('heading', { name: 'Participantes (1/3)' });
+  const handlers = subscribeRoomChannel.mock.calls.at(-1)[1];
+  getRoomPreview.mockResolvedValue({ data: { ...room, is_member: false } });
+  act(() => handlers.onParticipantDeleted({ id: 'p' }));
+  expect(await screen.findByRole('heading', { name: 'Ya no estás en esta sala' })).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Ir al inicio' }));
+  expect(await screen.findByText('Inicio')).toBeInTheDocument();
 });

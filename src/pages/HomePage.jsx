@@ -3,6 +3,7 @@ import ProfileHeader from '../features/profile/ui/ProfileHeader';
 import GoogleAccount from '../features/auth/ui/GoogleAccount';
 import AguayoStripe from '../shared/ui/AguayoStripe';
 import HomeRooms from '../features/rooms/ui/HomeRooms';
+import { CancellationArrivalNotice } from '../features/rooms/ui/RoomStateViews';
 
 export default function HomePage() {
   return (
@@ -12,7 +13,7 @@ export default function HomePage() {
           <Link className="ui-button ui-button--primary ui-button--full" to="/new">Crear sala</Link>
           <Link className="ui-button ui-button--secondary ui-button--full" to="/join">Unirme con código</Link>
         </div>
-      <HomeRooms />
+      <CancellationArrivalNotice /><HomeRooms />
       <footer className="identity-home__footer"><GoogleAccount /></footer>
     </main></div>
   );
