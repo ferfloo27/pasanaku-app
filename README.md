@@ -7,8 +7,9 @@ compartir su código, reunir a los participantes y sortear el orden de cobro.
 
 La rama `v2` prepara la nueva versión por fases. El entorno local dispone del
 esquema v2, RLS y RPC transaccionales. El sistema visual, la sesión anónima y el
-perfil están implementados. Los formularios y servicios de salas siguen en
-transición desde v1; su conexión con las RPC llegará en las fases 4–6.
+perfil están implementados. El inicio, la creación y la unión ya usan las RPC v2.
+La sala de miembros muestra el resumen y los participantes en modo de lectura;
+la gestión y Realtime corresponden a la Fase 5, y el sorteo a las fases 6–7.
 Las migraciones y pruebas se ejecutan solo en Supabase local.
 No se han modificado los datos ni la configuración de producción.
 
@@ -59,14 +60,29 @@ npm run dev
 ```
 
 Abre la dirección que muestra Vite. El cliente falla al iniciar si falta alguna
-de las dos variables. El frontend v1 necesita un backend compatible con su
-esquema actual (`client_id`, `start_month`, `assigned_month`). El esquema local v2
-no es compatible con los servicios v1: todavía no permite probar el flujo
-completo de salas v2 desde las pantallas.
-Los consumidores heredados reciben ya el `user.id` de Auth en su argumento
-temporal `clientId`; no se genera ni se consulta una identidad de dispositivo.
-Ese argumento y las columnas antiguas se retirarán al migrar los flujos de salas.
-Los formularios heredados toman ya el nombre del perfil, sin pedir uno por sala.
+de las dos variables. Configura un backend local o de desarrollo con las
+migraciones v2 para probar crear, buscar y unirse a salas. Las rutas activas ya
+no usan las escrituras directas ni las columnas antiguas de los servicios v1.
+El código heredado restante se conserva durante la transición de las fases
+siguientes; no forma parte de estos flujos activos.
+
+### Inicio, crear y unirse (Fase 4)
+
+`/` consulta `list_my_rooms` y muestra salas en espera o sorteadas. Las canceladas
+no aparecen en la lista; su aviso se recuerda una vez por dispositivo y usuario.
+Solo las marcas de avisos se guardan localmente, nunca la lista de salas.
+
+`/new` valida nombre, cuota, frecuencia, fecha de Bolivia y máximo; envía
+`create_room` y muestra el código con copiar/compartir. `/join` normaliza el
+código y consulta su existencia antes de navegar. `/room/:code` vuelve a cargar
+la vista previa; la unión usa `join_room` y el servidor revalida cupo y estado.
+Salas llenas, canceladas o sorteadas impiden nuevas uniones. El miembro existente
+entra a su sala sin volver a unirse. Los errores conservan los datos editados.
+
+`/dev/rooms` muestra los componentes de estas pantallas con datos de muestra,
+sin Auth ni llamadas a Supabase; igual que `/dev/ui`, solo existe en desarrollo.
+Permite comprobar diseño y estados sin afectar datos. La prueba completa con
+dos navegadores y Realtime sigue prevista en la Fase 8.
 
 ### Identidad y nombre (Fase 3)
 
@@ -212,7 +228,7 @@ src/
     errors/     AppError y mensajes en español
     styles/     tokens, base y modo oscuro definido pero desactivado
     ui/         componentes del sistema visual
-  pages/        páginas actuales de v1
+  pages/        páginas delgadas v2 y muestras solo de desarrollo
   components/   componentes de v1 durante la transición
   services/     roomService.js de v1 durante la transición
 ```
@@ -223,7 +239,7 @@ se conservan con `.gitkeep`, sin adelantar su implementación.
 La lógica de dominio es pura: no importa React ni Supabase. Solo `features/*/api`
 puede consumir el cliente de Supabase. ESLint restringe tanto los imports del
 cliente como los del SDK. `shared/lib/supabase.js` crea el cliente; hay excepciones
-temporales y explícitas para `roomService.js`, su test, `Lobby.jsx` y `RoomPage.jsx`.
+temporales y explícitas para `roomService.js`, su test y `Lobby.jsx` heredados.
 Se retirarán al migrar esos accesos a la capa `api`. Los archivos nuevos no
 heredan las excepciones.
 

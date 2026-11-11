@@ -1,7 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import JoinRoomForm from '../components/JoinRoomForm';
+import JoinRoomSearch from '../features/rooms/ui/JoinRoomSearch';
 
 export default function JoinPage() {
-  const navigate = useNavigate();
-  return <main className="identity-page__body"><JoinRoomForm onBack={() => navigate('/')} /></main>;
+  return <JoinRoomSearch />;
 }

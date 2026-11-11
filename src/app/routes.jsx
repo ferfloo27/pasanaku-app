@@ -8,6 +8,7 @@ const JoinPage = lazy(() => import('../pages/JoinPage'));
 const RoomPage = lazy(() => import('../pages/RoomPage'));
 const IdentityBoundary = lazy(() => import('./IdentityBoundary'));
 const UiKitPage = import.meta.env.DEV ? lazy(() => import('../pages/UiKitPage')) : null;
+const RoomsPreview = import.meta.env.DEV ? lazy(() => import('../pages/RoomsPreview')) : null;
 
 export default function AppRoutes() {
   return <Suspense fallback={<div className="ui-app-loading"><Spinner label="Cargando página…" /></div>}>
@@ -19,6 +20,7 @@ export default function AppRoutes() {
         <Route path="/room/:code" element={<RoomPage />} />
       </Route>
       {import.meta.env.DEV && <Route path="/dev/ui" element={<UiKitPage />} />}
+      {import.meta.env.DEV && <Route path="/dev/rooms" element={<RoomsPreview />} />}
     </Routes>
   </Suspense>;
 }

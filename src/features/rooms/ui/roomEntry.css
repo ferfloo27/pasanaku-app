@@ -1,0 +1,21 @@
+.room-entry { width: 100%; max-width: 480px; margin: 0 auto; min-height: 100dvh; display: flex; flex-direction: column; }
+.room-entry__title { padding: var(--space-8) var(--space-4) 0; }
+.room-entry__title p { margin: 0 0 var(--space-1); color: var(--color-text-muted); font-size: var(--text-note); font-weight: 700; }
+.room-entry h1 { margin: 0; font-size: var(--text-display); line-height: var(--leading-display); overflow-wrap: anywhere; }
+.room-preview__card { margin: var(--space-5) var(--space-4) 0; display: flex; flex-direction: column; gap: var(--space-4); }
+.room-preview__host { display: flex; align-items: center; gap: var(--space-3); }
+.room-preview__host > div { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-wrap: anywhere; }
+.room-preview__host span:not(.ui-avatar):not(.ui-chip), .room-preview__count > span { color: var(--color-text-muted); font-size: var(--text-note); }
+.room-preview__count { display: flex; flex-direction: column; padding-top: var(--space-4); border-top: 1px solid var(--color-border); }
+.room-preview__code { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.room-preview__code > b { font-family: var(--font-code); letter-spacing: .2em; }
+.room-entry__footer { margin-top: auto; padding: var(--space-6) var(--space-4) var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
+.room-preview__identity { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-2); color: var(--color-text-muted); }
+.room-preview__identity b { color: var(--color-text); }
+.room-entry__state { padding: var(--space-8) var(--space-4); display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
+.member-room { padding: var(--space-6) var(--space-4); display: flex; flex-direction: column; gap: var(--space-5); }
+.member-room header { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); }
+.member-room h2 { font-size: var(--text-subtitle); line-height: var(--leading-subtitle); }
+.member-room__participants { list-style: none; padding: 0; margin: 0; }
+.member-room__participants li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border); }
+.member-room__participants b { flex: 1; overflow-wrap: anywhere; }

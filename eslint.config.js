@@ -48,7 +48,6 @@ export default defineConfig([
       'src/services/roomService.js',
       'src/services/roomService.test.js',
       'src/components/Lobby.jsx',
-      'src/pages/RoomPage.jsx',
     ],
     rules: {
       'no-restricted-imports': 'off',
