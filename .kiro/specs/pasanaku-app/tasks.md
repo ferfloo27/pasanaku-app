@@ -91,7 +91,7 @@ Convenciones:
 - [x] 5.2 `roomChannel.js` (un canal por sala) + `useRoomSession(code)` con carga inicial y eventos de Realtime.
 - [x] 5.3 `Lobby` variante participante (artboard 6.5 Lobby participante).
 - [x] 5.4 `Lobby` variante anfitrión: "Sortear orden", eliminar participante, menú ⋯ con "Cancelar sala", estado de menos de 2 (artboards 6.5 Lobby anfitrión y Lobby menos de 2 + menú).
-- [ ] 5.5 `RemoveParticipantSheet` y `CancelRoomSheet` con sus RPC (artboard 6.5 Eliminar participante).
+- [x] 5.5 `RemoveParticipantSheet` y `CancelRoomSheet` con sus RPC (artboard 6.5 Eliminar participante).
 - [ ] 5.6 Vistas de "Ya no estás en esta sala" y "Rosa canceló la sala" (artboard 6.9).
 - _Requirements: 5.1–5.11, 9.1_
 

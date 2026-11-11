@@ -1,0 +1,7 @@
+.room-management__title { display: flex; align-items: center; gap: var(--space-3); }
+.room-management__title .ui-avatar { flex-shrink: 0; }
+.room-management__actions { display: flex; flex-direction: column; gap: var(--space-3); }
+.room-state-view { padding: var(--space-12) var(--space-4) var(--space-4); display: flex; flex: 1; flex-direction: column; align-items: center; gap: var(--space-3); text-align: center; }
+.room-state-view p { margin: 0; color: var(--color-text-muted); }
+.room-state-view .ui-button { margin-top: auto; }
+.room-state-view__symbol { width: 72px; height: 72px; display: grid; place-items: center; border-radius: var(--radius-pill); background: var(--color-accent-soft); color: var(--color-primary); font-size: var(--text-display); }
