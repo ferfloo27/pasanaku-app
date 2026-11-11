@@ -44,14 +44,19 @@ Pase del 11-11-2026 en el navegador integrado a **320 × 740** y **360 × 740**,
 
 Se ampliaron las muestras de desarrollo con estados transversales y nombre obligatorio, y se agregó la hoja de estilos de las tarjetas que faltaba en esa galería. No se alteró el comportamiento de producción. Las comprobaciones visuales de estados simulados no equivalen a interrumpir la red real ni a completar Google OAuth. Evidencia local: `phase8-results-320.png` en la carpeta de visualizaciones de esta conversación.
 
-## 8.6 — pendiente
+## 8.6 — flujo completo verificado
 
 - Contenedores locales de **pasanaku-app** disponibles; migraciones 0001–0004 verificadas.
 - API local: `http://127.0.0.1:55321`; aplicación de prueba: `http://127.0.0.1:5180/`.
 - La aplicación se inició con la configuración pública local obtenida por CLI, sin leer ni mostrar `.env`. No utiliza producción.
-- Se creó el perfil local **Anfitrión fase 8** y se verificó el inicio vacío. No se creó una sala ni se completó el flujo de dos usuarios.
-- La preparación del segundo navegador se interrumpió por la restricción indicada arriba.
+- Sesiones independientes: **Anfitrión fase 8** en el navegador integrado y **Participante fase 8** en Chrome.
+- Sala local **Prueba cierre v2**, código **7P2R86**: cuota Bs 100, frecuencia mensual, inicio enero de 2027 y máximo de dos personas.
+- El anfitrión creó la sala; el participante buscó el código, revisó la invitación y se unió. El anfitrión recibió el cambio a 2/2 en vivo, sin recargar.
+- El anfitrión preparó el borrador y subió al participante al primer turno. Chrome siguió mostrando la espera: el borrador permaneció privado.
+- La confirmación mostró dos participantes, Bs 200 por turno y el primer cobro en enero de 2027. Al anunciar, ambos recibieron la revelación sin recargar.
+- Resultado común: participante en el turno 1, enero de 2027; anfitrión en el turno 2, febrero de 2027. Ambos ven Bs 200 y su fila propia destacada.
+- La apertura directa y recarga del anfitrión mostraron resultados; el inicio incluyó la tarjeta sorteada. En el último intento, **F5 en Chrome funcionó**: se verificó el documento recargado con resultados y turno 1, sin repetir la revelación. Las interrupciones previas eran de la herramienta de control del navegador.
 
-Para completar: abrir la aplicación local en dos navegadores independientes; crear una sala, unirse por código con el segundo perfil, preparar y reordenar el borrador, anunciar, comprobar la revelación y el turno propio de ambos, y recargar para confirmar que se muestran resultados sin repetir la revelación.
+Evidencia local en la carpeta de visualizaciones de esta conversación: `phase8-live-host.png` y `phase8-live-participant.png`. Los datos de prueba quedan solo en Supabase local; no se desplegó ni se modificó producción.
 
 La paridad SQL de la tarea 1.7 permanece pendiente según la decisión anterior del usuario. Las tareas manuales de Google/Auth (1.6) siguen a cargo de la persona dueña del proyecto.

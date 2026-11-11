@@ -82,7 +82,8 @@ entra a su sala sin volver a unirse. Los errores conservan los datos editados.
 `/dev/rooms` muestra los componentes de estas pantallas con datos de muestra,
 sin Auth ni llamadas a Supabase; igual que `/dev/ui`, solo existe en desarrollo.
 Permite comprobar diseño y estados sin afectar datos. La prueba completa con
-dos navegadores y Realtime sigue prevista en la Fase 8.
+dos navegadores y Realtime se verificó en local; la evidencia está en
+`docs/phase8-verification.md`.
 
 ### Identidad y nombre (Fase 3)
 
