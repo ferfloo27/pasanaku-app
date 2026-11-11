@@ -7,6 +7,7 @@ import './roomPresentation.css';
 
 export default function RoomCodeBlock({ room }) {
   const [message, setMessage] = useState('');
+  const [noticeId, setNoticeId] = useState(0);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const pending = useRef(false);
@@ -14,14 +15,11 @@ export default function RoomCodeBlock({ room }) {
     if (pending.current) return;
     pending.current = true; setBusy(true); setError(''); setMessage('');
     try {
-      if (share && typeof navigator.share === 'function') {
-        await navigator.share({ title: room.name, url: `${window.location.origin}/room/${room.code}` });
-      } else {
-        await navigator.clipboard.writeText(share ? `${window.location.origin}/room/${room.code}` : room.code);
-        setMessage(share ? 'Link copiado' : 'Código copiado');
-      }
-    } catch (failure) {
-      if (failure?.name !== 'AbortError') setError(share && typeof navigator.share === 'function' ? 'No pudimos compartir el link. Intenta de nuevo.' : 'No pudimos copiar. Intenta de nuevo.');
+      await navigator.clipboard.writeText(share ? `${window.location.origin}/room/${room.code}` : room.code);
+      setMessage(share ? 'Link copiado para compartir' : 'Código copiado');
+      setNoticeId(id => id + 1);
+    } catch {
+      setError('No pudimos copiar. Intenta de nuevo.');
     } finally { pending.current = false; setBusy(false); }
   }
   return <>
@@ -31,6 +29,6 @@ export default function RoomCodeBlock({ room }) {
       </div><AguayoStripe />
     </div>
     {error && <ErrorBanner message={error} />}
-    <Toast message={message} onDismiss={() => setMessage('')} />
+    <Toast key={noticeId} message={message} onDismiss={() => setMessage('')} />
   </>;
 }

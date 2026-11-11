@@ -105,7 +105,7 @@ Referencias de diseño: `docs/design-brief.md` y el canvas "Pasanaku" de Claude 
 7. WHEN el usuario pulsa "Unirme" en la Pre-unión, THE App SHALL invocar la RPC `join_room(code)`, que en una transacción vuelve a verificar estado y cupo e inserta al participante con su `display_name`.
 8. WHEN la unión es exitosa (o el usuario ya era participante), THE App SHALL mostrar el Lobby de la sala.
 9. IF `join_room` falla por estado o cupo (por ejemplo, otra persona ocupó el último lugar), THEN THE App SHALL mostrar el mensaje correspondiente a 4.4–4.6.
-10. THE App SHALL ofrecer en Sala lista y en el Lobby el link compartible `<origen>/room/:code` ("Compartir link" usa el menú nativo de compartir cuando existe; si no, copia el link).
+10. THE App SHALL ofrecer en Sala lista y en el Lobby el link compartible `<origen>/room/:code`; "Compartir link" copia únicamente ese enlace al portapapeles y muestra "Link copiado para compartir", sin abrir el menú nativo (cambio solicitado el 11-11-2026).
 
 ---
 
@@ -179,7 +179,7 @@ Referencias de diseño: `docs/design-brief.md` y el canvas "Pasanaku" de Claude 
 3. THE App SHALL mostrar el resumen: cuota, frecuencia y monto por turno.
 4. THE App SHALL listar el "Orden de cobro" ascendente por posición, con nombre, fecha y monto, resaltando la fila del usuario.
 5. THE App SHALL formatear las fechas como "Enero 2027" (Mensual) o "15 ene 2027" (Semanal/Quincenal), y los montos como "Bs 1.600".
-6. THE App SHALL ofrecer "Copiar resultados" (resumen en texto plano) y "Compartir" (menú nativo cuando existe).
+6. THE App SHALL ofrecer "Copiar resultados" (resumen en texto plano) y "Compartir" (copia únicamente el enlace `<origen>/room/:code` y muestra "Link copiado para compartir", sin abrir el menú nativo; cambio solicitado el 11-11-2026).
 
 ---
 
@@ -221,7 +221,7 @@ Referencias de diseño: `docs/design-brief.md` y el canvas "Pasanaku" de Claude 
 1. THE App SHALL ser utilizable desde 320px de ancho, sin scroll horizontal (diseño base a 360px).
 2. THE App SHALL implementar el sistema de diseño de `docs/design-brief.md` y del canvas de Claude Design: paleta vino/crema, tipografía Nunito, códigos en JetBrains Mono, botones pill, tarjetas de 18px, acentos aguayo solo en cabecera, código de sala, revelación y estados vacíos.
 3. THE App SHALL definir los colores como tokens semánticos (`--color-*`) en un solo lugar; los componentes SHALL NOT usar valores hex directos. Los tokens de modo oscuro SHALL definirse, aunque el modo oscuro puede activarse en una iteración posterior.
-4. THE App SHALL usar un único componente de banner de error, un único toast y un único indicador de carga en toda la aplicación.
+4. THE App SHALL usar un único componente de banner de error, un único toast y un único indicador de carga en toda la aplicación. El toast aparece arriba a la derecha, con una barra decreciente hasta su cierre automático (cinco segundos por defecto); pausa el tiempo y la barra con foco o puntero encima. La animación respeta la preferencia de reducción de movimiento (cambio solicitado el 11-11-2026).
 5. THE App SHALL mostrar skeletons o spinner en operaciones que tarden más de 300 ms.
 6. THE App SHALL cumplir contraste WCAG AA, foco visible en todo elemento interactivo, áreas táctiles de al menos 44×44px, y estados que no dependan solo del color.
 7. THE App SHALL usar textos con tuteo, verbo primero en botones, sin signos de exclamación en mensajes del sistema, y errores que digan qué pasó y qué hacer.

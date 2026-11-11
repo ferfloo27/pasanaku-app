@@ -136,7 +136,7 @@ Cada uno con estados: **reposo, hover/pressed, foco (anillo 2px `vino-500`), des
 | **Chip de estado** | En espera (warning) · Sorteada (success) · Cancelada (neutro) · Anfitrión (rosa) · Tú (borde) |
 | **Bloque de código de sala** | Código grande mono + "Copiar código" + "Compartir link" (share nativo en móvil) |
 | **Banner de error** | Único estilo para toda la app, con acción opcional ("Reintentar") |
-| **Toast** | Confirmaciones breves ("Link copiado") |
+| **Toast** | Confirmaciones breves arriba a la derecha, con barra decreciente y cierre a los 5 segundos; pausa con foco o puntero (ajuste del 11-11-2026) |
 | **Indicador "Reconectando…"** | Chip discreto arriba, no bloquea |
 | **Modal / hoja inferior** | Confirmaciones (cancelar sala, eliminar participante, confirmar sorteo) y nombre de perfil |
 | **Menú ⋯** | Acciones secundarias de la sala (cancelar sala) |

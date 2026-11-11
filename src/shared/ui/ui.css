@@ -79,10 +79,12 @@
 .ui-error-banner__body { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
 .ui-error-banner__body p { color: var(--color-text); }
 .ui-error-banner .ui-error-banner__action { align-self: flex-start; color: var(--color-danger); border-color: var(--color-danger); background: var(--color-surface); }
-.ui-toast { display: flex; align-items: center; gap: var(--space-3); width: fit-content; max-width: 100%; padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill); background: var(--color-toast); color: var(--color-on-toast); box-shadow: var(--shadow-raised); }
+.ui-toast { position: fixed; z-index: 110; top: max(var(--space-4), env(safe-area-inset-top)); right: max(var(--space-4), env(safe-area-inset-right)); display: flex; align-items: center; gap: var(--space-3); width: fit-content; max-width: calc(100vw - var(--space-4) * 2); padding: var(--space-2) var(--space-4); border-radius: var(--radius-field); overflow: hidden; background: var(--color-toast); color: var(--color-on-toast); box-shadow: var(--shadow-raised); }
 .ui-toast__icon { color: var(--color-toast-icon); flex-shrink: 0; }
 .ui-toast .ui-toast__close { background: transparent; color: var(--color-on-toast); border-color: transparent; }
 .ui-toast > span { overflow-wrap: anywhere; }
+.ui-toast__progress { position: absolute; inset: auto 0 0; height: var(--space-1); background: var(--color-toast-icon); transform-origin: left; animation: toast-countdown linear forwards; }
+@keyframes toast-countdown { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 .ui-skeleton__content { display: flex; align-items: center; gap: var(--space-3); }
 .ui-skeleton--participant, .ui-skeleton--card { border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: var(--space-3); }
 .ui-skeleton__avatar { flex: 0 0 36px; width: 36px; height: 36px; border-radius: var(--radius-pill); background: var(--color-skeleton); }

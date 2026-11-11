@@ -17,8 +17,11 @@ la incorporación de estos componentes a los flujos v2 se hará por fases.
 - `ErrorBanner`: `message`, `onRetry`, `actionLabel` y `loading`. El mensaje se
   obtiene de `getErrorMessage(AppError)` en el punto que consume el error.
 - `Toast`: `message`, `onDismiss` y `duration` en milisegundos (5000 por defecto;
-  0 desactiva el cierre automático). Pausa el tiempo con foco o puntero encima.
-  Mantener una sola instancia por pantalla/app y cambiar su mensaje.
+  0 desactiva el cierre automático). Aparece arriba a la derecha mediante un
+  portal; la barra disminuye hasta cerrarse y pausa junto con el tiempo al recibir
+  foco o puntero. Con reducción de movimiento la barra no se anima. Mantener una
+  sola instancia por pantalla/app; cambiar la `key` al repetir la misma confirmación
+  reinicia su tiempo y barra.
 - `Spinner`: `label`; `decorative` cuando otro texto ya anuncia la operación.
 - `Skeleton`: `variant="line|avatar|card|participant"`, `label` y `lines`.
 - `ReconnectingChip`: indicador no bloqueante con texto y spinner decorativo.

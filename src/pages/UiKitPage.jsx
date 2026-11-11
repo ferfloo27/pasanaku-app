@@ -145,7 +145,7 @@ export default function UiKitPage() {
       <Showcase id="perfil" title="Nombre de perfil" note="Primer uso obligatorio y edición del nombre, con datos de muestra."><ProfilePreview /></Showcase>
       <footer className="ui-kit-footer"><AguayoStripe variant="steps" height={8} /><p>Pasanaku · Componentes compartidos · Diseño base a 360 px</p></footer>
     </main>
-    <div className="ui-kit-toast-region"><Toast message={toast} onDismiss={() => setToast('')} /></div>
+    <Toast message={toast} onDismiss={() => setToast('')} />
     <Sheet open={sheet !== null} onClose={() => setSheet(null)} title={sheet === 'cancel' ? '¿Cancelar esta sala?' : '¿Eliminar a Juan Quispe?'} description="Esta es una vista de muestra. No se modificará ninguna sala.">
       <p className="ui-kit-muted">{sheet === 'cancel' ? 'Todos verán que la sala fue cancelada.' : 'Saldrá de la sala. Puede volver a unirse con el código mientras no hagas el sorteo.'}</p>
       <Button variant="danger" fullWidth onClick={() => { setSheet(null); setToast('Acción de ejemplo completada.'); }}>{sheet === 'cancel' ? 'Cancelar sala' : 'Eliminar de la sala'}</Button>

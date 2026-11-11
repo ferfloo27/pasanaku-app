@@ -132,6 +132,10 @@ Convenciones:
 
 ---
 
+## Ajustes solicitados después de la Fase 8
+
+- [x] 11-11-2026: avisos arriba a la derecha con barra decreciente y pausa al leerlos; compartir copia solo el enlace en resultados, sala lista y lobby. Verificado en navegador a 320/360 px y escritorio, incluido pegado del enlace y cierre automático. Validación: 314 tests, lint sin errores (una advertencia previa de v1) y build correcto.
+
 ## Notes
 
 - Las fases 1 y 2 son independientes entre sí y pueden hacerse en paralelo.

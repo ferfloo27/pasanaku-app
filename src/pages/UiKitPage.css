@@ -42,8 +42,6 @@
 .ui-kit-formats dt { color: var(--color-text-muted); }
 .ui-kit-formats dd { margin: 0; font-weight: 700; }
 .ui-kit-footer { display: flex; flex-direction: column; gap: var(--space-4); color: var(--color-text-muted); font-size: var(--text-note); text-align: center; padding-top: var(--space-4); }
-.ui-kit-toast-region { position: fixed; z-index: 80; bottom: max(var(--space-4), env(safe-area-inset-bottom)); left: var(--space-4); right: var(--space-4); display: flex; justify-content: center; pointer-events: none; }
-.ui-kit-toast-region .ui-toast { pointer-events: auto; }
 .ui-kit-skip { position: fixed; left: var(--space-4); top: var(--space-4); z-index: 200; padding: var(--space-3); background: var(--color-surface); transform: translateY(-200%); }
 .ui-kit-skip:focus { transform: none; }
 .ui-kit-details summary { display: flex; align-items: center; min-height: var(--touch-target); color: var(--color-primary); font-weight: 700; cursor: pointer; }

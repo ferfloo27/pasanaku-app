@@ -18,13 +18,14 @@ it('muestra sala y resumen, copia el código y abre la sala', async () => {
   expect(onEnter).toHaveBeenCalledWith('ABC123');
 });
 
-it('comparte el link nativo sin copiar al cancelar', async () => {
-  const writeText = vi.fn(), share = vi.fn().mockRejectedValue({ name: 'AbortError' });
+it('compartir siempre copia el enlace sin abrir el menú nativo', async () => {
+  const writeText = vi.fn().mockResolvedValue(), share = vi.fn();
   vi.stubGlobal('navigator', { share, clipboard: { writeText } });
   render(<RoomReady room={room} onEnter={vi.fn()} />);
   fireEvent.click(screen.getByRole('button', { name: 'Compartir link' }));
-  await waitFor(() => expect(share).toHaveBeenCalledWith({ title: 'Familia', url: `${window.location.origin}/room/ABC123` }));
-  expect(writeText).not.toHaveBeenCalled();
+  expect(await screen.findByRole('status')).toHaveTextContent('Link copiado para compartir');
+  expect(writeText).toHaveBeenCalledWith(`${window.location.origin}/room/ABC123`);
+  expect(share).not.toHaveBeenCalled();
   expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 });
 
@@ -33,7 +34,7 @@ it('copia el link si no hay compartir nativo e informa errores del portapapeles'
   vi.stubGlobal('navigator', { clipboard: { writeText } });
   render(<RoomReady room={room} onEnter={vi.fn()} />);
   fireEvent.click(screen.getByRole('button', { name: 'Compartir link' }));
-  expect(await screen.findByRole('status')).toHaveTextContent('Link copiado');
+  expect(await screen.findByRole('status')).toHaveTextContent('Link copiado para compartir');
   expect(writeText).toHaveBeenCalledWith(`${window.location.origin}/room/ABC123`);
   fireEvent.click(screen.getByRole('button', { name: 'Copiar código' }));
   expect(await screen.findByRole('alert')).toHaveTextContent('No pudimos copiar');
