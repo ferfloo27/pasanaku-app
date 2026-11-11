@@ -75,7 +75,7 @@ Convenciones:
 
 ## Fase 4: Inicio, crear y unirse
 
-- [ ] 4.1 Rutas `/`, `/new`, `/join`, `/room/:code` en `app/routes.jsx`.
+- [x] 4.1 Rutas `/`, `/new`, `/join`, `/room/:code` en `app/routes.jsx`.
 - [ ] 4.2 `roomsApi.listMyRooms` + `useMyRooms`; `HomePage` con saludo, acciones, "Tus salas", estado vacío y aviso único de sala cancelada (artboards 6.2 Inicio e Inicio vacío).
 - [ ] 4.3 `domain/roomForm.js`: `validateRoomForm`, `payoutPerTurn` (+ propiedad 7).
 - [ ] 4.4 `CreateRoomForm` con resumen en vivo (artboard 6.3 Crear sala) y `RoomReady` con código, copiar y compartir (artboard 6.3 Sala lista).
