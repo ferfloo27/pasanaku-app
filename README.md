@@ -131,9 +131,10 @@ uniones al último cupo, dos confirmaciones simultáneas, reversión ante un fal
 durante la escritura y fechas semanales/quincenales. No lee archivos de entorno.
 Los datos creados por los tests se revierten o se eliminan al terminar.
 
-La propiedad 12, que compara fechas SQL con `domain/schedule.js`, queda pendiente
-hasta la Fase 6 por decisión del 10-11-2026. Las pruebas actuales de fechas usan
-resultados esperados independientes y no sustituyen esa comparación.
+La propiedad 12, que compara fechas SQL con `domain/schedule.js`, está preparada
+en `transactions.integration.mjs`. Su ejecución sigue pendiente por decisión del
+11-11-2026. El cierre y las comprobaciones pendientes de la Fase 8 se registran en
+`docs/phase8-verification.md`.
 
 ## Supabase local
 

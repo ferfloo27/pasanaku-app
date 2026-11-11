@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Spinner from '../shared/ui/Spinner';
+import PageFocus from './PageFocus';
 
 const HomePage = lazy(() => import('../pages/HomePage'));
 const NewRoomPage = lazy(() => import('../pages/NewRoomPage'));
@@ -12,7 +13,7 @@ const UiKitPage = import.meta.env.DEV ? lazy(() => import('../pages/UiKitPage'))
 const RoomsPreview = import.meta.env.DEV ? lazy(() => import('../pages/RoomsPreview')) : null;
 
 export default function AppRoutes() {
-  return <Suspense fallback={<div className="ui-app-loading"><Spinner label="Cargando página…" /></div>}>
+  return <><PageFocus /><Suspense fallback={<div className="ui-app-loading"><Spinner label="Cargando página…" /></div>}>
     <Routes>
       <Route element={<IdentityBoundary />}>
         <Route path="/" element={<HomePage />} />
@@ -24,5 +25,5 @@ export default function AppRoutes() {
       {import.meta.env.DEV && <Route path="/dev/rooms" element={<RoomsPreview />} />}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
-  </Suspense>;
+  </Suspense></>;
 }

@@ -19,6 +19,12 @@ function DraftRow({ row, frequency, count, onMove, disabled }) {
   </li>;
 }
 export default function DraftEditor({ room, draft, onMove, onReshuffle, onConfirm, onBack, busy = false, participantsChanged = false, error, onRetry, canReshuffle = true, readOnly = false }) {
+  const [moveAnnouncement, setMoveAnnouncement] = useState('');
+  function moveWithAnnouncement(from, to) {
+    if (busy || readOnly || participantsChanged) return;
+    onMove(from, to);
+    setMoveAnnouncement(`${draft[from].name} pasa al turno ${to + 1}, ${formatTurnDate(draft[to].turnDate, room.frequency)}.`);
+  }
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
   const name = id => draft.find(row => row.participantId === id)?.name || 'Participante';
   const announcements = {
@@ -33,6 +39,7 @@ export default function DraftEditor({ room, draft, onMove, onReshuffle, onConfir
     if (from >= 0 && to >= 0) onMove(from, to);
   }
   return <section className="draft-editor">
+    <div className="sr-only" role="status" aria-label="Cambios del borrador" aria-live="polite" aria-atomic="true">{moveAnnouncement}</div>
     <Button variant="text" disabled={busy} onClick={onBack}>Volver a la sala</Button>
     <h1>Borrador del sorteo</h1>
     <p className="draft-editor__privacy"><strong>Solo tú ves este borrador.</strong> Ajusta el orden si hace falta y luego anúncialo.</p>
@@ -40,10 +47,11 @@ export default function DraftEditor({ room, draft, onMove, onReshuffle, onConfir
     <h2>Orden de cobro</h2><p className="draft-editor__hint">Arrastra o usa las flechas</p>
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={finish} accessibility={{ announcements, screenReaderInstructions: { draggable: 'Pulsa espacio para levantar. Usa las flechas para mover, espacio para soltar y Escape para cancelar.' } }}>
       <SortableContext items={draft.map(row => row.participantId)} strategy={verticalListSortingStrategy}>
-        <ol className="draft-editor__list" aria-label="Orden de cobro">{draft.map(row => <DraftRow key={row.participantId} row={row} frequency={room.frequency} count={draft.length} onMove={onMove} disabled={busy || readOnly || participantsChanged} />)}</ol>
+        <ol className="draft-editor__list" aria-label="Orden de cobro">{draft.map(row => <DraftRow key={row.participantId} row={row} frequency={room.frequency} count={draft.length} onMove={moveWithAnnouncement} disabled={busy || readOnly || participantsChanged} />)}</ol>
       </SortableContext>
     </DndContext>
     <footer className="draft-editor__actions"><Button fullWidth disabled={busy || participantsChanged || draft.length < 2 || !onConfirm} onClick={onConfirm}>Confirmar y anunciar</Button>
       <Button fullWidth variant="secondary" disabled={busy || !canReshuffle} onClick={onReshuffle}>Volver a sortear</Button></footer>
   </section>;
 }
+import { useState } from 'react';

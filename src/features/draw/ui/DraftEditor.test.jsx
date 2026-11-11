@@ -14,6 +14,7 @@ it('reordena mediante flechas y actualiza las fechas sin perder personas', () =>
   expect(screen.getByText(/Solo tú ves este borrador/)).toBeVisible();
   expect(screen.getByRole('button', { name: 'Subir a Ana' })).toBeDisabled();
   fireEvent.click(screen.getByRole('button', { name: 'Subir a Bea' }));
+  expect(screen.getByRole('status', { name: 'Cambios del borrador' })).toHaveTextContent('Bea pasa al turno 1, Diciembre 2099.');
   const rows = screen.getAllByRole('listitem');
   expect(within(rows[0]).getByText('Bea')).toBeVisible();
   expect(within(rows[0]).getByText('Diciembre 2099')).toBeVisible();
