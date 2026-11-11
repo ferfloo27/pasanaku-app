@@ -1,0 +1,28 @@
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+import Reveal from './Reveal';
+const room = { name: 'Familia', frequency: 'monthly' };
+const participants = [{ id: 'a', name: 'Ana', user_id: 'me' }, { id: 'b', name: 'Bea', user_id: 'other' }];
+const turns = [{ id: 't2', participant_id: 'b', position: 2, turn_date: '2027-02-01', payout_bs: 400 }, { id: 't1', participant_id: 'a', position: 1, turn_date: '2027-01-01', payout_bs: 400 }];
+beforeEach(() => vi.useFakeTimers());
+afterEach(() => vi.useRealTimers());
+it('revela el orden persistido, anuncia cada posición y termina con el turno propio', () => {
+  render(<Reveal room={room} participants={participants} turns={turns} userId="me" onResults={() => {}} />);
+  expect(screen.getByText('Sorteado al azar')).toBeVisible();
+  const live = screen.getByRole('status');
+  expect(live).toHaveAttribute('aria-live', 'polite');
+  expect(live).toHaveTextContent('Le toca a Ana'); expect(live).toHaveTextContent('Turno 1 · Enero 2027');
+  act(() => vi.advanceTimersToNextTimer());
+  expect(live).toHaveTextContent('Le toca a Bea'); expect(live).toHaveTextContent('Febrero 2027');
+  expect(within(screen.getByRole('list', { name: 'Ya salieron' })).getByText('Ana · Tú')).toBeVisible();
+  act(() => vi.advanceTimersToNextTimer());
+  expect(screen.getByRole('heading', { name: 'Orden listo' })).toBeVisible();
+  expect(screen.getByText(/Tu turno es el 1/)).toHaveTextContent('Enero 2027');
+  fireEvent.click(screen.getByRole('button', { name: 'Ver de nuevo' }));
+  expect(screen.getByRole('status')).toHaveTextContent('Le toca a Ana');
+});
+it('Saltar va directamente a resultados y cancela el reloj', () => {
+  const onResults = vi.fn(); render(<Reveal room={room} participants={participants} turns={turns} userId="me" onResults={onResults} />);
+  fireEvent.click(screen.getByRole('button', { name: 'Saltar' }));
+  expect(onResults).toHaveBeenCalledOnce(); expect(vi.getTimerCount()).toBe(0);
+});

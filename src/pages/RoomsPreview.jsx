@@ -11,6 +11,8 @@ import { RemovedRoom, CancelledRoom } from '../features/rooms/ui/RoomStateViews'
 import DraftEditor from '../features/draw/ui/DraftEditor';
 import { useDraft } from '../features/draw/hooks/useDraft';
 import ConfirmDrawSheet from '../features/draw/ui/ConfirmDrawSheet';
+import Reveal from '../features/draw/ui/Reveal';
+import { turnDate } from '../features/draw/domain/schedule';
 import EmptyState from '../shared/ui/EmptyState';
 import Button from '../shared/ui/Button';
 import { AppError } from '../shared/errors/appError';
@@ -43,7 +45,8 @@ export default function RoomsPreview() {
   ]);
   const [selection, setSelection] = useState(null);
   const lobbyRoom = { ...sample, host_user_id: 'host' };
-  return <AuthContext.Provider value={{ profileState: { isSaving: false, save: async value => { setName(value); return { data: { display_name: value } }; } } }}><div className="identity-home"><main className={['preview', 'host', 'participant', 'alone', 'removed', 'cancelled', 'draft'].includes(view) ? 'room-entry' : 'identity-home__body'}>
+  const previewTurns = people.map((person, i) => ({ id: `turn-${person.id}`, participant_id: person.id, position: i + 1, turn_date: turnDate(sample.start_date, sample.frequency, i + 1), payout_bs: sample.contribution_bs * people.length }));
+  return <AuthContext.Provider value={{ profileState: { isSaving: false, save: async value => { setName(value); return { data: { display_name: value } }; } } }}><div className="identity-home"><main className={['preview', 'host', 'participant', 'alone', 'removed', 'cancelled', 'draft', 'reveal'].includes(view) ? 'room-entry' : 'identity-home__body'}>
     <p>Vista de muestra · sin conexión a Supabase</p>
     <nav className="ui-kit-inline" aria-label="Pantallas de muestra">
       <Button compact variant="text" onClick={() => setView('home')}>Inicio</Button>
@@ -57,6 +60,7 @@ export default function RoomsPreview() {
       <Button compact variant="text" onClick={() => setView('removed')}>Persona eliminada</Button>
       <Button compact variant="text" onClick={() => setView('cancelled')}>Sala cancelada</Button>
       <Button compact variant="text" onClick={() => setView('draft')}>Borrador</Button>
+      <Button compact variant="text" onClick={() => setView('reveal')}>Revelación</Button>
     </nav>
     {view === 'home' && <><h1>Hola, Lucía</h1><h2>Tus salas</h2><RoomCard room={sample} /><RoomCard room={{ ...sample, id: 'drawn', name: 'Amigas del cole', status: 'drawn', is_host: false }} /><EmptyState /></>}
     {view === 'create' && <CreateRoomForm onBack={() => setView('home')} onSubmit={async values => {
@@ -70,6 +74,7 @@ export default function RoomsPreview() {
     <ProfileNameSheet open={editing} initialName={name} onClose={() => setEditing(false)} />
     {['host', 'participant', 'alone'].includes(view) && <Lobby room={lobbyRoom} participants={view === 'alone' ? people.filter(person => person.user_id === 'host') : people} userId={view === 'participant' ? 'lucia' : 'host'} onDraw={() => setView('draft')} onRemoveParticipant={participant => setSelection({ type: 'remove', participant })} onCancelRoom={() => setSelection({ type: 'cancel' })} />}
     {view === 'draft' && <DraftPreview participants={people} room={lobbyRoom} onBack={() => setView('host')} />}
+    {view === 'reveal' && <Reveal room={lobbyRoom} participants={people} turns={previewTurns} userId="lucia" onResults={() => setView('home')} />}
     {view === 'removed' && <RemovedRoom room={lobbyRoom} onHome={() => setView('home')} />}
     {view === 'cancelled' && <CancelledRoom room={lobbyRoom} onHome={() => setView('home')} />}
     <RemoveParticipantSheet open={selection?.type === 'remove'} participant={selection?.participant} onClose={() => setSelection(null)} onConfirm={() => { setPeople(current => current.filter(person => person.id !== selection.participant.id)); setSelection(null); }} />
