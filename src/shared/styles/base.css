@@ -11,7 +11,7 @@
   color: var(--color-text);
   background: var(--color-bg);
 }
-body { margin: 0; min-width: 320px; font-size: var(--text-body); line-height: var(--leading-body); }
+body { margin: 0; min-width: 0; font-size: var(--text-body); line-height: var(--leading-body); }
 #root { min-height: 100svh; }
 button, input, select, textarea { font: inherit; }
 button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
