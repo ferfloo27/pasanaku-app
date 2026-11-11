@@ -58,6 +58,34 @@ it('muestra el resumen antes de unirse y después carga la sala del miembro', as
   expect(joinRoom).toHaveBeenCalledExactlyOnceWith('ABC123');
   expect(screen.queryByRole('button', { name: 'Sortear orden' })).not.toBeInTheDocument();
 });
+it('el indicador de reconexión sigue visible durante el borrador sin bloquearlo', async () => {
+  existingHost(); show();
+  fireEvent.click(await screen.findByRole('button', { name: 'Sortear orden' }));
+  const handlers = subscribeRoomChannel.mock.calls.at(-1)[1];
+  act(() => handlers.onStatus('CHANNEL_ERROR'));
+  expect(screen.getByText('Reconectando…')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Confirmar y anunciar' })).toBeEnabled();
+});
+it('al perder conexión conserva la sala, ofrece reintentar y vuelve a sincronizar al regresar', async () => {
+  existingHost();
+  const online = vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(true);
+  try {
+    show(); await screen.findByRole('heading', { name: 'Participantes (2/3)' });
+    online.mockReturnValue(false); act(() => window.dispatchEvent(new Event('offline')));
+    expect(screen.getByRole('alert')).toHaveTextContent('Sin conexión. Te mostramos lo último que vimos.');
+    expect(screen.getByRole('heading', { name: 'Familia' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reintentar' })).toBeEnabled();
+    fetchMemberRoom.mockResolvedValue({ data: { room: { ...room, id: 'r', host_user_id: 'u' }, participants: [{ id: 'self', user_id: 'u', name: 'Lucía' }] } });
+    online.mockReturnValue(true); act(() => window.dispatchEvent(new Event('online')));
+    expect(await screen.findByRole('heading', { name: 'Participantes (1/3)' })).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  } finally { online.mockRestore(); }
+});
+it('la carga inicial usa skeletons con nombre accesible', () => {
+  getRoomPreview.mockImplementation(() => new Promise(() => {})); show();
+  expect(screen.getByText('Cargando sala…')).toBeInTheDocument();
+  expect(document.querySelector('.ui-skeleton')).toBeInTheDocument();
+});
 
 it.each([
   [{ status: 'drawn' }, /Esta sala ya hizo su sorteo/],
@@ -237,12 +265,4 @@ it('muestra el aviso de expulsión cuando Realtime borra la participación propi
   expect(await screen.findByRole('heading', { name: 'Ya no estás en esta sala' })).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: 'Ir al inicio' }));
   expect(await screen.findByText('Inicio')).toBeInTheDocument();
-});
-it('el indicador de reconexión sigue visible durante el borrador sin bloquearlo', async () => {
-  existingHost(); show();
-  fireEvent.click(await screen.findByRole('button', { name: 'Sortear orden' }));
-  const handlers = subscribeRoomChannel.mock.calls.at(-1)[1];
-  act(() => handlers.onStatus('CHANNEL_ERROR'));
-  expect(screen.getByText('Reconectando…')).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: 'Confirmar y anunciar' })).toBeEnabled();
 });

@@ -9,7 +9,6 @@ import { getErrorMessage } from '../../../shared/errors/appError';
 import AguayoStripe from '../../../shared/ui/AguayoStripe';
 import Button from '../../../shared/ui/Button';
 import ErrorBanner from '../../../shared/ui/ErrorBanner';
-import Spinner from '../../../shared/ui/Spinner';
 import ReconnectingChip from '../../../shared/ui/ReconnectingChip';
 import Skeleton from '../../../shared/ui/Skeleton';
 import RoomPreview from './RoomPreview';
@@ -27,7 +26,7 @@ function Entry({ code, userId }) {
   const navigate = useNavigate();
   const { profile } = useProfile();
   const session = useRoomSession(code);
-  const { state, status, room, participants, turns, error, retry, joining, join, channelStatus, dispatch, refresh } = session;
+  const { state, status, room, participants, turns, error, retry, joining, join, channelStatus, isOnline, refreshing, dispatch, refresh } = session;
   const [editing, setEditing] = useState(false);
   const management = useRoomManagement({
     onRemoved: participant => { dispatch({ type: 'PARTICIPANT_DELETED', participantId: participant.id }); refresh(); },
@@ -37,30 +36,31 @@ function Entry({ code, userId }) {
   const selection = management.selection;
   const memberView = ['results', 'revealing'].includes(status);
   const drawReady = memberView && hasCompleteDraw(turns, participants);
+  const offline = !isOnline || error?.code === 'NETWORK';
+  const feedbackError = !['preview', 'not_found'].includes(status) && error;
   return <main className="room-entry">{!memberView && <AguayoStripe />}
-    {['lobby', 'drafting', 'revealing', 'results'].includes(status) && channelStatus && channelStatus !== 'SUBSCRIBED' && <ReconnectingChip />}
-    {status === 'loading' && !error && <div className="room-entry__state" role="status"><Spinner decorative /><p>Cargando sala…</p></div>}
+    {offline ? <ErrorBanner message={getErrorMessage({ code: 'NETWORK' })} onRetry={retry} loading={refreshing} />
+      : feedbackError && <ErrorBanner message={getErrorMessage(error)} onRetry={retry} loading={refreshing} />}
+    {!offline && ['lobby', 'drafting', 'revealing', 'results'].includes(status) && channelStatus && channelStatus !== 'SUBSCRIBED' && <ReconnectingChip />}
+    {status === 'loading' && !error && <div className="room-entry__state"><Skeleton label="Cargando sala…" lines={4} /></div>}
     {(status === 'not_found' || (status === 'loading' && error)) && <div className="room-entry__state">
       {status === 'not_found' ? <><h1>No encontramos esta sala</h1><p>Revisa el código o pide un nuevo link a quien organiza.</p></>
-        : <ErrorBanner message={getErrorMessage(error)} onRetry={retry} />}
+        : null}
       <Button variant="text" onClick={() => navigate('/')}>Volver al inicio</Button>
     </div>}
     {status === 'preview' && room && <RoomPreview room={room} displayName={profile?.display_name || ''}
-      onJoin={join} loading={joining} error={error} onChangeName={() => setEditing(true)} onCancel={() => navigate('/')} />}
+      onJoin={join} loading={joining} error={offline ? null : error} onChangeName={() => setEditing(true)} onCancel={() => navigate('/')} />}
     {status === 'lobby' && room && <>
       <Button variant="text" compact onClick={() => navigate('/')} className="room-entry__back">← Volver al inicio</Button>
-      {error && <ErrorBanner message={getErrorMessage(error)} onRetry={retry} />}
       <Lobby room={room} participants={participants} userId={userId} newParticipantIds={state.newParticipantIds}
         onDraw={() => dispatch({ type: 'START_DRAFT' })}
         onRemoveParticipant={management.selectParticipant} onCancelRoom={() => management.selectCancellation(room)} busy={management.loading} />
     </>}
     {status === 'drafting' && room?.host_user_id === userId && <>
-      {error && <ErrorBanner message={getErrorMessage(error)} onRetry={retry} />}
       <DrawFlow room={room} participants={participants} onBack={() => dispatch({ type: 'CANCEL_DRAFT' })} onResync={refresh}
         onConfirmed={() => { dispatch({ type: 'ROOM_UPDATED', room: { ...room, status: 'drawn' } }); refresh(); }} />
     </>}
     {memberView && room && <>
-      {error && <ErrorBanner message={getErrorMessage(error)} onRetry={retry} />}
       {!drawReady ? <div className="room-entry__state"><Skeleton label="Cargando resultados…" lines={3} /></div>
         : status === 'revealing' ? <Reveal room={room} turns={turns} participants={participants} userId={userId} onResults={() => dispatch({ type: 'REVEAL_FINISHED' })} />
           : <Results room={room} turns={turns} participants={participants} userId={userId} onHome={() => navigate('/')} />}

@@ -121,7 +121,7 @@ Convenciones:
 ## Fase 8: Resiliencia, estados y cierre
 
 - [x] 8.1 Resync en `useRoomSession`: `visibilitychange` y reconexión del canal; `ReconnectingChip`.
-- [ ] 8.2 Estado "Sin conexión" con últimos datos y "Reintentar"; skeletons de carga (artboard 6.9).
+- [x] 8.2 Estado "Sin conexión" con últimos datos y "Reintentar"; skeletons de carga (artboard 6.9).
 - [ ] 8.3 Vista "No encontramos esta sala" para links inválidos (artboard 6.9).
 - [ ] 8.4 Revisión de accesibilidad: foco, contraste, 44px, lector de pantalla en revelación y borrador.
 - [ ] 8.5 Revisión a 320px y 360px de todas las pantallas contra el canvas.

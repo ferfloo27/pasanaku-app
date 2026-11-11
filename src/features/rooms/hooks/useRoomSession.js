@@ -4,6 +4,7 @@ import { loadRoomSession } from '../api/roomSessionApi';
 import { joinRoom } from '../api/previewApi';
 import { subscribeRoomChannel } from '../api/roomChannel';
 import { initialRoomState, roomReducer } from '../domain/roomMachine';
+import { useOnline } from './useOnline';
 
 function scopedReducer(state, action) {
   const current = state.scope === action.scope ? state : { ...initialRoomState, scope: action.scope };
@@ -13,11 +14,12 @@ function scopedReducer(state, action) {
  * anteriores a eventos; SUBSCRIBED fuerza recarga para cerrar el hueco inicial.
  * dispatch permite transiciones locales tras RPC confirmadas por la UI. */
 export function useRoomSession(code) {
+  const isOnline = useOnline();
   const { user } = useAuth();
   const userId = user?.id;
   const scope = `${userId || ''}:${code}`;
   const [state, rawDispatch] = useReducer(scopedReducer, { ...initialRoomState, scope });
-  const [meta, setMeta] = useState({ scope, joining: false, channelStatus: 'CONNECTING' });
+  const [meta, setMeta] = useState({ scope, joining: false, channelStatus: 'CONNECTING', refreshing: false });
   const runtime = useRef(null);
   useEffect(() => {
     let active = true;
@@ -64,6 +66,7 @@ export function useRoomSession(code) {
     function refresh() {
       dirty = true;
       if (pending) return pending;
+      updateMeta({ refreshing: true });
       pending = (async () => {
         while (active && dirty) {
           dirty = false;
@@ -81,7 +84,7 @@ export function useRoomSession(code) {
             send({ type: 'FAILED', error });
           }
         }
-      })().finally(() => { pending = null; });
+      })().finally(() => { pending = null; updateMeta({ refreshing: false }); });
       return pending;
     }
     function join() {
@@ -103,10 +106,13 @@ export function useRoomSession(code) {
     if (userId) void refresh();
     const onVisible = () => { if (document.visibilityState === 'visible' && roomId) void refresh(); };
     document.addEventListener('visibilitychange', onVisible);
+    const onOnline = () => { if (userId) void refresh(); };
+    window.addEventListener('online', onOnline);
     return () => {
       active = false; stopChannel?.();
       highlightTimers.forEach(timer => clearTimeout(timer));
       document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('online', onOnline);
       if (runtime.current === controller) runtime.current = null;
     };
   }, [code, userId, scope]);
@@ -115,8 +121,8 @@ export function useRoomSession(code) {
   const retry = useCallback(() => { dispatch({ type: 'CLEAR_ERROR' }); return refresh(); }, [dispatch, refresh]);
   const join = useCallback(() => runtime.current?.scope === scope ? runtime.current.join() : Promise.resolve(), [scope]);
   const visible = state.scope === scope ? state : initialRoomState;
-  const visibleMeta = meta.scope === scope ? meta : { joining: false, channelStatus: 'CONNECTING' };
-  return { ...visible, state: visible, ...visibleMeta, dispatch, refresh, retry, join };
+  const visibleMeta = meta.scope === scope ? meta : { joining: false, channelStatus: 'CONNECTING', refreshing: false };
+  return { ...visible, state: visible, ...visibleMeta, isOnline, dispatch, refresh, retry, join };
 }
 
 
