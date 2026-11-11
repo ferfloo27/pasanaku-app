@@ -15,11 +15,16 @@ import Reveal from '../features/draw/ui/Reveal';
 import Results from '../features/draw/ui/Results';
 import { turnDate } from '../features/draw/domain/schedule';
 import EmptyState from '../shared/ui/EmptyState';
+import RoomNotFound from '../features/rooms/ui/RoomNotFound';
+import ErrorBanner from '../shared/ui/ErrorBanner';
+import ReconnectingChip from '../shared/ui/ReconnectingChip';
+import Skeleton from '../shared/ui/Skeleton';
 import Button from '../shared/ui/Button';
 import { AppError } from '../shared/errors/appError';
 import { AuthContext } from '../app/authContext';
 import ProfileNameSheet from '../features/profile/ui/ProfileNameSheet';
 import '../features/auth/ui/identity.css';
+import '../features/rooms/ui/homeRooms.css';
 
 const sample = { id: 'sample', name: 'Pasanaku Familia Mamani', code: 'K7QM3P', contribution_bs: 200, frequency: 'monthly', start_date: '2027-01-01', max_participants: 30, participant_count: 8, host_name: 'Rosa Mamani', status: 'waiting', is_host: true };
 
@@ -63,6 +68,11 @@ export default function RoomsPreview() {
       <Button compact variant="text" onClick={() => setView('draft')}>Borrador</Button>
       <Button compact variant="text" onClick={() => setView('reveal')}>Revelación</Button>
       <Button compact variant="text" onClick={() => setView('results')}>Resultados</Button>
+      <Button compact variant="text" onClick={() => setView('missing')}>Sala inexistente</Button>
+      <Button compact variant="text" onClick={() => setView('loading')}>Cargando sala</Button>
+      <Button compact variant="text" onClick={() => setView('offline')}>Sin conexión</Button>
+      <Button compact variant="text" onClick={() => setView('reconnecting')}>Reconectando</Button>
+      <Button compact variant="text" onClick={() => setView('profile')}>Primer nombre</Button>
     </nav>
     {view === 'home' && <><h1>Hola, Lucía</h1><h2>Tus salas</h2><RoomCard room={sample} /><RoomCard room={{ ...sample, id: 'drawn', name: 'Amigas del cole', status: 'drawn', is_host: false }} /><EmptyState /></>}
     {view === 'create' && <CreateRoomForm onBack={() => setView('home')} onSubmit={async values => {
@@ -74,6 +84,13 @@ export default function RoomsPreview() {
     {view === 'preview' && <><RoomPreview room={room} displayName={name} onChangeName={() => setEditing(true)} onCancel={() => setView('home')} onJoin={() => setView('home')} />
       <div><Button variant="text" onClick={() => setRoom({ ...sample, status: 'drawn' })}>Ver sorteada</Button><Button variant="text" onClick={() => setRoom({ ...sample, status: 'cancelled' })}>Ver cancelada</Button><Button variant="text" onClick={() => setRoom({ ...sample, participant_count: 30 })}>Ver llena</Button></div></>}
     <ProfileNameSheet open={editing} initialName={name} onClose={() => setEditing(false)} />
+    <ProfileNameSheet open={view === 'profile'} required onClose={() => setView('home')} />
+    {view === 'missing' && <RoomNotFound onHome={() => setView('home')} onEnterCode={() => setView('join')} />}
+    {view === 'loading' && <Skeleton variant="card" label="Cargando sala…" />}
+    {['offline', 'reconnecting'].includes(view) && <>
+      {view === 'offline' ? <ErrorBanner message="Sin conexión. Mostramos los últimos datos disponibles." onRetry={() => {}} /> : <ReconnectingChip />}
+      <Lobby room={lobbyRoom} participants={people} userId="lucia" />
+    </>}
     {['host', 'participant', 'alone'].includes(view) && <Lobby room={lobbyRoom} participants={view === 'alone' ? people.filter(person => person.user_id === 'host') : people} userId={view === 'participant' ? 'lucia' : 'host'} onDraw={() => setView('draft')} onRemoveParticipant={participant => setSelection({ type: 'remove', participant })} onCancelRoom={() => setSelection({ type: 'cancel' })} />}
     {view === 'draft' && <DraftPreview participants={people} room={lobbyRoom} onBack={() => setView('host')} />}
     {view === 'reveal' && <Reveal room={lobbyRoom} participants={people} turns={previewTurns} userId="lucia" onResults={() => setView('results')} />}

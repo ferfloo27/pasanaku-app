@@ -27,13 +27,22 @@ Ratios calculados desde los tokens de la paleta clara:
 | Foco / fondo | 4,77 |
 | Borde de control / superficie | 3,31 |
 
-Botones, iconos, menús y segmentos declaran un mínimo de 44 px; campos, 48 px; casillas de código, 52 px de alto y 44 px de ancho mínimo. El código pasa a tres columnas cuando el contenedor baja de 283 px, evitando reducir los blancos táctiles. Queda pendiente comprobar toda la composición en el navegador (8.5).
+Botones, iconos, menús y segmentos declaran un mínimo de 44 px; campos, 48 px; casillas de código, 52 px de alto y 44 px de ancho mínimo. El código pasa a tres columnas cuando el contenedor baja de 283 px, evitando reducir los blancos táctiles.
 
-## 8.5 — pendiente
+## 8.5 — revisión visual realizada
 
-Las fases anteriores incluyeron comprobaciones parciales a 320/360 px. Falta el pase completo de la versión actual contra los HTML de diseño: perfil, inicio, creación, sala lista, unión y errores, pre-unión y bloqueos, variantes del lobby y confirmaciones, borrador, revelación, resultados y estados transversales.
+Pase del 11-11-2026 en el navegador integrado a **320 × 740** y **360 × 740**, contrastando la composición con los HTML de diseño. Se inspeccionaron capturas y ancho del documento; sin desbordamiento horizontal (305/345 px útiles cuando hay barra de desplazamiento, o 320/360 px sin ella).
 
-La herramienta detuvo la interacción con Chrome al no poder verificar su dirección. No se marca esta revisión como terminada.
+| Grupo | Cobertura en ambos tamaños |
+|---|---|
+| Inicio y perfil | Inicio real con sala sorteada, tarjetas en espera/sorteadas, vacío, nombre obligatorio y edición; cuenta anónima, vinculando, error y vinculada en la galería |
+| Formularios | Crear, errores de campos, selector mensual y cambio a fecha semanal; código vacío e inexistente, sala lista |
+| Invitación | Sala disponible, sorteada, cancelada y llena |
+| Lobby | Anfitrión, participante, vacío; diálogos de eliminar y cancelar |
+| Sorteo | Borrador y confirmación; revelación, resultados y turno propio |
+| Recuperación | Persona eliminada, sala cancelada, sala inexistente, skeleton, sin conexión y reconectando |
+
+Se ampliaron las muestras de desarrollo con estados transversales y nombre obligatorio, y se agregó la hoja de estilos de las tarjetas que faltaba en esa galería. No se alteró el comportamiento de producción. Las comprobaciones visuales de estados simulados no equivalen a interrumpir la red real ni a completar Google OAuth. Evidencia local: `phase8-results-320.png` en la carpeta de visualizaciones de esta conversación.
 
 ## 8.6 — pendiente
 

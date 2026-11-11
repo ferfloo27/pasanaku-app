@@ -124,8 +124,8 @@ Convenciones:
 - [x] 8.2 Estado "Sin conexión" con últimos datos y "Reintentar"; skeletons de carga (artboard 6.9).
 - [x] 8.3 Vista "No encontramos esta sala" para links inválidos (artboard 6.9).
 - [x] 8.4 Revisión de accesibilidad: foco, contraste, 44px, lector de pantalla en revelación y borrador.
-- [ ] 8.5 Revisión a 320px y 360px de todas las pantallas contra el canvas.
-  - Pendiente el pase completo actual: la herramienta interrumpió Chrome al no poder verificar su dirección. Evidencia y lista de revisión en `docs/phase8-verification.md`.
+- [x] 8.5 Revisión a 320px y 360px de todas las pantallas contra el canvas.
+  - Pase visual realizado en el navegador integrado; cobertura y evidencia en `docs/phase8-verification.md`. Validación: 313 tests, lint sin errores (una advertencia previa de v1) y build correcto.
 - [ ] 8.6 Prueba de punta a punta del flujo principal con dos navegadores (anfitrión y participante).
   - Supabase local verificado y perfil anfitrión creado; flujo de dos usuarios pendiente por la misma interrupción. No se probó contra producción.
 - _Requirements: 9.2–9.4, 11.1, 11.5, 11.6_
