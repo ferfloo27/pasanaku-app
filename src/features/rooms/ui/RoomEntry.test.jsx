@@ -157,6 +157,8 @@ it('muestra sala inexistente al abrir un link y permite volver al inicio', async
   getRoomPreview.mockRejectedValue(new AppError('ROOM_NOT_FOUND'));
   show();
   expect(await screen.findByRole('heading', { name: 'No encontramos esta sala' })).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Escribir un código' }));
+  expect(await screen.findByRole('heading', { name: 'Unirme a una sala' })).toBeInTheDocument();
 });
 
 it('buscar espera la pre-unión y deja el código inexistente bajo el campo', async () => {

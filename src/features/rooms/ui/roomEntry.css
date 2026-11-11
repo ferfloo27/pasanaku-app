@@ -19,3 +19,7 @@
 .member-room__participants { list-style: none; padding: 0; margin: 0; }
 .member-room__participants li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border); }
 .member-room__participants b { flex: 1; overflow-wrap: anywhere; }
+.room-entry__missing { display: flex; flex: 1; padding: var(--space-12) var(--space-4) var(--space-4); min-width: 0; }
+.room-entry__missing > .ui-empty { flex: 1; width: 100%; padding: 0; }
+.room-entry .room-entry__missing h1 { font-size: var(--text-title); line-height: var(--leading-title); }
+.room-entry__missing-actions { width: 100%; margin-top: auto; padding-top: var(--space-6); display: flex; flex-direction: column; gap: var(--space-2); }

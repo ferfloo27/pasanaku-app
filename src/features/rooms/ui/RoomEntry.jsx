@@ -12,6 +12,7 @@ import ErrorBanner from '../../../shared/ui/ErrorBanner';
 import ReconnectingChip from '../../../shared/ui/ReconnectingChip';
 import Skeleton from '../../../shared/ui/Skeleton';
 import RoomPreview from './RoomPreview';
+import RoomNotFound from './RoomNotFound';
 import Reveal from '../../draw/ui/Reveal';
 import Results from '../../draw/ui/Results';
 import { hasCompleteDraw } from '../../draw/domain/results';
@@ -43,9 +44,8 @@ function Entry({ code, userId }) {
       : feedbackError && <ErrorBanner message={getErrorMessage(error)} onRetry={retry} loading={refreshing} />}
     {!offline && ['lobby', 'drafting', 'revealing', 'results'].includes(status) && channelStatus && channelStatus !== 'SUBSCRIBED' && <ReconnectingChip />}
     {status === 'loading' && !error && <div className="room-entry__state"><Skeleton label="Cargando sala…" lines={4} /></div>}
-    {(status === 'not_found' || (status === 'loading' && error)) && <div className="room-entry__state">
-      {status === 'not_found' ? <><h1>No encontramos esta sala</h1><p>Revisa el código o pide un nuevo link a quien organiza.</p></>
-        : null}
+    {status === 'not_found' && <RoomNotFound onHome={() => navigate('/')} onEnterCode={() => navigate('/join')} />}
+    {status === 'loading' && error && <div className="room-entry__state">
       <Button variant="text" onClick={() => navigate('/')}>Volver al inicio</Button>
     </div>}
     {status === 'preview' && room && <RoomPreview room={room} displayName={profile?.display_name || ''}

@@ -6,6 +6,7 @@ const HomePage = lazy(() => import('../pages/HomePage'));
 const NewRoomPage = lazy(() => import('../pages/NewRoomPage'));
 const JoinPage = lazy(() => import('../pages/JoinPage'));
 const RoomPage = lazy(() => import('../pages/RoomPage'));
+const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const IdentityBoundary = lazy(() => import('./IdentityBoundary'));
 const UiKitPage = import.meta.env.DEV ? lazy(() => import('../pages/UiKitPage')) : null;
 const RoomsPreview = import.meta.env.DEV ? lazy(() => import('../pages/RoomsPreview')) : null;
@@ -21,6 +22,7 @@ export default function AppRoutes() {
       </Route>
       {import.meta.env.DEV && <Route path="/dev/ui" element={<UiKitPage />} />}
       {import.meta.env.DEV && <Route path="/dev/rooms" element={<RoomsPreview />} />}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   </Suspense>;
 }

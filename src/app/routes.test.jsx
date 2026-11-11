@@ -17,3 +17,9 @@ it('navega crear y vuelve al inicio mediante el router', async () => {
   fireEvent.click(await screen.findByRole('button', { name: 'Volver' }));
   expect(await screen.findByRole('link', { name: 'Crear sala' })).toBeInTheDocument();
 });
+it.each(['/room', '/link-incompleto'])('ofrece una salida útil en %s', async path => {
+  render(<MemoryRouter initialEntries={[path]}><AppRoutes /></MemoryRouter>);
+  expect(await screen.findByRole('heading', { name: 'No encontramos esta sala' })).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Escribir un código' }));
+  expect(await screen.findByRole('heading', { name: 'Formulario código' })).toBeInTheDocument();
+});
