@@ -4,10 +4,28 @@ import { randomUUID } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 import test from 'node:test';
 import * as fc from 'fast-check';
+import { turnDate } from '../../src/features/draw/domain/schedule.js';
 
 // Destino fijo: un contenedor Docker local, nunca una URL ni credenciales de .env.
 const container = 'supabase_db_pasanaku-app';
 const quote = (value) => `'${String(value).replaceAll("'", "''")}'`;
+
+test('Propiedad 12: SQL y turnDate coinciden para todas las frecuencias', { timeout: 120000 }, async () => {
+  for (const frequency of ['monthly', 'weekly', 'biweekly']) {
+    await fc.assert(fc.asyncProperty(fc.integer({ min: 2096, max: 2104 }), fc.integer({ min: 1, max: 12 }),
+      fc.integer({ min: 2, max: 8 }), async (year, month, count) => {
+        const start = `${year}-${String(month).padStart(2, '0')}-${frequency === 'monthly' ? '01' : '25'}`;
+        const f = await fixture(count, frequency, start);
+        try {
+          await sql(`insert into public.participants (room_id, user_id, name) values ${f.users.slice(1, count).map(id => `(${quote(f.room.id)}, ${quote(id)}, 'Paridad')`).join(',')}`);
+          await sql(asUser(f.users[0], `select public.confirm_draw(${quote(f.room.id)},
+            (select array_agg(id order by user_id) from public.participants where room_id = ${quote(f.room.id)}))`));
+          const dates = JSON.parse(await sql(`select json_agg(turn_date order by position) from public.turns where room_id = ${quote(f.room.id)}`));
+          assert.deepEqual(dates, Array.from({ length: count }, (_, i) => turnDate(start, frequency, i + 1)));
+        } finally { await f.cleanup(); }
+      }), { numRuns: 4 });
+  }
+});
 
 function connection(statement, keepOpen = false) {
   const child = spawn('docker', ['exec', '-i', container, 'psql', '-X', '-qAt',

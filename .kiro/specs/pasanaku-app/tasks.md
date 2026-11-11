@@ -39,7 +39,7 @@ Convenciones:
   - Guía documentada en README; ejecución y verificación del panel pendientes de la persona dueña del proyecto.
 - [ ] 1.7 Tests de base de datos: propiedades 8, 9, 10, 11 y 12 de `design.md`.
   - [x] Propiedades 8–11 verificadas en Supabase local (RLS/RPC, cupo concurrente, atomicidad e idempotencia).
-  - [ ] Propiedad 12: la paridad SQL/`turnDate` se pospone a la Fase 6 por decisión del 10-11-2026; no adelantar la función de dominio.
+  - [ ] Propiedad 12: test SQL/`turnDate` preparado en la Fase 6; ejecución pendiente por Docker local no disponible, por decisión del 11-11-2026.
 - [x] 1.8 Plan de migración de los datos actuales (salas sin `host_user_id`/`name`): decidir si se descartan o se migran con valores por defecto.
   - Decisión del 10-11-2026: descartar los datos de prueba al estrenar v2; plan en `docs/v2-data-transition.md`. No se han ejecutado borrados ni cambios remotos.
 - _Requirements: 3.5, 4.2, 4.7, 5.7, 5.8, 5.10, 6.8, 6.10, 6.11, 6.12, 10.1–10.7_
@@ -99,8 +99,8 @@ Convenciones:
 
 ## Fase 6: Borrador y confirmación
 
-- [ ] 6.1 `domain/schedule.js` `turnDate` (+ propiedad 5) y `domain/shuffle.js` con `random` inyectable (+ propiedad 2).
-  - Incluir la propiedad 12 de paridad SQL/JavaScript pendiente de la tarea 1.7.
+- [x] 6.1 `domain/schedule.js` `turnDate` (+ propiedad 5) y `domain/shuffle.js` con `random` inyectable (+ propiedad 2).
+  - Propiedad 12 incluida en `transactions.integration.mjs`; ejecución pendiente por decisión del 11-11-2026 (Docker local no disponible). La tarea 1.7 continúa abierta.
 - [ ] 6.2 `domain/draft.js`: `buildDraft`, `moveDraftItem`, `draftToOrder` (+ propiedades 3 y 4).
 - [ ] 6.3 Instalar `@dnd-kit/core` y `@dnd-kit/sortable`; `DraftEditor` con arrastre, botones subir/bajar y "Volver a sortear" (artboard 6.6 Borrador).
 - [ ] 6.4 `ConfirmDrawSheet` (artboard 6.6 Confirmar y anunciar) y `drawApi.confirmDraw` con manejo de `PARTICIPANTS_CHANGED`, `ROOM_NOT_WAITING` y error genérico con borrador conservado.

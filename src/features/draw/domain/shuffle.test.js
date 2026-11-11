@@ -2,6 +2,12 @@ import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
 import { shuffle } from './shuffle';
 
+it('usa el generador inyectado sin modificar la entrada', () => {
+  const input = Object.freeze(['a', 'b', 'c']);
+  expect(shuffle(input, () => 0)).toEqual(['b', 'c', 'a']);
+  expect(shuffle(input, () => 0.999)).toEqual(['a', 'b', 'c']);
+});
+
 describe('shuffle', () => {
   it('returns an array of the same length', () => {
     expect(shuffle([1, 2, 3, 4, 5])).toHaveLength(5);
