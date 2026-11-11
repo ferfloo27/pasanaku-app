@@ -112,7 +112,7 @@ Convenciones:
 
 - [x] 7.1 `useReveal`: avance por posición, "Saltar", "Ver de nuevo", reducción de movimiento (tests con timers falsos).
 - [x] 7.2 `Reveal` con rótulo "Sorteado al azar", tarjeta grande, lista revelada, `aria-live` y franja aguayo (artboard 6.7 Revelación).
-- [ ] 7.3 `Results`: "Tu turno", resumen, orden de cobro con fila propia destacada, "Copiar resultados" y "Compartir" (artboard 6.8 Resultados).
+- [x] 7.3 `Results`: "Tu turno", resumen, orden de cobro con fila propia destacada, "Copiar resultados" y "Compartir" (artboard 6.8 Resultados).
 - [ ] 7.4 Entrada directa a una sala `drawn` → resultados sin revelación.
 - _Requirements: 7.1–7.8, 8.1–8.6_
 
