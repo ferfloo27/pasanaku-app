@@ -65,4 +65,15 @@ Por solicitud del usuario, se retomó la prueba aplazada el 11-11-2026. Se verif
 
 `npm run test:db` terminó con código 0: **98 comprobaciones pgTAP en 5 archivos y 5 tests de integración pasan**, sin fallos ni omisiones. La propiedad 12 compara las fechas guardadas por `confirm_draw` con `turnDate` para mensual, semanal y quincenal: cuatro casos generados por frecuencia, con años entre 2096 y 2104 y entre dos y ocho participantes. Las demás pruebas verifican permisos, cupo concurrente, confirmaciones simultáneas, reversión de escrituras y cambios de mes/año. Se limpiaron únicamente los datos creados por las propias pruebas.
 
-La tarea 1.7 queda cerrada. Las tareas manuales de Google/Auth (1.6) siguen a cargo de la persona dueña del proyecto.
+La tarea 1.7 queda cerrada.
+
+## Cierre de la tarea 1.6 y despliegue (confirmación de la persona dueña)
+
+El 11-11-2026 la persona dueña reportó la ejecución correcta del paquete de
+transición en SQL Editor, configuró el acceso anónimo, la vinculación manual,
+Google y las URLs de retorno. Después confirmó que el despliegue v2 funciona en
+`https://pasanaku-app.vercel.app/` y mantiene la sesión con Google. Se marca 1.6
+como completada a partir de esa confirmación. El agente no ejecutó operaciones
+remotas ni inspeccionó credenciales; tampoco midió directamente el `auth.uid()`
+de la sesión remota. La evidencia de dos navegadores de 8.6 corresponde al
+entorno local descrito arriba.

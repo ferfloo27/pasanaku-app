@@ -102,8 +102,9 @@ atrás; no almacena identificadores ni credenciales.
 
 La galería `/dev/ui` incluye una muestra del perfil y de los estados de cuenta
 que no inicia sesiones ni guarda datos en Supabase. Las pruebas de identidad
-simulan el cliente; la validación real de Google depende de la configuración
-manual de la tarea 1.6 y sigue pendiente de la persona dueña del proyecto.
+simulan el cliente. La persona dueña completó la configuración manual de la
+tarea 1.6 y confirmó la persistencia de la sesión con Google en la web publicada
+el 11-11-2026.
 
 ## Comprobaciones
 
@@ -179,7 +180,7 @@ Cuando se integre el frontend v2, la persona dueña del entorno configurará las
 variables del frontend con la URL y la clave `anon` locales. Los valores no se
 guardan en este README ni se incluyen en los tests.
 
-### Configuración manual del panel (tarea 1.6, pendiente de la persona dueña)
+### Configuración manual del panel (tarea 1.6, completada por la persona dueña)
 
 En el proyecto Supabase de desarrollo, realiza estos pasos:
 
@@ -201,8 +202,12 @@ En el proyecto Supabase de desarrollo, realiza estos pasos:
    el `auth.uid()` y el nombre de perfil, cancelar sin perder la sesión y volver
    al frontend correcto.
 
-Google OAuth no se ha configurado ni validado aquí. Las opciones locales de
-Auth anónimo y manual linking no configuran automáticamente el proyecto remoto.
+La persona dueña confirmó la configuración de Google OAuth y la persistencia de
+su sesión en `https://pasanaku-app.vercel.app/` el 11-11-2026. El callback remoto
+es `https://khtujmtypqexzkfnkzay.supabase.co/auth/v1/callback`. La configuración
+remota y la prueba de Google las realizó la persona dueña; las pruebas locales
+automatizadas simulan el proveedor. Las opciones locales de Auth no configuran
+automáticamente otros proyectos.
 
 ## Transición de datos de v1
 

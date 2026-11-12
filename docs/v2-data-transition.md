@@ -112,5 +112,7 @@ advertencia previa del Lobby de v1; `npm run build`, correcto.
 - Decisión de descartar datos: confirmada.
 - Esquema, flujo de dos navegadores y paridad SQL/JavaScript: verificados en local.
 - Paquete de transición en el mismo proyecto: preparado y ensayado en local.
-- Borrados de datos existentes, migraciones remotas y despliegue: no ejecutados.
-- Configuración manual de Auth: pendiente de la persona dueña (tarea 1.6).
+- Ejecución remota del paquete: la persona dueña reportó "Success. No rows returned" en SQL Editor el 11-11-2026. Las tablas v1 se apartan; no se solicitó su eliminación posterior.
+- Despliegue v2: la persona dueña confirmó su funcionamiento en `https://pasanaku-app.vercel.app/`.
+- Configuración manual de Auth: completada por la persona dueña, que confirmó la persistencia de la sesión con Google (tarea 1.6).
+- Historial de Supabase CLI: conciliar antes de un futuro `db push`, según el procedimiento anterior; no se ha confirmado esa conciliación.
