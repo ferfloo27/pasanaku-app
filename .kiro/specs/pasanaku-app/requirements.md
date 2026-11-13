@@ -62,6 +62,8 @@ Referencias de diseño: `docs/design-brief.md` y el canvas "Pasanaku" de Claude 
 
 ---
 
+**Recuperación de identidad (criterio adicional de Requirement 1):** una sesión persistida debe verificarse con Auth antes de cargar su perfil. Si el usuario fue eliminado o las credenciales son definitivamente inválidas, la app recupera una sesión invitada local. Ante falta de conexión, límites de peticiones o errores del servidor conserva las credenciales y permite reintentar. Si detecta otra sesión durante la comprobación, la verifica antes de descartar credenciales.
+
 ### Requirement 2: Pantalla de inicio y "Tus salas"
 
 **User Story:** Como usuario, quiero ver mis salas al abrir la app y crear o unirme a una nueva en un toque.

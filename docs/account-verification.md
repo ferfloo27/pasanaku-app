@@ -39,3 +39,17 @@ Después de integrar/desplegar con autorización:
 
 No se incluyen fusión de cuentas, traslado de anfitrión, borrado de usuarios,
 preferencias de tema ni otras opciones de ajustes.
+
+## Regresión: usuario eliminado desde Authentication
+
+El 13-11-2026 se reprodujo mediante pruebas que una sesión persistida de un
+usuario eliminado seguía aceptándose y que INITIAL_SESSION podía cargar su
+identidad antes de verificarla. Se corrigió la validación de arranque y la
+recuperación local ante errores definitivos de Auth. Una segunda lectura detecta
+credenciales cambiadas durante la comprobación. Offline, 429 y 5xx no provocan
+cierre ni creación de otra cuenta.
+
+Validación posterior: **363 pruebas en 61 archivos pasan**, lint sin errores
+(misma advertencia previa de v1) y build correcto. Sin operaciones contra el
+proyecto remoto. La comprobación del caso real requiere actualizar el Preview
+y recargar el navegador afectado; no hubo push ni despliegue desde esta sesión.

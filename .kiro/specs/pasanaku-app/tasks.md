@@ -138,6 +138,8 @@ Convenciones:
 
 ## Notes
 
+- [x] Corrección posterior a C.3: recuperar sesiones de usuarios eliminados en Auth, validar antes del perfil y conservar credenciales ante fallos transitorios; 363 pruebas pasan, lint sin errores (advertencia previa de v1) y build correcto. Pendiente comprobar en el Preview desplegado por la persona dueña.
+
 ### Cuenta y ajustes: primera entrega (rama feature/cuenta-google-ajustes)
 
 - [x] C.1 Separar acceso Google de vinculación; callback PKCE aislado, protección de invitados con cualquier participación y cierre local de sesión.
