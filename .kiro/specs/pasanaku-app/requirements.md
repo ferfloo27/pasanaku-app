@@ -55,6 +55,10 @@ Referencias de diseño: `docs/design-brief.md` y el canvas "Pasanaku" de Claude 
 10. THE App SHALL permitir editar el `display_name` en cualquier momento desde el inicio; el cambio aplica a salas futuras y SHALL NOT renombrar participaciones existentes.
 11. WHEN el usuario vincula Google y ya tiene `display_name`, THE App SHALL conservarlo.
 12. WHEN el usuario vincula Google y no tiene `display_name`, THE App SHALL sugerir el nombre de Google, editable antes de confirmar.
+13. THE App SHALL distinguir «Vincular cuenta de Google» (conserva UID y salas invitadas) de «Ya tengo cuenta: entrar con Google» (recupera la identidad Google existente y su perfil, sin fusionar datos).
+14. THE App SHALL permitir entrar con Google antes de guardar el primer nombre y desde Cuenta. SHALL bloquear este cambio si el invitado tiene cualquier participación, incluso en salas sorteadas o canceladas antiguas; el invitado puede continuar o vincular una cuenta Google que aún no exista en Pasanaku.
+15. THE App SHALL conservar la sesión primaria durante el acceso Google mediante PKCE aislado por intento y pestaña. Antes de activarlo SHALL verificar usuario Google, identidad invitada original y ausencia de participaciones otra vez. Cancelaciones y fallos anteriores a la activación SHALL conservar la sesión original. El acceso exige almacenamiento de pestaña disponible y vence a los 15 minutos.
+16. THE App SHALL mostrar un avatar de iniciales arriba a la derecha en Inicio, enlazado a `/account`: nombre editable, correo de solo lectura y estado invitado/Google. Desde Cuenta el usuario Google SHALL poder cerrar solo su sesión local y volver a Inicio como invitado; sin eliminar perfiles ni salas. No se ofrece reiniciar la sesión invitada.
 
 ---
 
@@ -64,7 +68,7 @@ Referencias de diseño: `docs/design-brief.md` y el canvas "Pasanaku" de Claude 
 
 #### Acceptance Criteria
 
-1. THE App SHALL renderizar `/` con el saludo "Hola, {nombre}", un acceso para editar el nombre, la acción primaria "Crear sala" (→ `/new`) y la secundaria "Unirme con código" (→ `/join`).
+1. THE App SHALL renderizar `/` con el saludo "Hola, {nombre}", un avatar de acceso a Cuenta para editar el nombre, la acción primaria "Crear sala" (→ `/new`) y la secundaria "Unirme con código" (→ `/join`).
 2. THE App SHALL mostrar la sección "Tus salas" con las salas `waiting` y `drawn` en las que el usuario es participante, consultadas en la base de datos, ordenadas por actividad más reciente.
 3. Cada tarjeta de sala SHALL mostrar nombre, código, número de participantes, rol (Anfitrión/Participante) y estado (En espera/Sorteada), y SHALL navegar a `/room/:code`.
 4. WHILE el usuario no tiene salas, THE App SHALL mostrar el estado vacío "Aún no tienes salas" con una explicación breve.

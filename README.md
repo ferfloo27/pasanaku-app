@@ -182,6 +182,21 @@ guardan en este README ni se incluyen en los tests.
 
 ### Configuración manual del panel (tarea 1.6, completada por la persona dueña)
 
+**Cuenta y ajustes (rama `feature/cuenta-google-ajustes`):** el acceso a una cuenta
+existente usa un retorno distinto al de vinculación. Antes de probarlo, la persona
+dueña debe añadir en **Authentication → URL Configuration → Redirect URLs** las
+URLs exactas del frontend: `https://pasanaku-app.vercel.app/auth/google` y, para
+desarrollo, `http://localhost:5173/auth/google` (ajustar al origen/puerto real).
+La URL de callback del proveedor en Google Cloud sigue siendo la de Supabase.
+
+«Vincular cuenta de Google» conserva el invitado y sus salas. «Ya tengo cuenta:
+entrar con Google» recupera el perfil y salas Google; se bloquea si el invitado
+tiene alguna participación, incluso cancelada antigua. Nunca fusiona cuentas.
+El acceso necesita sessionStorage y caduca a los 15 minutos; cancelarlo mantiene
+la sesión original. «Cerrar sesión» afecta solo a este navegador, sin borrar
+datos, y devuelve al primer uso como invitado. El nombre se edita desde el avatar
+de Inicio → Cuenta y ajustes; el correo es de solo lectura.
+
 En el proyecto Supabase de desarrollo, realiza estos pasos:
 
 1. En **Authentication**, habilita **Allow anonymous sign-ins** y **Allow manual

@@ -331,11 +331,21 @@ Requisitos de Supabase: tablas en la publicación `supabase_realtime` y `replica
 | Ruta | Guard | Pantallas (artboards del canvas) |
 |---|---|---|
 | `/` | sesión + perfil | 6.1 Nombre de perfil (sheet), 6.2 Inicio, 6.2 Inicio vacío + aviso de sala cancelada |
+| `/account` | sesión + perfil | Cuenta y ajustes: avatar, nombre editable, correo y estado; vincular, entrar o cerrar sesión local |
+| `/auth/google` | sin IdentityBoundary | Retorno de acceso Google aislado; valida antes de activar, muestra error/reintento y salida al inicio |
 | `/new` | sesión + perfil | 6.3 Crear sala → 6.3 Sala lista |
 | `/join` | sesión + perfil | 6.4 Unirse, 6.4 Errores al unirse |
 | `/room/:code` | sesión + perfil | 6.4 Pre-unión, 6.5 Lobby (anfitrión / participante / menos de 2 + menú), 6.5 Eliminar participante, 6.6 Borrador, 6.6 Confirmar, 6.7 Revelación, 6.8 Resultados, 6.9 Estados (no encontrada, cancelada, eliminado, reconectando, cargando, sin conexión) |
 
 Las rutas reemplazan el `useState` de vista actual de `HomePage`, para que el botón "atrás" funcione.
+
+### Acceso Google y ajustes (primera entrega, noviembre 2026)
+
+`linkGoogle` conserva el UID invitado mediante `linkIdentity`; el nuevo `googleSignInApi` inicia acceso con `signInWithOAuth` en un cliente temporal PKCE. Su storageKey es único por intento y usa sessionStorage, sin autorrenovación ni detección automática del callback. El cliente principal ignora `/auth/google`. Un registro de intento guarda solo UID invitado, clave de almacenamiento y fecha (15 minutos), nunca tokens propios de la aplicación. Los tokens temporales los gestiona el SDK.
+
+Antes de redirigir y antes de activar, `membershipApi.hasRoomMembership(uid)` consulta `participants` bajo RLS, sin filtrar estado ni antigüedad. No usa `list_my_rooms`, que omite cancelaciones antiguas. El retorno valida Google con `getUser`, comprueba que sigue el mismo invitado y solo entonces llama a `setSession` principal. Se comparten peticiones en curso para evitar canjear dos veces el código en StrictMode. Un fallo de validación conserva el temporal para reintentar sin canjear de nuevo; cancelar o completar limpia su almacenamiento sin revocar la sesión que acaba de activarse.
+
+El perfil sigue ligado a UID: entrar no escribe ni reemplaza el nombre Google existente; un perfil ausente pasa por el formulario actual. `signOut({ scope: 'local' })` deja que AuthProvider cree el invitado; los hooks ya invalidan perfil, salas y suscripciones por UID. No hay migraciones, fusión de cuentas, traslado de anfitrión ni borrado en esta entrega.
 
 ---
 

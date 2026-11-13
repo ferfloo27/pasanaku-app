@@ -10,4 +10,16 @@ if (!supabaseUrl || !supabaseAnonKey) {
   )
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// El callback de acceso usa un cliente aislado: nunca consume códigos en la sesión invitada.
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: { detectSessionInUrl: window.location.pathname !== '/auth/google' },
+})
+
+export function createGoogleSignInClient(storageKey) {
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      flowType: 'pkce', storage: window.sessionStorage, storageKey,
+      persistSession: true, autoRefreshToken: false, detectSessionInUrl: false,
+    },
+  })
+}
