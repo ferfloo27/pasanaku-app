@@ -141,8 +141,9 @@ Convenciones:
 ### Cuenta y ajustes: primera entrega (rama feature/cuenta-google-ajustes)
 
 - [x] C.1 Separar acceso Google de vinculación; callback PKCE aislado, protección de invitados con cualquier participación y cierre local de sesión.
-- [ ] C.2 Avatar en Inicio y `/account` con nombre editable, correo de solo lectura, estado de cuenta y acciones entrar/vincular/cerrar sesión; acceso Google antes de guardar el primer nombre.
-- [ ] C.3 Verificar pruebas, lint, build, revisión y pantallas móviles; documentar el nuevo callback. Sin migraciones, fusión de cuentas ni despliegue.
+- [x] C.2 Avatar en Inicio y `/account` con nombre editable, correo de solo lectura, estado de cuenta y acciones entrar/vincular/cerrar sesión; acceso Google antes de guardar el primer nombre.
+- [x] C.3 Verificar pruebas, lint, build, revisión y pantallas móviles; documentar el nuevo callback. Sin migraciones, fusión de cuentas ni despliegue.
+  - Validación del 13-11-2026: 356 pruebas en 61 archivos; lint sin errores (advertencia previa de v1) y build correcto. Evidencia y comprobación manual Google pendiente en `docs/account-verification.md`.
 
 - Las fases 1 y 2 son independientes entre sí y pueden hacerse en paralelo.
 - El borrador vive solo en el navegador del anfitrión; recargar lo descarta.

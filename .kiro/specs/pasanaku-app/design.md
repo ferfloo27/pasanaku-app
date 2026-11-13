@@ -347,6 +347,8 @@ Antes de redirigir y antes de activar, `membershipApi.hasRoomMembership(uid)` co
 
 El perfil sigue ligado a UID: entrar no escribe ni reemplaza el nombre Google existente; un perfil ausente pasa por el formulario actual. `signOut({ scope: 'local' })` deja que AuthProvider cree el invitado; los hooks ya invalidan perfil, salas y suscripciones por UID. No hay migraciones, fusión de cuentas, traslado de anfitrión ni borrado en esta entrega.
 
+La cancelación invalida la generación del intento. La URL OAuth se obtiene con `skipBrowserRedirect` y solo se abre si el intento sigue vigente. Como `setSession` espera una consulta interna antes de guardar, el cliente principal usa un adaptador del mismo localStorage y conserva la clave estándar del SDK: una guardia temporal comprueba generación y valor original justo en `setItem`, antes de persistir y anunciar `SIGNED_IN`. Impide borrar o sobreescribir una sesión cambiada por otra pestaña durante esa operación. Se retira al terminar; el SDK sigue gestionando serialización y tokens. La limpieza de respuestas tardías usa únicamente la clave del intento invalidado.
+
 ---
 
 ## Design System

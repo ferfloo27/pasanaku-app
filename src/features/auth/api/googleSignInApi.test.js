@@ -1,12 +1,18 @@
 import { beforeEach, expect, it, vi } from 'vitest';
 import { startGoogleSignIn, finishGoogleSignIn, cancelGoogleSignIn, signOutLocal } from './googleSignInApi';
 
-const { primary, temporary, createGoogleSignInClient, hasRoomMembership } = vi.hoisted(() => ({
+const { primary, temporary, createGoogleSignInClient, hasRoomMembership, redirectExternal, storageGuard } = vi.hoisted(() => ({
   primary: { getUser: vi.fn(), setSession: vi.fn(), signOut: vi.fn() },
   temporary: { signInWithOAuth: vi.fn(), exchangeCodeForSession: vi.fn(), getSession: vi.fn(), getUser: vi.fn(), stopAutoRefresh: vi.fn() },
-  createGoogleSignInClient: vi.fn(), hasRoomMembership: vi.fn(),
+  createGoogleSignInClient: vi.fn(), hasRoomMembership: vi.fn(), redirectExternal: vi.fn(), storageGuard: { current: null },
 }));
-vi.mock('../../../shared/lib/supabase', () => ({ supabase: { auth: primary }, createGoogleSignInClient }));
+vi.mock('../../../shared/lib/supabase', () => ({ supabase: { auth: primary }, createGoogleSignInClient,
+  withAuthStorageGuard: async (guard, operation) => {
+    storageGuard.current = guard;
+    try { return await operation(); } finally { storageGuard.current = null; }
+  },
+}));
+vi.mock('../../../shared/lib/navigation', () => ({ redirectExternal }));
 vi.mock('../../rooms/api/membershipApi', () => ({ hasRoomMembership }));
 const guest = { id: 'guest', is_anonymous: true };
 const google = { id: 'google', is_anonymous: false, identities: [{ provider: 'google' }] };
@@ -31,7 +37,8 @@ async function callback() {
 }
 it('abre Google en una sesión separada sin sustituir al invitado', async () => {
   await startGoogleSignIn();
-  expect(temporary.signInWithOAuth).toHaveBeenCalledWith({ provider: 'google', options: { redirectTo: `${window.location.origin}/auth/google` } });
+  expect(temporary.signInWithOAuth).toHaveBeenCalledWith({ provider: 'google', options: { redirectTo: `${window.location.origin}/auth/google`, skipBrowserRedirect: true } });
+  expect(redirectExternal).toHaveBeenCalledWith('https://example.test/oauth');
   expect(primary.setSession).not.toHaveBeenCalled();
   expect(primary.signOut).not.toHaveBeenCalled();
 });
@@ -144,4 +151,37 @@ it('cancelar durante la preparación impide abrir Google', async () => {
   cancelGoogleSignIn(); resolve(false);
   await expect(result).rejects.toMatchObject({ code: 'AUTH_SESSION_CHANGED' });
   expect(temporary.signInWithOAuth).not.toHaveBeenCalled();
+});
+it('cancelar durante la generación PKCE no redirige cuando llega la URL', async () => {
+  let resolve;
+  temporary.signInWithOAuth.mockImplementation(() => new Promise(done => { resolve = done; }));
+  const result = startGoogleSignIn();
+  await vi.waitFor(() => expect(resolve).toBeTypeOf('function'));
+  cancelGoogleSignIn(); resolve({ data: { url: 'https://example.test/oauth' }, error: null });
+  await expect(result).rejects.toMatchObject({ code: 'AUTH_SESSION_CHANGED' });
+  expect(redirectExternal).not.toHaveBeenCalled();
+});
+it('limpia credenciales temporales escritas después de cancelar el intercambio', async () => {
+  await callback();
+  const key = JSON.parse(sessionStorage.getItem('pasanaku-google-signin:pending')).storageKey;
+  let resolve;
+  temporary.exchangeCodeForSession.mockImplementation(() => new Promise(done => { resolve = done; }));
+  const result = finishGoogleSignIn();
+  await vi.waitFor(() => expect(resolve).toBeTypeOf('function'));
+  cancelGoogleSignIn(); sessionStorage.setItem(key, 'late-session');
+  resolve({ data: { session }, error: null });
+  await expect(result).rejects.toMatchObject({ code: 'AUTH_SESSION_CHANGED' });
+  expect(sessionStorage.getItem(key)).toBeNull(); expect(primary.setSession).not.toHaveBeenCalled();
+});
+it('la guardia de escritura invalida una activación que esperaba la respuesta del SDK', async () => {
+  await callback(); let resolve;
+  // Modela _getUser → _saveSession: la guardia debe seguir activa dentro del SDK.
+  primary.setSession.mockImplementation(() => new Promise(done => { resolve = () => {
+    try { storageGuard.current(); done({ data: { session }, error: null }); }
+    catch (error) { done({ error }); }
+  }; }));
+  const result = finishGoogleSignIn();
+  await vi.waitFor(() => expect(resolve).toBeTypeOf('function'));
+  cancelGoogleSignIn(); resolve();
+  await expect(result).rejects.toMatchObject({ code: 'AUTH_SESSION_CHANGED' });
 });

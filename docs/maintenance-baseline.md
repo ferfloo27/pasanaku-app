@@ -37,6 +37,14 @@ las suites después de cada grupo de cambios.
 
 ### M02 — Recuperación de una cuenta Google desde otro dispositivo (alta, reproducción pendiente)
 
+Actualización 13-11-2026: la persona dueña reprodujo el fallo en celular después
+de elegir su cuenta Google. En `feature/cuenta-google-ajustes` se añadió acceso
+explícito para cuentas existentes, separado de vinculación, y la pantalla de
+cuenta. Las pruebas automatizadas simulan la red (incluida la escritura del SDK
+real) y protegen las salas invitadas. Falta configurar el retorno `/auth/google`
+y comprobar el flujo Google real con la persona dueña después de integrar y
+desplegar esta rama. No se declara cerrada la comprobación entre dispositivos.
+
 `authApi.js` implementa `linkIdentity`, pero no `signInWithOAuth` ni otra acción
 para entrar a una cuenta ya existente. La interfaz promete recuperar salas en
 otro celular. Mantener la sesión en el navegador original no verifica ese caso.

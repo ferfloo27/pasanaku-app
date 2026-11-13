@@ -5,6 +5,7 @@ import Button from '../shared/ui/Button';
 import ProfileHeader from '../features/profile/ui/ProfileHeader';
 import AccountLinkCard from '../features/auth/ui/AccountLinkCard';
 import { AppError } from '../shared/errors/appError';
+import AccountDetails from '../features/auth/ui/AccountDetails';
 
 export default function ProfilePreview() {
   const [mode, setMode] = useState(null);
@@ -15,6 +16,7 @@ export default function ProfilePreview() {
   } };
   return <AuthContext.Provider value={{ profileState }}>
     <ProfileHeader />
+    <AccountDetails name={name} email="lucia.mamani@example.test" isAnonymous={false} onEdit={() => setMode('edit')} />
     <p className="ui-kit-muted">Nombre de muestra: {name}. Esta prueba se queda en la galería.</p>
     <div className="ui-kit-inline">
       <Button variant="secondary" compact onClick={() => setMode('required')}>Abrir perfil obligatorio</Button>

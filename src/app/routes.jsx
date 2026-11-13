@@ -9,6 +9,8 @@ const JoinPage = lazy(() => import('../pages/JoinPage'));
 const RoomPage = lazy(() => import('../pages/RoomPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const IdentityBoundary = lazy(() => import('./IdentityBoundary'));
+const AccountPage = lazy(() => import('../pages/AccountPage'));
+const GoogleCallbackPage = lazy(() => import('../pages/GoogleCallbackPage'));
 const UiKitPage = import.meta.env.DEV ? lazy(() => import('../pages/UiKitPage')) : null;
 const RoomsPreview = import.meta.env.DEV ? lazy(() => import('../pages/RoomsPreview')) : null;
 
@@ -17,10 +19,12 @@ export default function AppRoutes() {
     <Routes>
       <Route element={<IdentityBoundary />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/account" element={<AccountPage />} />
         <Route path="/new" element={<NewRoomPage />} />
         <Route path="/join" element={<JoinPage />} />
         <Route path="/room/:code" element={<RoomPage />} />
       </Route>
+      <Route path="/auth/google" element={<GoogleCallbackPage />} />
       {import.meta.env.DEV && <Route path="/dev/ui" element={<UiKitPage />} />}
       {import.meta.env.DEV && <Route path="/dev/rooms" element={<RoomsPreview />} />}
       <Route path="*" element={<NotFoundPage />} />

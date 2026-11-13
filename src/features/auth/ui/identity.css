@@ -10,3 +10,15 @@
 .identity-home__body { width: min(100%, 32rem); margin: 0 auto; padding: var(--space-6) var(--space-4); display: flex; flex: 1; flex-direction: column; gap: var(--space-6); }
 .identity-home__actions { display: flex; flex-direction: column; gap: var(--space-3); }
 .identity-home__footer { margin-top: auto; padding-top: var(--space-6); }
+.account-back { display: inline-flex; align-items: center; align-self: flex-start; min-height: 44px; color: var(--color-primary); font-weight: 700; }
+.account-details { display: flex; flex-direction: column; gap: var(--space-4); }
+.account-details__identity { display: flex; align-items: center; gap: var(--space-3); }
+.account-details__identity > div { min-width: 0; }
+.account-details__identity h2 { font-size: var(--text-title); overflow-wrap: anywhere; }
+.account-details__identity span { color: var(--color-text-muted); font-size: var(--text-note); }
+.account-details dl { display: flex; flex-direction: column; gap: var(--space-4); margin: 0; }
+.account-details dt { color: var(--color-text-muted); font-size: var(--text-note); }
+.account-details dd { margin: var(--space-1) 0 0; overflow-wrap: anywhere; font-weight: 700; }
+.account-details > p, .account-session > p, .account-signin > p { color: var(--color-text-muted); font-size: var(--text-note); line-height: var(--leading-note); }
+.account-session, .account-signin { display: flex; flex-direction: column; gap: var(--space-3); }
+.account-signin { margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border); }
