@@ -7,7 +7,8 @@ vi.mock('../pages/HomePage', async () => { const { Link } = await import('react-
 vi.mock('../features/rooms/ui/CreateRoomFlow', () => ({ default: ({ onBack }) => <><h1>Formulario crear</h1><button onClick={onBack}>Volver</button></> }));
 vi.mock('../features/rooms/ui/JoinRoomSearch', () => ({ default: () => <h1>Formulario código</h1> }));
 vi.mock('../pages/RoomPage', () => ({ default: () => <h1>Sala</h1> }));
-it.each([['/new', 'Formulario crear'], ['/join', 'Formulario código'], ['/room/ABC123', 'Sala']])('abre %s directamente', async (path, heading) => {
+vi.mock('../pages/AccountPage', () => ({ default: () => <h1>Cuenta y ajustes</h1> }));
+it.each([['/new', 'Formulario crear'], ['/join', 'Formulario código'], ['/room/ABC123', 'Sala'], ['/account', 'Cuenta y ajustes']])('abre %s directamente', async (path, heading) => {
   render(<MemoryRouter initialEntries={[path]}><AppRoutes /></MemoryRouter>);
   expect(await screen.findByRole('heading', { name: heading })).toBeInTheDocument();
 });

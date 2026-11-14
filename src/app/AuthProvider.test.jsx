@@ -40,3 +40,12 @@ it('un cambio más reciente de Auth gana a una respuesta inicial tardía', async
   await act(async () => resolve({ data: anon }));
   expect(screen.getByRole('status')).toHaveTextContent('ready:one:false:');
 });
+it('no carga el perfil de INITIAL_SESSION hasta verificar que el usuario sigue existiendo', async () => {
+  let resolve; api.ensureSession.mockImplementation(() => new Promise(done => { resolve = done; }));
+  render(<AuthProvider><Consumer /></AuthProvider>);
+  act(() => listener('INITIAL_SESSION', { user: { id: 'deleted-user', is_anonymous: false, email: 'old@example.test' } }));
+  expect(screen.getByRole('status')).toHaveTextContent('loading:');
+  expect(screen.getByRole('status')).not.toHaveTextContent('deleted-user');
+  await act(async () => resolve({ data: anon }));
+  expect(screen.getByRole('status')).toHaveTextContent('ready:one:true:');
+});

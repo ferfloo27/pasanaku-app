@@ -8,7 +8,7 @@ import ErrorBanner from '../../../shared/ui/ErrorBanner';
 import { getErrorMessage } from '../../../shared/errors/appError';
 import './profile.css';
 
-function NameForm({ initialName, required, onClose }) {
+function NameForm({ initialName, required, onClose, children }) {
   const { save, isSaving } = useProfile();
   const [name, setName] = useState(initialName);
   const [touched, setTouched] = useState(false);
@@ -35,9 +35,10 @@ function NameForm({ initialName, required, onClose }) {
       <Button type="submit" fullWidth disabled={!validation.ok} loading={isSaving} loadingText="Guardando…">{required ? 'Continuar' : 'Guardar nombre'}</Button>
       {!required && <Button variant="text" fullWidth disabled={isSaving} onClick={onClose}>Volver</Button>}
     </form>
+    {children}
   </Sheet>;
 }
 
-export default function ProfileNameSheet({ open, initialName = '', required = false, onClose }) {
-  return open ? <NameForm initialName={initialName} required={required} onClose={onClose} /> : null;
+export default function ProfileNameSheet({ open, initialName = '', required = false, onClose, children }) {
+  return open ? <NameForm initialName={initialName} required={required} onClose={onClose}>{children}</NameForm> : null;
 }

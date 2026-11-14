@@ -9,31 +9,39 @@ const anon = { id: 'one', is_anonymous: true };
 const context = user => ({ user, isAnonymous: user.is_anonymous, profileState: { profile: { user_id: 'one', display_name: 'Rosa' } } });
 beforeEach(() => { vi.resetAllMocks(); sessionStorage.clear(); window.history.replaceState(null, '', '/'); });
 afterEach(() => vi.restoreAllMocks());
+it.each(['?error=server_error&error_code=identity_already_exists', '#error=server_error&error_code=identity_already_exists'])('explica el conflicto de cuenta confirmado en el callback %s', async suffix => {
+  window.history.replaceState(null, '', `/${suffix}`);
+  render(<AuthContext.Provider value={context(anon)}><GoogleAccount /></AuthContext.Provider>);
+  expect(await screen.findByRole('alert')).toHaveTextContent('Esta cuenta Google ya está registrada en Pasanaku');
+  expect(screen.getByRole('alert')).toHaveTextContent('Entrar con Google');
+  expect(screen.getByRole('alert')).toHaveTextContent('Las salas de este invitado siguen aquí');
+  expect(window.location.search).toBe(''); expect(window.location.hash).toBe('');
+});
 it('inicia la vinculación, muestra carga y conserva la identidad ante un fallo inmediato', async () => {
   let reject; linkGoogle.mockImplementation(() => new Promise((_, r) => { reject = r; }));
   render(<AuthContext.Provider value={context(anon)}><GoogleAccount /></AuthContext.Provider>);
-  fireEvent.click(screen.getByRole('button', { name: 'Vincular cuenta de Google' }));
-  expect(screen.getByRole('button', { name: 'Vinculando…' })).toBeDisabled();
+  fireEvent.click(screen.getByRole('button', { name: 'Guardar mis salas con Google' }));
+  expect(screen.getByRole('button', { name: 'Abriendo Google…' })).toBeDisabled();
   await act(async () => reject(new AppError('AUTH_LINK_FAILED')));
   expect(screen.getByRole('alert')).toHaveTextContent('Tu sesión sigue aquí');
-  expect(screen.getByRole('button', { name: 'Vincular cuenta de Google' })).toBeEnabled();
+  expect(screen.getByRole('button', { name: 'Guardar mis salas con Google' })).toBeEnabled();
 });
 it('muestra cancelación al volver de Google y limpia solo los parámetros de error', async () => {
   window.history.replaceState(null, '', '/?keep=1#error=access_denied&error_description=technical');
   render(<AuthContext.Provider value={context(anon)}><GoogleAccount /></AuthContext.Provider>);
-  await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('No se vinculó Google'));
+  await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('No se completó la conexión con Google'));
   expect(window.location.search).toBe('?keep=1'); expect(window.location.hash).toBe('');
   expect(linkGoogle).not.toHaveBeenCalled();
 });
 it('detecta volver atrás desde Google con la misma página conservada', async () => {
   linkGoogle.mockResolvedValue({ data: { provider: 'google', url: 'https://example.test/oauth' } });
   render(<AuthContext.Provider value={context(anon)}><GoogleAccount /></AuthContext.Provider>);
-  await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Vincular cuenta de Google' })));
-  expect(screen.getByRole('button', { name: 'Vinculando…' })).toBeDisabled();
+  await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Guardar mis salas con Google' })));
+  expect(screen.getByRole('button', { name: 'Abriendo Google…' })).toBeDisabled();
   expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   act(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
   await waitFor(() => expect(screen.getByRole('alert')).toBeInTheDocument());
-  expect(screen.getByRole('button', { name: 'Vincular cuenta de Google' })).toBeEnabled();
+  expect(screen.getByRole('button', { name: 'Guardar mis salas con Google' })).toBeEnabled();
 });
 it('tras vincular muestra el correo y conserva el nombre del perfil', () => {
   const { rerender } = render(<AuthContext.Provider value={context(anon)}><GoogleAccount /></AuthContext.Provider>);
@@ -41,7 +49,7 @@ it('tras vincular muestra el correo y conserva el nombre del perfil', () => {
   const auth = context(linked);
   rerender(<AuthContext.Provider value={auth}><GoogleAccount /></AuthContext.Provider>);
   expect(screen.getByText('Cuenta vinculada: lucia@example.test')).toBeVisible();
-  expect(screen.queryByRole('button', { name: 'Vincular cuenta de Google' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Guardar mis salas con Google' })).not.toBeInTheDocument();
   expect(auth.profileState.profile.display_name).toBe('Rosa');
 });
 it('volver atrás desbloquea el botón incluso si el navegador bloquea sessionStorage', async () => {
@@ -49,9 +57,9 @@ it('volver atrás desbloquea el botón incluso si el navegador bloquea sessionSt
   vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new DOMException('Blocked', 'SecurityError'); });
   linkGoogle.mockResolvedValue({ data: { provider: 'google', url: 'https://example.test/oauth' } });
   render(<AuthContext.Provider value={context(anon)}><GoogleAccount /></AuthContext.Provider>);
-  await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Vincular cuenta de Google' })));
-  expect(screen.getByRole('button', { name: 'Vinculando…' })).toBeDisabled();
+  await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Guardar mis salas con Google' })));
+  expect(screen.getByRole('button', { name: 'Abriendo Google…' })).toBeDisabled();
   act(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
-  await waitFor(() => expect(screen.getByRole('button', { name: 'Vincular cuenta de Google' })).toBeEnabled());
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Guardar mis salas con Google' })).toBeEnabled());
   expect(screen.getByRole('alert')).toHaveTextContent('Tu sesión sigue aquí');
 });

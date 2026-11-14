@@ -15,7 +15,8 @@ export default function AuthProvider({ children }) {
   useEffect(() => {
     let active = true; let version = 0;
     const stop = onAuthChange((event, session) => {
-      if (!active || (event === 'INITIAL_SESSION' && !session)) return;
+      // INITIAL_SESSION proviene del almacenamiento; ensureSession lo valida antes de mostrarlo.
+      if (!active || event === 'INITIAL_SESSION') return;
       version++;
       if (session?.user) setAuth({ user: session.user, status: 'ready', error: null });
       else retry(); // El efecto inicia la petición fuera del callback de Auth.
