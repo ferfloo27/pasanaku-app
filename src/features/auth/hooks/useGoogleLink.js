@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { linkGoogle } from '../api/authApi';
 import { useAuth } from './useAuth';
 import { AppError } from '../../../shared/errors/appError';
+import { googleLinkError } from '../domain/googleLinkError';
 
 const pendingKey = 'pasanaku_google_link_pending';
 function pendingLink(action) {
@@ -17,6 +18,8 @@ function consumeReturn(isAnonymous, pendingInMemory = false) {
   const hash = new URLSearchParams(url.hash.slice(1));
   const keys = ['error', 'error_code', 'error_description', 'error_uri'];
   const hasError = keys.some(key => url.searchParams.has(key) || hash.has(key));
+  // Solo se clasifica un código conocido; nunca se muestra la descripción cruda del callback.
+  const failure = hasError ? googleLinkError({ code: url.searchParams.get('error_code') || hash.get('error_code') }) : null;
   const wasPending = pendingLink('get') || pendingInMemory;
   pendingLink('clear');
   if (hasError) {
@@ -24,7 +27,7 @@ function consumeReturn(isAnonymous, pendingInMemory = false) {
     url.hash = hash.toString();
     window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
   }
-  return hasError || (wasPending && isAnonymous) ? new AppError('AUTH_LINK_FAILED') : null;
+  return failure || (wasPending && isAnonymous ? new AppError('AUTH_LINK_FAILED') : null);
 }
 
 export function useGoogleLink() {

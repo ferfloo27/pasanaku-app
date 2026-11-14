@@ -53,3 +53,21 @@ Validación posterior: **363 pruebas en 61 archivos pasan**, lint sin errores
 (misma advertencia previa de v1) y build correcto. Sin operaciones contra el
 proyecto remoto. La comprobación del caso real requiere actualizar el Preview
 y recargar el navegador afectado; no hubo push ni despliegue desde esta sesión.
+
+## Comprobaciones reportadas por la persona dueña
+
+Durante las pruebas del Preview, la persona dueña confirmó que entrar con Google
+desde el celular recupera las salas, que el retorno permanece en el mismo dominio
+Preview y que cerrar sesión en el celular mantiene la sesión del PC. También
+confirmó que guardar con una cuenta Google todavía no registrada conserva el
+nombre y la sala del invitado, y que entrar a una cuenta existente se bloquea
+cuando el invitado ya tiene salas. La cancelación se reportó como aparentemente
+correcta, sin una comprobación explícita adicional.
+
+Después de esas pruebas se aprobaron los textos «Guardar mis salas con Google»
+y «Entrar con Google», con explicaciones separadas. El error de cuenta existente
+se muestra únicamente con `identity_already_exists`, tanto desde la API como en
+el retorno OAuth. Las descripciones técnicas del proveedor no se muestran.
+Validación de este ajuste: **367 pruebas en 62 archivos pasan**, lint sin errores
+(advertencia previa de v1) y build correcto. Pendiente revisar el texto en el
+Preview más reciente después de que la persona dueña suba la rama.

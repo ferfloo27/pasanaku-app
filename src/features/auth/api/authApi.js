@@ -1,5 +1,6 @@
 import { supabase } from '../../../shared/lib/supabase';
 import { AppError } from '../../../shared/errors/appError';
+import { googleLinkError } from '../domain/googleLinkError';
 
 let pendingSession;
 const invalidSessionCodes = new Set([
@@ -60,7 +61,7 @@ export async function linkGoogle() {
     if (error) throw error;
     return { data };
   } catch (cause) {
-    throw new AppError('AUTH_LINK_FAILED', cause);
+    throw googleLinkError(cause);
   }
 }
 

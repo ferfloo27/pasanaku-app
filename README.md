@@ -188,9 +188,12 @@ dueña debe añadir en **Authentication → URL Configuration → Redirect URLs*
 URLs exactas del frontend: `https://pasanaku-app.vercel.app/auth/google` y, para
 desarrollo, `http://localhost:5173/auth/google` (ajustar al origen/puerto real).
 La URL de callback del proveedor en Google Cloud sigue siendo la de Supabase.
+Para un Preview, autoriza también su raíz `/` y su ruta `/auth/google` en el
+mismo proyecto: guardar las salas vuelve a la raíz y entrar vuelve al callback.
 
-«Vincular cuenta de Google» conserva el invitado y sus salas. «Ya tengo cuenta:
-entrar con Google» recupera el perfil y salas Google; se bloquea si el invitado
+«Guardar mis salas con Google» conserva el nombre, identidad y salas del invitado
+para recuperarlos desde otro dispositivo con una cuenta Google aún no registrada.
+«Entrar con Google» recupera el perfil y salas Google; se bloquea si el invitado
 tiene alguna participación, incluso cancelada antigua. Nunca fusiona cuentas.
 El acceso necesita sessionStorage y caduca a los 15 minutos; cancelarlo mantiene
 la sesión original. «Cerrar sesión» afecta solo a este navegador, sin borrar

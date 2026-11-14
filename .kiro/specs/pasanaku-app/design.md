@@ -353,6 +353,8 @@ La cancelación invalida la generación del intento. La URL OAuth se obtiene con
 
 ## Design System
 
+**Claridad de Google:** las acciones visibles se llaman «Guardar mis salas con Google» (vinculación que conserva al invitado) y «Entrar con Google» (cuenta existente). `domain/googleLinkError` convierte únicamente el código confirmado `identity_already_exists` en `AUTH_IDENTITY_EXISTS`, tanto para la respuesta API como para el retorno OAuth. El mensaje explica que se debe entrar a esa cuenta y que las salas invitadas siguen aquí. Los demás errores no se deducen de descripciones libres y mantienen el mensaje general.
+
 **Recuperación de usuarios eliminados:** `ensureSession` verifica el usuario del token persistido con `getUser(access_token)` antes de devolverlo. Solo los códigos definitivos de usuario/sesión/JWT/refresh inválidos permiten cerrar localmente y crear un invitado. Antes de descartar se relee la sesión para detectar un cambio de token; las comprobaciones se acotan a tres intentos. Fallos de red, 429 y 5xx muestran error sin crear otra identidad. AuthProvider ignora `INITIAL_SESSION` porque proviene del almacenamiento y espera la comprobación inicial antes de cargar perfiles o permitir guardar nombres.
 
 Fuente de verdad visual: el canvas "Pasanaku" de Claude Design (artboards "Sistema de diseño", "Componentes" y "Modo oscuro") y `docs/design-brief.md`. En código vive en `shared/styles/tokens.css`; los componentes de `shared/ui` solo usan tokens semánticos.

@@ -47,7 +47,7 @@ Referencias de diseño: `docs/design-brief.md` y el canvas "Pasanaku" de Claude 
 2. WHILE existe una sesión activa (anónima o vinculada), THE App SHALL reutilizarla sin crear otra.
 3. THE App SHALL usar `auth.uid()` como identidad en todas las operaciones; ningún identificador de usuario se genera en el cliente.
 4. IF `signInAnonymously()` falla, THEN THE App SHALL mostrar un error con opción "Reintentar" y SHALL bloquear crear/unirse hasta tener sesión.
-5. WHEN el usuario anónimo elige "Vincular cuenta de Google", THE App SHALL invocar `linkIdentity({ provider: 'google' })` conservando el mismo `auth.uid()`.
+5. WHEN el usuario anónimo elige "Guardar mis salas con Google", THE App SHALL invocar `linkIdentity({ provider: 'google' })` conservando el mismo `auth.uid()`. La explicación SHALL indicar que conserva el nombre y las salas de este invitado para recuperarlos desde otro dispositivo, usando una cuenta Google que aún no esté registrada en Pasanaku.
 6. IF la vinculación falla o se cancela, THEN THE App SHALL mostrar un error y SHALL mantener la sesión anónima sin cambios.
 7. WHILE la cuenta está vinculada, THE App SHALL mostrar "Cuenta vinculada: {correo}" en lugar de la opción de vincular.
 8. WHEN no existe un Perfil con `display_name` para el `auth.uid()`, THE App SHALL mostrar el modal "¿Cómo te llamas?" y SHALL bloquear crear/unirse hasta guardar un nombre válido (1–50 caracteres, sin contar espacios al inicio y final).
@@ -55,7 +55,7 @@ Referencias de diseño: `docs/design-brief.md` y el canvas "Pasanaku" de Claude 
 10. THE App SHALL permitir editar el `display_name` en cualquier momento desde el inicio; el cambio aplica a salas futuras y SHALL NOT renombrar participaciones existentes.
 11. WHEN el usuario vincula Google y ya tiene `display_name`, THE App SHALL conservarlo.
 12. WHEN el usuario vincula Google y no tiene `display_name`, THE App SHALL sugerir el nombre de Google, editable antes de confirmar.
-13. THE App SHALL distinguir «Vincular cuenta de Google» (conserva UID y salas invitadas) de «Ya tengo cuenta: entrar con Google» (recupera la identidad Google existente y su perfil, sin fusionar datos).
+13. THE App SHALL distinguir «Guardar mis salas con Google» (conserva UID y salas invitadas) de «Entrar con Google» (recupera la identidad Google existente y su perfil, sin fusionar datos). Si Supabase confirma `identity_already_exists`, SHALL explicar que esa cuenta ya está registrada y orientar a «Entrar con Google», conservando las salas invitadas. Otros fallos SHALL mostrar el mensaje general sin deducir conflictos de cuenta.
 14. THE App SHALL permitir entrar con Google antes de guardar el primer nombre y desde Cuenta. SHALL bloquear este cambio si el invitado tiene cualquier participación, incluso en salas sorteadas o canceladas antiguas; el invitado puede continuar o vincular una cuenta Google que aún no exista en Pasanaku.
 15. THE App SHALL conservar la sesión primaria durante el acceso Google mediante PKCE aislado por intento y pestaña. Antes de activarlo SHALL verificar usuario Google, identidad invitada original y ausencia de participaciones otra vez. Cancelaciones y fallos anteriores a la activación SHALL conservar la sesión original. El acceso exige almacenamiento de pestaña disponible y vence a los 15 minutos.
 16. THE App SHALL mostrar un avatar de iniciales arriba a la derecha en Inicio, enlazado a `/account`: nombre editable, correo de solo lectura y estado invitado/Google. Desde Cuenta el usuario Google SHALL poder cerrar solo su sesión local y volver a Inicio como invitado; sin eliminar perfiles ni salas. No se ofrece reiniciar la sesión invitada.
@@ -76,7 +76,7 @@ Referencias de diseño: `docs/design-brief.md` y el canvas "Pasanaku" de Claude 
 4. WHILE el usuario no tiene salas, THE App SHALL mostrar el estado vacío "Aún no tienes salas" con una explicación breve.
 5. THE App SHALL NOT listar salas `cancelled` en "Tus salas".
 6. WHEN una sala del usuario fue cancelada en los últimos 30 días y el usuario aún no fue avisado en este dispositivo, THE App SHALL mostrar una única vez el aviso "{anfitrión} canceló la sala “{nombre}”. Ya no aparece en tus salas." con opción de cerrarlo.
-7. WHILE la sesión es anónima, THE App SHALL mostrar la invitación a vincular Google ("Vincula Google para ver tus salas en otro celular").
+7. WHILE la sesión es anónima, THE App SHALL mostrar «Guarda tus salas con Google», explicando que conserva nombre y salas del invitado para recuperarlos desde otro dispositivo, junto a la opción separada «Entrar con Google» para cuentas existentes.
 
 ---
 

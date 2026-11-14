@@ -79,6 +79,10 @@ describe('API de identidad', () => {
     auth.linkIdentity.mockResolvedValue({ error: { message: 'access_denied' } });
     await expect(linkGoogle()).rejects.toMatchObject({ code: 'AUTH_LINK_FAILED' });
   });
+  it('distingue una identidad ya registrada de un fallo genérico al guardar con Google', async () => {
+    auth.linkIdentity.mockResolvedValue({ error: { code: 'identity_already_exists' } });
+    await expect(linkGoogle()).rejects.toMatchObject({ code: 'AUTH_IDENTITY_EXISTS' });
+  });
   it('propaga los cambios de sesión y libera la suscripción', () => {
     const unsubscribe = vi.fn(); const listener = vi.fn();
     auth.onAuthStateChange.mockImplementation(callback => {

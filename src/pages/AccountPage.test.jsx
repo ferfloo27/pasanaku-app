@@ -35,7 +35,7 @@ it('el invitado puede editar su nombre y distingue acceso de vinculación', asyn
   fireEvent.click(screen.getByRole('button', { name: 'Guardar nombre' }));
   await waitFor(() => expect(save).toHaveBeenCalledWith('Lucía'));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
-  await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Ya tengo cuenta: entrar con Google' })));
+  await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Entrar con Google' })));
   expect(startGoogleSignIn).toHaveBeenCalledOnce(); expect(linkGoogle).not.toHaveBeenCalled();
 });
 it('con Google el correo es de solo lectura y se puede cerrar sesión local', async () => {
@@ -56,13 +56,13 @@ it('un fallo de cierre conserva los datos visibles y permite reintentar', async 
 });
 it('ofrece acceso Google antes de guardar el nombre, sin escribir perfil', async () => {
   show(guest, null, <RequireProfile><p>Inicio</p></RequireProfile>);
-  fireEvent.click(screen.getByRole('button', { name: 'Ya tengo cuenta: entrar con Google' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Entrar con Google' }));
   await waitFor(() => expect(startGoogleSignIn).toHaveBeenCalledOnce());
   expect(save).not.toHaveBeenCalled(); expect(screen.getByRole('dialog')).toBeVisible();
 });
 it('explica el bloqueo de invitados con salas y permite continuar usando su cuenta', async () => {
   startGoogleSignIn.mockRejectedValue(new AppError('GUEST_HAS_ROOMS')); show();
-  fireEvent.click(screen.getByRole('button', { name: 'Ya tengo cuenta: entrar con Google' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Entrar con Google' }));
   expect(await screen.findByRole('alert')).toHaveTextContent('Este invitado ya tiene salas');
-  expect(screen.getByRole('button', { name: 'Vincular cuenta de Google' })).toBeEnabled();
+  expect(screen.getByRole('button', { name: 'Guardar mis salas con Google' })).toBeEnabled();
 });

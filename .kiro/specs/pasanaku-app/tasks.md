@@ -138,6 +138,8 @@ Convenciones:
 
 ## Notes
 
+- [x] Claridad de Google: botones «Guardar mis salas con Google» y «Entrar con Google», explicaciones separadas y mensaje de cuenta existente solo ante `identity_already_exists` confirmado. Validación: 367 pruebas en 62 archivos; lint sin errores (advertencia previa de v1) y build correcto.
+
 - [x] Corrección posterior a C.3: recuperar sesiones de usuarios eliminados en Auth, validar antes del perfil y conservar credenciales ante fallos transitorios; 363 pruebas pasan, lint sin errores (advertencia previa de v1) y build correcto. Pendiente comprobar en el Preview desplegado por la persona dueña.
 
 ### Cuenta y ajustes: primera entrega (rama feature/cuenta-google-ajustes)

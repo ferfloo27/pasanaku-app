@@ -8,12 +8,13 @@ export class AppError extends Error {
 
 export const MESSAGES = Object.freeze({
   AUTH_FAILED: 'No pudimos iniciar tu sesión. Reintenta para continuar.',
-  AUTH_LINK_FAILED: 'No se vinculó Google. Tu sesión sigue aquí; intenta de nuevo.',
+  AUTH_LINK_FAILED: 'No se completó la conexión con Google. Tu sesión sigue aquí; intenta de nuevo.',
+  AUTH_IDENTITY_EXISTS: 'Esta cuenta Google ya está registrada en Pasanaku. Para recuperar sus salas, usa «Entrar con Google». Las salas de este invitado siguen aquí.',
   AUTH_SIGN_IN_FAILED: 'No pudimos entrar con Google. Tu sesión anterior sigue aquí. Intenta de nuevo.',
   AUTH_SIGN_OUT_FAILED: 'No pudimos cerrar tu sesión. Intenta de nuevo.',
   AUTH_STORAGE_UNAVAILABLE: 'Permite el almacenamiento del navegador para entrar con Google. Tu sesión sigue aquí.',
   AUTH_SESSION_CHANGED: 'Tu sesión cambió durante el acceso. Vuelve al inicio para continuar.',
-  GUEST_HAS_ROOMS: 'Este invitado ya tiene salas. Para conservarlas, continúa como invitado o vincula una cuenta de Google que aún no uses en Pasanaku.',
+  GUEST_HAS_ROOMS: 'Este invitado ya tiene salas. Para conservarlas, continúa como invitado o elige «Guardar mis salas con Google» con una cuenta que aún no uses en Pasanaku.',
   PROFILE_LOAD_FAILED: 'No pudimos cargar tu nombre. Intenta de nuevo.',
   PROFILE_SAVE_FAILED: 'No pudimos guardar tu nombre. Intenta de nuevo.',
   ROOM_NOT_FOUND: 'Ese código no existe. Revísalo e intenta de nuevo.',

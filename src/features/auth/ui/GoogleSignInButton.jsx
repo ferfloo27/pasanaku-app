@@ -6,8 +6,8 @@ import { getErrorMessage } from '../../../shared/errors/appError';
 export default function GoogleSignInButton({ disabled = false }) {
   const { signIn, signingIn, error } = useGoogleSignIn();
   return <div className="account-signin">
-    <p>¿Ya usas Pasanaku con Google? Recupera tu cuenta y tus salas.</p>
+    <p>¿Ya usaste Google en Pasanaku? Entra con esa cuenta para recuperar su nombre y sus salas.</p>
     {error && <ErrorBanner message={getErrorMessage(error)} />}
-    <Button variant="secondary" fullWidth disabled={disabled} loading={signingIn} loadingText="Abriendo Google…" onClick={signIn}>Ya tengo cuenta: entrar con Google</Button>
+    <Button variant="secondary" fullWidth disabled={disabled} loading={signingIn} loadingText="Abriendo Google…" onClick={signIn}>Entrar con Google</Button>
   </div>;
 }
